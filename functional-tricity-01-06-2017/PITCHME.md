@@ -9,28 +9,28 @@ Who have seen this phrase before?
 
 +++
 
-![SLIDE](assets/slide.png)
+![SLIDE](functional-tricity-01-06-2017/assets/slide.png)
 
 +++
 
-![PRES](assets/pres.png)
+![PRES](functional-tricity-01-06-2017/assets/pres.png)
 
 +++
 
-![PRES](assets/google.png)
+![PRES](functional-tricity-01-06-2017/assets/google.png)
 
 +++
 
-![PRES](assets/stack.png)
+![PRES](functional-tricity-01-06-2017/assets/stack.png)
 
 +++
 
-![PRES](assets/quora.png)
+![PRES](functional-tricity-01-06-2017/assets/quora.png)
 
 
 +++
 
-![PRES](assets/caution.png)
+![PRES](functional-tricity-01-06-2017/assets/caution.png)
 
 ---
 
