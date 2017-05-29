@@ -45,9 +45,9 @@ Who know these terms?
 
 ```scala
 trait Monad[F[_]] {
-  def unit[A](value: A): F[A]
+  def unit[A] (value: A): F[A]
   
-  def bind[A, B](instance: F[A], f: A => F[B]): F[B]
+  def bind[A, B] (instance: F[A], f: A => F[B]): F[B]
 }
 ```
 
@@ -57,9 +57,9 @@ trait Monad[F[_]] {
 
 ```scala
 object OptionMonad extends Monad[Option] {
-  def unit[A](value: A) = Some(a)
+  def unit[A] (value: A) = Some(a)
   
-  def bind[A, B](instance: Option[A], f: A => Option[B]): Option[B] = 
+  def bind[A, B] (instance: Option[A], f: A => Option[B]): Option[B] = 
     instance match {
       case Some(value) => f(value)
       case None => None
@@ -102,7 +102,7 @@ object IntMultiplyMonoid extends Monoid[Int] {
 
 ```scala
 trait Functor[F[_]] {
-    def map[A, B](instance: F[A], f: A => B): F[B]
+    def map[A, B] (instance: F[A], f: A => B): F[B]
 }
 ```
 
@@ -127,6 +127,13 @@ object OptionFunctor extends Functor[Option] {
 
 +++
 
+![SLIDE](functional-tricity-01-06-2017/assets/langs-category-2.png)
+
++++
+
+![SLIDE](functional-tricity-01-06-2017/assets/langs-category.png)
+
++++
 ### Category
 
 ```scala
@@ -145,8 +152,7 @@ object CategoryOfSets extends Category {
 ### Monoidal category
 
 ```scala
-trait MonoidalCategory {
-  type Morphism[F, G]
+trait MonoidalCategory extends Category {
   type MonoidalProduct[F,G]
   type IdentityObject
 }
@@ -192,8 +198,9 @@ trait MonoidInCategoryOfSets[T] extends MonoidInCategory[T] {
 
 ```scala
 object IntAddMonoidInCategoryOfSets extends MonoidInCategoryOfSets[Int] {
-    def zero: Unit => Int = (a: Unit) => 0 
-    def combine: ((Int, Int)) => Int = (t: (Int, Int)) => t._1 + t._2
+    def zero: Unit => Int = _ => 0 
+    def combine: ((Int, Int)) => Int = 
+      { case (a, b) => a + b }
 }
 ```
 
@@ -202,13 +209,22 @@ object IntAddMonoidInCategoryOfSets extends MonoidInCategoryOfSets[Int] {
 
 
 +++
+### Functor
+
+![SLIDE](functional-tricity-01-06-2017/assets/functor.png)
+
++++
+### Endofunctor
+![SLIDE](functional-tricity-01-06-2017/assets/endofunctor.png)
+
++++
 ### Endofunctor
 
 Just a functor we know
 
 ```scala
 trait Functor[F[_]] {
-    def map[A, B](instance: F[A], f: A => B): F[B]
+    def map[A, B] (instance: F[A], f: A => B): F[B]
 }
 ```
 
@@ -231,10 +247,10 @@ trait MonoidalCategoryK2 {
 ### Preparation
 
 ```scala
-case class Id[T](value: T)
+case class Id[T] (value: T)
 
 trait NaturalTransformation[F[_], G[_]] {
-  def apply[A](fa: F[A]): G[A]
+  def apply[A] (fa: F[A]): G[A]
 }
 
 type ~~>[-F[_], +G[_]] = NaturalTransformation[F, G]
@@ -249,7 +265,7 @@ trait Compose[F[_], G[_]] extends Product[F,G]{
 
 ```scala
 object TryToOption extends NaturalTransformation[Try, Option] {
-  def apply[T](t: Try[T]): Option[T] = t.toOption
+  def apply[T] (t: Try[T]): Option[T] = t.toOption
 }
 
 val x: Compose[Option, Try]#Out[Int] = Option(Try(1))
@@ -290,12 +306,14 @@ trait MonoidInCategoryOfEndofunctors[F[_]] extends MonoidInCategoryK2[F] {
 ```scala
 object OptionMonoid extends MonoidInCategoryOfEndofunctors[Option] {
   override def zero: Id ~~> Option = new NaturalTransformation[Id, Option]{
-    def apply[T](id: Id[T]): Option[T] = Some(id.value)
+    def apply[T] (id: Id[T]): Option[T] = 
+      Some(id.value)
   }
 
   override def combine: Compose[Option,Option]#Out ~~> Option = 
     new NaturalTransformation[Compose[Option,Option]#Out, Option]{
-      def apply[T](opt: Option[Option[T]]): Option[T] = opt.flatten
+      def apply[T] (opt: Option[Option[T]]): Option[T] = 
+        opt.flatten
     }
 
   override def functor: Functor[Option] = OptionFunctor
@@ -321,10 +339,10 @@ def fromMonadToMonoid[M[_]]
 +++
 ### From monoid to monad
 ```scala
-def fromMonoidToMonad[M[_]](monoid: MonoidInCategoryOfEndofunctors[M]): Monad[M] = {
+def fromMonoidToMonad[M[_]] (monoid: MonoidInCategoryOfEndofunctors[M]): Monad[M] = {
   new Monad[M]{
-    override def unit[A](v: A): M[A] = monoid.zero(Id(v))
-    override def bind[A, B](m: M[A], f: (A) => M[B]): M[B] = 
+    override def unit[A] (v: A): M[A] = monoid.zero(Id(v))
+    override def bind[A, B] (m: M[A], f: (A) => M[B]): M[B] = 
       monoid.combine(monoid.functor.fmap(f)(m))
   }
 }
@@ -333,18 +351,18 @@ def fromMonoidToMonad[M[_]](monoid: MonoidInCategoryOfEndofunctors[M]): Monad[M]
 +++
 From monad to monoid
 ```scala
-def fromMonadToMonoid[M[_]](monad: Monad[M]): MonoidInCategoryOfEndofunctors[M] = {
+def fromMonadToMonoid[M[_]] (monad: Monad[M]): MonoidInCategoryOfEndofunctors[M] = {
   new MonoidInCategoryOfEndofunctors[M] {
     override def zero: Id ~~> M = new (Id ~~> M) {
-      override def apply[A](a: Id[A]): M[A] = monad.unit(a.value)
+      override def apply[A] (a: Id[A]): M[A] = monad.unit(a.value)
     }
     
     override def combine: Compose[M, M]#Out ~~> M = new (Compose[M, M]#Out ~~> M) {
-      override def apply[A](m: M[M[A]]): M[A] = monad.bind(m, identity[M[A]])
+      override def apply[A] (m: M[M[A]]): M[A] = monad.bind(m, identity[M[A]])
     }
     
     override def functor: Functor[M] = new Functor[M] {
-      override def fmap[A, B](f: (A) => B): (M[A]) => M[B] = (m: M[A]) => {
+      override def fmap[A, B] (f: (A) => B): (M[A]) => M[B] = (m: M[A]) => {
         monad.bind(m, f.andThen(monad.unit))
       }
     }
