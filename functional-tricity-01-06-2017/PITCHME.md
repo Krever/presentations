@@ -13,15 +13,11 @@ Who have seen this phrase before?
 
 +++
 
-![PRES](functional-tricity-01-06-2017/assets/pres.png)
+![PRES](functional-tricity-01-06-2017/assets/pres.png)d
 
 +++
 
-![PRES](functional-tricity-01-06-2017/assets/google.png)
-
-+++
-
-![PRES](functional-tricity-01-06-2017/assets/stack.png)
+![PRES](functional-tricity-01-06-2017/assets/i-know-words.jpg)
 
 +++
 
@@ -112,7 +108,7 @@ trait Functor[F[_]] {
 
 ```scala
 object OptionFunctor extends Functor[Option] {
-    def map[A, B](instance: Option[A], f: A => B): Option[B] =
+    def map[A, B] (instance: Option[A], f: A => B): Option[B] =
       instance match {
         case Some(value) => Some(f(value))
         case None => None
@@ -224,7 +220,7 @@ Just a functor we know
 
 ```scala
 trait Functor[F[_]] {
-    def map[A, B] (instance: F[A], f: A => B): F[B]
+    def map[A, B] (f: A => B): F[A] => F[B]
 }
 ```
 
@@ -343,7 +339,7 @@ def fromMonoidToMonad[M[_]] (monoid: MonoidInCategoryOfEndofunctors[M]): Monad[M
   new Monad[M]{
     override def unit[A] (v: A): M[A] = monoid.zero(Id(v))
     override def bind[A, B] (m: M[A], f: (A) => M[B]): M[B] = 
-      monoid.combine(monoid.functor.fmap(f)(m))
+      monoid.combine(monoid.functor.map(f)(m))
   }
 }
 ```
@@ -362,7 +358,7 @@ def fromMonadToMonoid[M[_]] (monad: Monad[M]): MonoidInCategoryOfEndofunctors[M]
     }
     
     override def functor: Functor[M] = new Functor[M] {
-      override def fmap[A, B] (f: (A) => B): (M[A]) => M[B] = (m: M[A]) => {
+      override def map[A, B] (f: (A) => B): (M[A]) => M[B] = (m: M[A]) => {
         monad.bind(m, f.andThen(monad.unit))
       }
     }
