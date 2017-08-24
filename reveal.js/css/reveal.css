@@ -165,7 +165,7 @@ body {
 /*********************************************
  * DEFAULT ELEMENT STYLES
  *********************************************/
-/* Fixes issue in Chrome where italic fonts did not appear when printing to PDF */
+/* Fixes issue in Chrome chere italic fonts did not appear when printing to PDF */
 .reveal:after {
   content: '';
   font-style: italic; }
