@@ -3,22 +3,12 @@
 
 ### And what makes Spark 2.32x better than Flink?
 
-<span style="color:gray; font-size:0.6em;">Wojciech Pituła @ Nordea Data Engineering</span>
-
-
-<!---
-lista wszystkich technologii
-lista silnikow
-
-Why benchmarking is hard
-Summary
--->
+<span style="color:gray; font-size:0.6em;">Wojciech Pituła @ Nordea Common Platforms</span>
 
 
 ----
 
 ## What is it all about?
-### And how it all started?
 
 notes:
 Started very early
@@ -26,25 +16,24 @@ I spend my time at the computer
 
 ++++
 
-### I began my career quite early
-
-![child-using-computer](img/child-at-the-computer,-macbook-161122.jpg)
+![all-tech](img/spark-logo-trademark.png)
 
 ++++
 
-### And after few years...
-
-![business-child](img/boy_business_manager_boss_child_office_laptop_computer_businessman.jpg)
-
-notes:
-I became "alfa and omega"
+![all-tech](img/mapred.png)
 
 ++++
 
-### So I wrote ...
+
+![all-tech](img/flink.png)
+
+++++
+
+![all-tech](img/all-tech-msc.png)
+
+++++
 
 > Comparison of modern platforms for massive data processing
-
 
 ----
 
@@ -411,6 +400,10 @@ val strings: RDD[String] = intsPlus2.map(_.toString)
 
 ++++
 
+![all-tech](img/math.jpg)
+
+++++
+
 ### Guarantees
 
 - at-least-once
@@ -422,7 +415,7 @@ val strings: RDD[String] = intsPlus2.map(_.toString)
 ### Problems
 
 - ill-defined
-- 
+- hard to verify
 
 ----
 
@@ -537,6 +530,14 @@ val strings: RDD[String] = intsPlus2.map(_.toString)
 
 Maturity
 
+++++
+
+![all-tech](img/popularity.png)
+
+++++
+
+![all-tech](img/maturity.png)
+
 ----
 
 ## Enterprise support
@@ -611,6 +612,16 @@ Maturity
 ### Spark is fast
 #### MapReduce is slow
 Everything else is not measured
+
+++++
+
+### Doing benchmarks is hard
+
+* scale the cluster
+* scale the dataset
+* compare different applications
+* implement them optimally
+* automate the process
 
 ----
 
