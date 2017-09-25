@@ -263,7 +263,7 @@ sc.textFile(args(0))
     <tr>
       <th align="left" >Kafka Streams</th>
       <td align="center"><span style="color:green">&#x2611;</span></td>
-      <td align="center"><span style="color:green">&#x2611;</span></td>
+      <td align="center"><span style="color:red">&#x2612;</span></td>
       <td align="center"></td>
     </tr>
     <tr>
@@ -275,7 +275,7 @@ sc.textFile(args(0))
     <tr>
       <th align="left" >Apache Storm</th>
       <td align="center"><span style="color:green">&#x2611;</span></td>
-      <td align="center"><span style="color:green">&#x2611;</span></td>
+      <td align="center"><span style="color:red">&#x2612;</span></td>
       <td align="center"></td>
     </tr>
     <tr>
@@ -757,7 +757,7 @@ Everything else is not measured
 
 ----
 
-# Summary
+## Summary
 
 * Start with Spark
 * If you don't want Spark:
@@ -766,6 +766,69 @@ Everything else is not measured
 * Samza, Storm, Trident, Gearmpump, Apex are alive
 * Kafka Streams has unique deployment
 * Doing comparisons is hard
+
+++++
+
+## Subjective summary
+
+* mostly false/inaccurate
+* based on my own judgementz
+* short and simple
+
+++++
+
+### Apache Spark
+
+Most popular, most advanced, first choice for data processing. Not going anywhere.
+
+++++
+
+### Hadoop MapReduce
+
+Old, simple, quite reliable, slow and verbose.
+
+++++
+
+### Apache Flink
+
+Similar to Spark but with direct message processing and better windowing. 
+
+++++
+
+### Apache Storm
+
+First choice for stream processing before Flink/Spark, now losing popularity. Not-so-great API
+and doesn't work with YARN. 
+
+++++
+
+### Twitter Heron
+
+Storm with better deployment(can run on YARN) and without Trident.
+
+++++
+
+### Kafka Streams
+
+Very nice deployment scheme(just a library), limited to Kafka, quite fancy.
+
+++++
+
+### Apache Apex
+
+Good for authors, not popular enough, quite sophisticated but looks over engineered.
+
+++++
+
+### Apache Samza
+
+Simple, closely coupled with Kafka na Yarn, based on properties files.
+
+++++
+
+### Apache Gearpump
+
+Still incubating without any killer features.
 
 ----
 
