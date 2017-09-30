@@ -6,85 +6,62 @@
 
 ----
 
-## Understand the code
+## Mission: Understand the code
 
 ```javascript
-class Point {
-    constructor(height, width) {
-        this.height = height;
-        this.width = width;
-    }
-
-    divide(factor) {
-        if(factor != 0) {
-            this.height /= factor;
-            this.width /= factor;
-            return this;
-        }
+function divide(factor) {
+    if(factor != 0) {
+        this.height /= factor;
+        this.width /= factor;
+        return this;
     }
 }
 ```
 
 ++++
 
-## Understand the code
-
-- Variables in scope
-  - Arguments, class members, global scope
-  - What are they?
-  - Can their values be modified? By other threads?
-  - Can they be reassigned?
-- Return value
-  - Is there always one? 
-  - What is it?
-  - Can exception be thrown?
-- External side effects(IO)
-
+### Approach 1: Read it!
 
 ++++
 
-## All the questions are recursive!
+#### Nope
 
-
-++++
-
-
-## Let's do some math
-
-30 lines per method
-
-5 invocations per method
-
-7 levels of nesting
-
-\>2 300 000 lines of code
-
+Reading is recursive
 
 ++++
 
-
-## Thread-unsafety propagates
-
-You need to find usages of your data in the whole codebase(your code, dependencies, transitive dependencies, JVM)
-
+### Approach 2: Read the tests!
 
 ++++
 
+#### Nope
 
-## Tests to the rescue
+* Tests can be more complicated than code itself
+* Tests are equivalent to existential qualifiers
 
-notes:
-Tests are equivalent to existential qualifier
+++++
+
+### Approach 3: Constrain the code!
 
 ----
 
-## Types
-universal qualifiers that constrain your code and make it safer
-
+## Contraint 1: Types
 
 ++++
 
-### Exception handling
+### Step 0: Redefine the semantics, change the expectations
+
+```java
+Double divide(Double a, Double b)
+```
+vs
+```scala
+def divide(a: Double, b: Double): Double
+```
+
+++++
+
+### Step 1: Exception handling
 
 ```java
 public String decode(String data)
@@ -98,7 +75,7 @@ public Either<Exception, String> decode(String data)
 
 ++++
 
-### Nullability
+### Step 2: Nullability
 
 ```java
 public String get(String key)
@@ -110,7 +87,7 @@ public Option<String> get(String key)
 
 ++++
 
-### Refined types
+### Step 3: Refined types
 
 ```java
 public Double calculateVelocity(Double d, Double t)
@@ -125,13 +102,13 @@ public Velocity calculate(Distance d, Time t)
 public Integer reduce(NonEmptyList<Integer> list, 
                       BiFunction<Integer, Integer, Integer> func)
 
-public Integer divide(Integer a, NonZeroInt b)
+public Double divide(Integer a, NonZeroInt b)
 
 ```
 
 ++++
 
-### Unknown type is better than any type
+### Step 4: Unknown type is better than any type
 
 ```java
 public <T> T identity(T x)
@@ -139,42 +116,73 @@ public <T> T identity(T x)
 public <A, B> B apply(A a, Function<A, B> func)
 ```
 
-----
-
-## Immutability
-let's contraint us even more
-
-
 ++++
 
-### Forbid reassignment
+### Step 5: Know the costs
 
-```
-final int a = 1; // Java
-const int a = 1; // C++
-val a: Int = 1 //Scala
-```
-
-++++
-
-### Data still can be modified
-
-++++
-
-Immutable data
-
-Immutable collections
-
-++++
-
-### I still need to modify some state
+* More complicated  signatures
+* Compilation time can grow
+* The better the language the more you can do
 
 ----
 
-### Everything has it costs
+## Summary
+
+* You can embed a lot of information in method signature
+* There is plenty of techniques in FP that you can use in your language
+* Experiment with new languages
+* Follow me to see the 2nd part :)
+
+----
+
+## Thanks
+
+**Meet me at Nordea stand**
+
+Wojciech Pituła
+
+[@Krever01](https://twitter.com/Krever01)
+
+[w.pitula.me/presentations](http://w.pitula.me/presentations/datamass-2017/index.html)
+
+----
+
+## Constraint 2: Immutability
+
+++++
+
+### Step 1: Forbid the reassignments
+
+```
+final int a = 1;    // Java
+const int a = 1;    // C++
+val a = 1           // Scala
+let a = 1           // Swift
+```
+
+++++
+
+### Step 2: Data still can be modified
+
+* Immutable data
+* Immutable collections
+
+++++
+
+### Step 3: I still need to modify some state!
+
+* Are you sure?
+* Bubble of mutability
+* Push it to database
+
+++++
+
+### Step 4: Know the costs 
 
 * Performance
 * Learning curve/simplicity
+* You need to know what you are doing
+* No mainstream language can enforce immutability
 
 ----
 
@@ -190,7 +198,7 @@ Immutable collections
 
 ++++
 
-### Go and try new langs
+### Go and try new languages
 #### See what you can bring back home
 
 * Scala
@@ -204,9 +212,12 @@ Immutable collections
 
 ## Thanks
 
+**Meet me at Nordea stand**
+
 Wojciech Pituła
 
-@Krever01
+[@Krever01](https://twitter.com/Krever01)
 
+[w.pitula.me/presentations](http://w.pitula.me/presentations/datamass-2017/index.html)
 
 

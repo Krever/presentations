@@ -3,6 +3,14 @@
     <link rel="stylesheet" href="../reveal.js/css/reveal.css">
     <link rel="stylesheet" href="../reveal.js/css/theme/white.css">
     <link rel="stylesheet" href="../reveal.js/lib/css/zenburn.css">
+
+    <script>
+        var link = document.createElement( 'link' );
+        link.rel = 'stylesheet';
+        link.type = 'text/css';
+        link.href = window.location.search.match( /print-pdf/gi ) ? '../reveal.js/css/print/pdf.css' : '../reveal.js/css/print/paper.css';
+        document.getElementsByTagName( 'head' )[0].appendChild( link );
+    </script>
 </head>
 <body>
 <div class="reveal">
@@ -18,6 +26,7 @@
 <script src="../reveal.js/lib/js/head.min.js"></script>
 <script>
     Reveal.initialize({
+        history: true,
         dependencies: [
             { src: '../reveal.js/plugin/markdown/marked.js' },
             { src: '../reveal.js/plugin/markdown/markdown.js' },
