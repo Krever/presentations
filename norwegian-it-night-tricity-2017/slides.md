@@ -118,19 +118,25 @@ public <A, B> B apply(A a, Function<A, B> func)
 
 ++++
 
-### Step 5: Know the costs
+### Step 5: Remove half of your tests and stop worrying
+
+* you should be able to read most of information from method signatures
+* you only need to test business logic
+
+++++
+
+### Step 6: Know the costs
 
 * More complicated  signatures
 * Compilation time can grow
-* The better the language the more you can do
 
 ----
 
 ## Summary
 
-* You can embed a lot of information in method signature
-* There is plenty of techniques in FP that you can use in your language
-* Experiment with new languages
+* You can embed a lot of information in methods signatures
+* Experiment with new languages, the better the language the more you can do
+* [Constraints liberate, liberties constrain](https://www.youtube.com/watch?v=GqmsQeSzMdw)
 * Follow me to see the 2nd part :)
 
 ----
@@ -177,7 +183,26 @@ let a = 1           // Swift
 
 ++++
 
-### Step 4: Know the costs 
+### Step 3.1: Bubble of mutability
+
+```scala
+val list: mutable.List
+```
+vs
+```scala
+var list: immutable.List
+```
+
+++++
+
+### Step 4: Stop worrying about thread-safety and rest of your system
+
+* Everything that is immutable is thread-safe automatically
+* No one can break your piece from outside
+
+++++
+
+### Step 5: Know the costs 
 
 * Performance
 * Learning curve/simplicity
@@ -192,9 +217,10 @@ let a = 1           // Swift
 
 ### Guidelines
 
-* put as much constrains as you can into the signatures
+* put as much constrains as you can into the code
 * make everything you can immutable
 * remember about the costs
+* [Constraints liberate, liberties constrain](https://www.youtube.com/watch?v=GqmsQeSzMdw)
 
 ++++
 
