@@ -9,24 +9,24 @@ Who have seen this phrase before?
 
 +++
 
-![SLIDE](functional-tricity-01-06-2017/assets/slide.png)
+![SLIDE](assets/slide.png)
 
 +++
 
-![PRES](functional-tricity-01-06-2017/assets/pres.png)d
+![PRES](assets/pres.png)d
 
 +++
 
-![PRES](functional-tricity-01-06-2017/assets/i-know-words.jpg)
+![PRES](assets/i-know-words.jpg)
 
 +++
 
-![PRES](functional-tricity-01-06-2017/assets/quora.png)
+![PRES](assets/quora.png)
 
 
 +++
 
-![PRES](functional-tricity-01-06-2017/assets/caution.png)
+![PRES](assets/caution.png)
 
 ---
 
@@ -123,13 +123,14 @@ object OptionFunctor extends Functor[Option] {
 
 +++
 
-![SLIDE](functional-tricity-01-06-2017/assets/langs-category-2.png)
+![SLIDE](assets/langs-category-2.png)
 
 +++
 
-![SLIDE](functional-tricity-01-06-2017/assets/langs-category.png)
+![SLIDE](assets/langs-category.png)
 
 +++
+
 ### Category
 
 ```scala
@@ -145,6 +146,7 @@ object CategoryOfSets extends Category {
 ```
 
 +++
+
 ### Monoidal category
 
 ```scala
@@ -156,6 +158,7 @@ trait MonoidalCategory extends Category {
 ```
 
 +++
+
 ### Monoidal category example
 
 ```scala
@@ -167,6 +170,7 @@ object CategoryOfSets extends MonoidalCategory {
 ```
 
 +++
+
 ### Monoid in category
 
 ```scala
@@ -190,6 +194,7 @@ trait MonoidInCategoryOfSets[T] extends MonoidInCategory[T] {
 ```
 
 +++
+
 ### Example
 
 ```scala
@@ -201,19 +206,23 @@ object IntAddMonoidInCategoryOfSets extends MonoidInCategoryOfSets[Int] {
 ```
 
 ---
+
 ## Monad is a monoid in category of <span style="color: red">endo</span>functors
 
 
 +++
+
 ### Functor
 
-![SLIDE](functional-tricity-01-06-2017/assets/functor.png)
+![SLIDE](assets/functor.png)
 
 +++
+
 ### Endofunctor
-![SLIDE](functional-tricity-01-06-2017/assets/endofunctor.png)
+![SLIDE](assets/endofunctor.png)
 
 +++
+
 ### Endofunctor
 
 Just a functor we know
@@ -225,6 +234,7 @@ trait Functor[F[_]] {
 ```
 
 +++
+
 ### Category of different kind
 
 ```scala
@@ -240,6 +250,7 @@ trait MonoidalCategoryK2 {
 ```
 
 +++
+
 ### Preparation
 
 ```scala
@@ -257,6 +268,7 @@ trait Compose[F[_], G[_]] extends Product[F,G]{
 ```
 
 +++
+
 ### Examples
 
 ```scala
@@ -270,6 +282,7 @@ val y: Option[Try[Int]] = Option(Try(1))
 ```
 
 +++
+
 ### Category of Endofunctors
 
 ```scala
@@ -284,6 +297,7 @@ trait CategoryOfEndofunctors extends MonoidalCategoryK2{
 ```
 
 +++
+
 ### Monoid in category of endofunctors
 
 ```scala
@@ -297,6 +311,7 @@ trait MonoidInCategoryOfEndofunctors[F[_]] extends MonoidInCategoryK2[F] {
 
 
 +++
+
 ### Option Monoid
 
 ```scala
@@ -317,9 +332,11 @@ object OptionMonoid extends MonoidInCategoryOfEndofunctors[Option] {
 ```
 
 ---
+
 ## Monad <span style="color: red">is a</span> monoid in category of endofunctors
 
 +++
+
 ### How to prove it?
 
 ```scala
@@ -333,6 +350,7 @@ def fromMonadToMonoid[M[_]]
 ```
 
 +++
+
 ### From monoid to monad
 ```scala
 def fromMonoidToMonad[M[_]] (monoid: MonoidInCategoryOfEndofunctors[M]): Monad[M] = {
@@ -345,7 +363,8 @@ def fromMonoidToMonad[M[_]] (monoid: MonoidInCategoryOfEndofunctors[M]): Monad[M
 ```
 
 +++
-From monad to monoid
+
+### From monad to monoid
 ```scala
 def fromMonadToMonoid[M[_]] (monad: Monad[M]): MonoidInCategoryOfEndofunctors[M] = {
   new MonoidInCategoryOfEndofunctors[M] {
@@ -380,5 +399,5 @@ def fromMonadToMonoid[M[_]] (monad: Monad[M]): MonoidInCategoryOfEndofunctors[M]
 ## Questions ?
 
 - [@Krever01](https://twitter.com/Krever01)
-- [w.pitula.me](http://w.pitula.me)
+- [w.pitula.me/presentations](http://w.pitula.me/presentations)
 
