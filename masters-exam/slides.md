@@ -14,10 +14,17 @@
 
 ## Problems
 
+1. What is massive data processing?
 1. What platforms should be compared?
 1. What aspects and features should be compared?
 1. How to gather the data?
 1. What are the results?
+
+----
+
+### What is massive data processing?
+
+> An operation applied to the dataset exceeding the capabilites of single machine
 
 ----
 
