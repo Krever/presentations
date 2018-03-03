@@ -4,9 +4,6 @@
 <span style="color:gray; font-size:0.6em;">Wojciech Pituła @ Nordea Data Engineering</span>
 
 
-Note:
-Who have seen this phrase before?
-
 +++
 
 ![SLIDE](assets/slide.png)
@@ -31,9 +28,6 @@ Who have seen this phrase before?
 ---
 
 ## <span style="color: red">Monad</span> is a <span style="color: red">monoid</span> in category of endo<span style="color: red">functors</span>
-
-Note:
-Who know these terms?
 
 +++
 
