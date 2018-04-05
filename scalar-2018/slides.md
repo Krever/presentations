@@ -4,7 +4,7 @@
 # HTTP LIBRARY
 #### EVER AGAIN
 
-<span style="color:gray; font-size:0.6em;">Wojciech Pituła @ Sony Electronics</span>
+<span style="color:gray; font-size:0.6em;">Wojtek Pituła @ Sony Electronics</span>
 
 ----
 
@@ -25,10 +25,10 @@ We need a new API!
 
 <pre><code data-trim data-noescape class=scala>
 val route =
-    <span class="fragment highlight-current-bg">path("users" / "search") {
+    <span data-fragment-index="1" class="fragment highlight-current-bg">path("users" / "search") {
         parameters('name) { name =>
             get {</span>
-              complete(<span class="fragment highlight-current-bg">service.findUser(name)</span>)
+              complete(<span data-fragment-index="2" class="fragment highlight-current-bg">service.findUser(name)</span>)
             }
         }
     }
@@ -38,7 +38,7 @@ val route =
 case class User(name: String)
 
 trait Service {
-    def findUser(name: String): <span class="fragment highlight-current-bg">Future[Option[User]]</span>
+    def findUser(name: String): <span data-fragment-index="2" class="fragment highlight-current-bg">Future[Option[User]]</span>
 }
 </code></pre>
 
@@ -57,7 +57,7 @@ We need a frontend!
 def <span data-fragment-index="1" class="fragment highlight-current-bg">findUser(name: String, callback: Option[User] => Unit)</span>: Unit = {
     val xhr = new XMLHttpRequest()
     xhr.open(<span data-fragment-index="2" class="fragment highlight-current-bg">"GET"</span>,
-      s"http://localhost<span data-fragment-index="2">/users/search?name=$name"</span>
+      s"http://localhost<span data-fragment-index="2" class="fragment highlight-current-bg">/users/search?name=$name"</span>
     )
     xhr.onload = { (e: Event) =>
       if (xhr.status == 200) {
@@ -83,7 +83,7 @@ We need a client!
 <!-- -- .section: data-background="black" data-transition="fade" -->
 
 <pre><code data-trim data-noescape class=scala>
-def <span data-fragment-index="1" class="fragment highlight-current-bg">findUser(name: String): Future[Option[String]]</span> =
+def <span data-fragment-index="1" class="fragment highlight-current-bg">findUser(name: String): Future[Option[User]]</span> =
     sttp
       .<span data-fragment-index="2" class="fragment highlight-current-bg">get</span>(uri"https://localhost<span data-fragment-index="2" class="fragment highlight-current-bg">/user/search?name=$name</span>")
       .response(<span data-fragment-index="2" class="fragment highlight-current-bg">asJson[User]</span>)
@@ -125,7 +125,7 @@ paths:
         '200':
           description: An paged array of pets
           content:
-            <span class="fragment highlight-current-bg" data-fragment-index="1">application/json</span:
+            <span class="fragment highlight-current-bg" data-fragment-index="1">application/json</span>:
               schema:
                 $ref: <span class="fragment highlight-current-bg" data-fragment-index="1">"#/components/schemas/Users"</span>
         '404':
@@ -211,8 +211,8 @@ class UsersApiRoutes(service: Service)
 </code></pre>
 
 <pre><code data-trim data-noescape class=scala>
-val api = new UsersApiRoutes(new Service)
-Http().bindAndHandle(api.routes, "localhost", 8080)
+<span class="fragment highlight-current-bg">val api = new UsersApiRoutes(new Service)
+Http().bindAndHandle(api.routes, "localhost", 8080)</span>
 </code></pre>
 
 ++++
@@ -235,7 +235,8 @@ class UsersApiClient(address: String)
 
 <pre><code data-trim data-noescape class=scala>
 val client = new UsersApiClient("http://localhost:8080")
-<span class="fragment highlight-current-bg">client.usersSearch.call("username")</span>
+<span class="fragment highlight-current-bg">val userOpt: Option[User] = 
+  client.usersSearch.call("Bob") </span>
 </code></pre>
 
 ++++
@@ -272,19 +273,20 @@ import endpoints.documented.openapi
 import endpoints.documented.openapi.model.{Info, OpenApi}
 
 object MyApiOpenApi
-  extends MyApiDocumented
+  <span class="fragment highlight-current-bg">extends MyApiDocumented
     with openapi.Endpoints
-    with openapi.JsonSchemaEntities {
+    with openapi.JsonSchemaEntities</span> {
 
   val api: OpenApi =
-    openApi(
+    <span class="fragment highlight-current-bg">openApi(
       Info(title = "API to search for users ", version = "1.0.0")
-    )(usersSearch)
+    )(usersSearch)</span>
 
 }
 </code></pre>
 <pre><code data-trim data-noescape class=scala>
-val docs = MyApiOpenApi.api
+<span class="fragment highlight-current-bg">import io.circe.syntax._
+val docs = MyApiOpenApi.api.toJson</span>
 </code></pre>
 </div>
 
@@ -292,9 +294,10 @@ val docs = MyApiOpenApi.api
 
 ### Simple, isn't it?
 
-* single endpoint definition
-* server provides only business logic
-* client & docs for free
+* single endpoint definition <!-- .element: class="fragment" -->
+* server provides only business logic <!-- .element: class="fragment" -->
+* client & docs for free <!-- .element: class="fragment" -->
+* typesafe & macro-free <!-- .element: class="fragment" -->
 
 ++++
 
@@ -437,8 +440,9 @@ trait Endpoints extends Requests with Responses {
 ### Interpreter
 
 ```scala
+// Play
 trait RequestBodiesInterpreter extends RequestBodies {
-    type Body[T] = play.api.mvc.BodyParser[A]
+    type Body[T] = play.api.mvc.BodyParser[T]
 
     def wwwFormBody: Body[Map[String, Seq[String]]] = 
       BodyParsers.parse.formUrlEncoded
@@ -446,6 +450,7 @@ trait RequestBodiesInterpreter extends RequestBodies {
 ```
 <div class=fragment>
 <pre><code data-trim data-noescape class=scala>
+// Akka
 trait ServerInterpreter extends Endpoints {
   type Response[A] = A => Route
 
@@ -468,7 +473,11 @@ trait MyApi extends Endpoints {
     )
 }
 ```
-TODO drugi code z mixem interpretera
+```scala
+trait MyApiServer extends MyApi with ServerInterpreter {
+
+}
+```
 
 ++++
 
@@ -479,11 +488,11 @@ TODO drugi code z mixem interpretera
 #### deliver partial interpreter 
 
 ```scala
-trait JsonEntities {
+trait JsonEntities extends Requests {
   //typeclass 
   type JsonRequest[A]
   
-  def jsonRequest[A : JsonRequest]: RequestEntity[A]
+  def jsonRequest[A : JsonRequest]: RequestBody[A]
 }
 ```
 
@@ -497,6 +506,8 @@ trait CirceSupport extends JsonEntities {
 ++++
 
 #### add custom vocabulary 
+
+Or implement missing interpreter
 
 ```scala
 trait MyApi extends ... {
@@ -513,26 +524,12 @@ trait MyApi extends ... {
 
 ++++
 
-#### fix a bug
+#### fix a bug / modify the behaviour
 
 ```scala
 trait MyServerInterpreter extends ... {
 
   override def get[...](...) = ...
-
-}
-```
-
-++++
-
-#### implement missing interpreter
-
-```scala
-trait MyServerInterpreter extends ... {
-
-  def option[A](req: Response[A]): Response[Option[A]] = {
-    ...
-  }
 
 }
 ```
@@ -604,9 +601,10 @@ trait Endpoints[
 
 ----
 
-## Thanks!
+## Don't repeat yourself
+#### Thanks!
 
-Wojciech Pituła
+Wojtek Pituła
 
 [@Krever01](https://twitter.com/Krever01)
 
