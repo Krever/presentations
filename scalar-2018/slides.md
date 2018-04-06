@@ -247,7 +247,7 @@ val client = new UsersApiClient("http://localhost:8080")
 import endpoints.documented
 
 trait MyApiDocumented
- <span class="fragment highlight-current-bg"> extends documented.algebra.Endpoints
+ <span class="fragment highlight-current-bg" data-fragment-index="1" > extends documented.algebra.Endpoints
     with documented.algebra.JsonSchemaEntities
     with documented.generic.JsonSchemas</span> {
 
@@ -255,11 +255,11 @@ trait MyApiDocumented
     endpoint(
         get(path / "users" / "search" /? qs[String]("name")),
         option(
-            jsonResponse[User] (<span class="fragment highlight-current-bg">documentation = "User with given name"</span>)
-            notFoundDocumentation = "User not found"
+            jsonResponse[User] (<span class="fragment highlight-current-bg" data-fragment-index="2">documentation = "User with given name"</span>)
+            <span class="fragment highlight-current-bg" data-fragment-index="2">notFoundDocumentation = "User not found"</span>
         )
     )
-  <span class="fragment highlight-current-bg">implicit lazy val userJsonSchema: JsonSchema[User] = genericJsonSchema</span>
+  <span class="fragment highlight-current-bg" data-fragment-index="3">implicit lazy val userJsonSchema: JsonSchema[User] = genericJsonSchema</span>
 }
 </code></pre>
 </div>
