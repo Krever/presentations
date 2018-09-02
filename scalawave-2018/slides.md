@@ -85,8 +85,6 @@
 
 # <span style="color: blue" class=blink_me>Ammonite</span>
 
-<small class="fragment">and a promise</small>
-
 ----
 
 ## What is <span style="color: red">Ammonite</span>?
@@ -178,7 +176,7 @@ no floats
 <small><b>Arcane syntax</b></small>
 ### parameter expansion
 
-<div style=font-size:70%>
+<div style=font-size:70% class=fragment>
 <pre><code data-trim data-noescape class=bash>
 ${parameter:-word}
 ${parameter:=word}
@@ -212,6 +210,7 @@ notes:
 ### arrays
 
 ```bash
+  arr=(a b c d)
   ${arr[*]}         # All of the items in the array
   ${!arr[*]}        # All of the indexes in the array
   ${#arr[*]}        # Number of items in the array
@@ -249,7 +248,7 @@ test 2 -gt 1
 
 </div>
 
-<div id=right>
+<div id=right class=fragment>
 <ul>
 <li>20 file tests
 <li>6 string tests 
@@ -280,33 +279,12 @@ find . -iname \\*.scala -print0 | xargs -0 ls -ls | sort -k5 -r | head -3
 </code></pre></div>
 vs
 ```scala
-(ls.rec! wd).filter(_.ext == scala).sortBy(_.size).take(3)
+(ls.rec! wd).filter(_.ext == "scala").sortBy(_.size).take(3)
 ```
 
+notes:
+Maxim Novak
 
-++++
-
-### Good practices
-
-</div>
-
-<div id=left>
-<ul>
-<li class=fragment>shellcheck
-<li class=fragment>functions
-<li class=fragment>set -o errexit
-<li class=fragment>set -o nounset
-<li class=fragment>set -o xtrace
-<li class=fragment>set -o pipefail
-</ul>
-
-</div>
-
-</div id=right>
-
-<h1 class=fragment>NO ONE CARES</h1>
-
-</div>
 
 ++++
 
@@ -328,32 +306,6 @@ and you already know it
 ----
 
 <small><b>Whats wrong with <span style="color: red">bash</span>?</b></small>
-## Portability
-
-* how to declare dependencies? <!-- .element: class="fragment" -->
-* how to get those dependencies? <!-- .element: class="fragment" -->
-* how to do this across different OSes <!-- .element: class="fragment" -->
-
-++++
-
-<small><b><span style="color: red">Ammonite</span></b></small>
-### Magic imports
-
-you can use anything available for maven!
-
-```scala
-import $ivy.`com.chuusai::shapeless:2.3.2`, shapeless._
-```
-```scala
-import $plugin.$ivy.`org.spire-math::kind-projector:0.6.3`
-```
-```scala
-import $file.myfolder.MyScript
-```
-
-----
-
-<small><b>Whats wrong with <span style="color: red">bash</span>?</b></small>
 ## Unsafe
 
 ++++
@@ -366,7 +318,8 @@ import $file.myfolder.MyScript
 rm -rf $MY_VAR/
 ```
 
-```scala
+<div class=fragment>
+<pre><code data-noescape class=scala>
 @ root / ""
 ammonite.ops.PathError$InvalidSegment: [] is not a valid path segment. Ammonite-Ops does not allow empty path segments If you are dealing with path-strings coming from external sources, use the Path(...) or RelPath(...) constructor calls to convert them.
   ammonite.ops.BasePath$.fail$1(Path.scala:76)
@@ -374,7 +327,7 @@ ammonite.ops.PathError$InvalidSegment: [] is not a valid path segment. Ammonite-
   ammonite.ops.RelPath$.StringPath(Path.scala:204)
   ammonite.$sess.cmd2$.<init>(cmd2.sc:1)
   ammonite.$sess.cmd2$.<clinit>(cmd2.sc)
-```
+</code></pre></div>
 
 ++++
 
@@ -383,20 +336,20 @@ ammonite.ops.PathError$InvalidSegment: [] is not a valid path segment. Ammonite-
 
 ### Implicit working dir
 
-<pre><code data-trim data-noescape class=scala>
-#run.sh
+<pre><code data-trim data-noescape class=bash>
 java -jar <mark>my.jar</mark>
+</code></pre>
 
-#or
+<pre class=fragment><code data-trim data-noescape class=bash>
 script_loc=$(dirname "$(readlink -f "$0")")
 java -jar  <mark>$script_loc/my.jar</mark>
 </code></pre>
 
-
+<div class=fragment>
 <small><b><span style="color: red">Ammonite</span></b></small>
 <pre><code data-trim data-noescape class=scala>
 def %%(commands: String*)<mark>(implicit wd: Path)</mark>
-</code></pre>
+</code></pre></div>
 
 ++++
 
@@ -429,6 +382,56 @@ sudo eche "127.0.0.1" > /etc/resolv.conf
 
 ```
 
+++++
+
+### Good practices
+
+</div>
+
+<div id=left>
+<ul>
+<li class=fragment>shellcheck
+<li class=fragment>functions
+<li class=fragment>set -o errexit
+<li class=fragment>set -o nounset
+<li class=fragment>set -o xtrace
+<li class=fragment>set -o pipefail
+</ul>
+
+</div>
+
+</div id=right>
+
+<h1 class=fragment style="color:red">NO ONE CARES</h1>
+
+</div>
+
+----
+
+<small><b>Whats wrong with <span style="color: red">bash</span>?</b></small>
+## Portability
+
+* how to declare dependencies? <!-- .element: class="fragment" -->
+* how to get those dependencies? <!-- .element: class="fragment" -->
+* how to do this across different OSes? <!-- .element: class="fragment" -->
+
+++++
+
+<small><b><span style="color: red">Ammonite</span></b></small>
+### Magic imports
+
+you can use anything available for maven!
+
+```scala
+import $ivy.`com.chuusai::shapeless:2.3.2`, shapeless._
+```
+```scala
+import $plugin.$ivy.`org.spire-math::kind-projector:0.6.3`
+```
+```scala
+import $file.myfolder.MyScript
+```
+
 ----
 
 ## What else can we improve?
@@ -440,7 +443,7 @@ sudo eche "127.0.0.1" > /etc/resolv.conf
 <div style=font-size:80%>
 <pre><code data-trim data-noescape class=scala>
 @main
-def command1() = ??
+def command1() = ???
 
 @main
 @doc("the best command in the world")
@@ -544,60 +547,98 @@ sources.foreach{file =>
 
 ## DEMO
 
+
 new intellij project
 setup worksheets
+
+
 write hello world, run it with --watch
 
-maybe select from http://ammonite.io/#AmmoniteCookbook ?
 
-import https://github.com/DanielaSfregola/twitter4s
-implement wordcount
+find book by title
+download cover, save to file
 
-custom printer for git log
-write to the file
 
 ----
 
 #### Bonus
-## Mill
+# <span style="color: red">Mill</span>
 
 ++++
 
-how fast was mill developed?
+## build tool created in ~3 months
 
-standing on the giatns
-ammonite
-coursier
-scalafmt
+standing on the shoulders of giatns
 
-++++ 
-
-mill example
-ivy deps
-some other settings
-
-
-compared side by side with sbt
-
-how to add format to compile? super.compile
-
-custom task (line count from docs)
+* ammonite
+* coursier
 
 ++++
+
+## Everything is a task
+
+* (almost) everything is a task
+* each task is cached
+
+```scala
+object foo extends ScalaModule { ... }
+
+def lineCount = T {
+  import ammonite.ops._
+  foo.sources()
+    .flatMap(ref => ls.rec(ref.path))
+    .filter(_.isFile)
+    .flatMap(read.lines)
+    .size
+}
+```
+```
+$ mill lineCount
+3
+```
+
+++++
+
+### Super extensible
+
+```scala
+object foo extends ScalaModule with ScalafmtModule {
+    ...
+    override def compile = T {
+      reformat()
+      super.compile()
+    }
+}
+
+```
+
+```
+$ mill foo.compile
+```
+
+++++
+
+## Everything is a module
 
 build matrix
-scalajs, jvm as separate projects
-scala versions as separate projects
-test as separate project
+* tests are a separate module
+* js/jvm are separate modules
+* 2.12/2.13 are separate modules
 
-++++ 
-
---watch
-// Mill's --watch flag watches both the files you are building using Mill, as well as Mill's own build.sc
+```
+$ mill foo[2.12].js.test.run
+```
 
 ++++
 
-mill plan
+## Everything is watched
+
+Mill's <span style="color: red">--watch</span> flag watches both the <span style="color: red">files you are building</span> using Mill, 
+as well as <span style="color: red">Mill's own build.sc</span>
+
+```
+$ mill --watch foo.compile
+```
 
 
 ----
