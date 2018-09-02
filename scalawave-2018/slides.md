@@ -547,16 +547,88 @@ sources.foreach{file =>
 
 ## DEMO
 
+++++
 
-new intellij project
-setup worksheets
+<!-- -- .section: data-transition="none" data-background="grey" -->
 
+<video controls class="stretch" data-autoplay src="video/1_new_project.mkv"></video>
 
-write hello world, run it with --watch
+++++
 
+<!-- -- .section: data-transition="none" data-background="grey" -->
 
-find book by title
-download cover, save to file
+<video controls class="stretch" data-autoplay src="video/2_worksheet_settings.mkv"></video>
+
+++++
+
+<!-- -- .section: data-transition="none" data-background="grey" -->
+
+<video controls class="stretch" data-autoplay src="video/3.1_new_file.mkv"></video>
+
+++++
+
+<!-- -- .section: data-transition="none" data-background="grey" -->
+
+<video controls class="stretch" data-autoplay src="video/3.2_ammonite_deps.mkv"></video>
+
+++++
+
+<!-- -- .section: data-transition="none" data-background="grey" -->
+
+<video controls class="stretch" data-autoplay src="video/4.1_helloworld.mkv"></video>
+
+++++
+
+<!-- -- .section: data-transition="none" data-background="grey" -->
+
+<video controls class="stretch" data-autoplay src="video/4.2_helloworld_watch.mkv"></video>
+
+----
+
+## More interesting demo
+
+++++
+
+<!-- -- .section: data-transition="none" data-background="grey" -->
+
+<video controls class="stretch" data-autoplay src="video/5_covers_p1_http.mkv"></video>
+
+++++
+
+<!-- -- .section: data-transition="none" data-background="grey" -->
+
+<video controls class="stretch" data-autoplay src="video/6_covers_p2_json.mkv"></video>
+
+++++
+
+<!-- -- .section: data-transition="none" data-background="grey" -->
+
+<video controls class="stretch" data-autoplay src="video/7.1_covers_p3_download.mkv"></video>
+
+++++
+
+<!-- -- .section: data-transition="none" data-background="grey" -->
+
+<video controls class="stretch" data-autoplay src="video/7.2_covers_p3_result.mkv"></video>
+
+++++
+
+<!-- -- .section: data-transition="none" data-background="grey" -->
+
+<video controls class="stretch" data-autoplay src="video/8.1_covers_p4_ivy_import.mkv"></video>
+
+++++
+
+<!-- -- .section: data-transition="none" data-background="grey" -->
+
+<video controls class="stretch" data-autoplay src="video/8.2_covers_p4_captions.mkv"></video>
+
+++++
+
+<!-- -- .section: data-transition="none" data-background="grey" -->
+
+<video controls class="stretch" data-autoplay src="video/8.3_covers_p4_result.mkv"></video>
+
 
 
 ----
