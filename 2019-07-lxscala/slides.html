@@ -1,0 +1,506 @@
+<div id=left-6>
+    <h2 style="font-size:1.4em">Pragmatic</h2>
+    <h2 style="font-size:1.4em">object-oriented</h2>
+    <h2 style="font-size:2.3em" class=blue>tagless final</h2>
+</div>
+
+<div id=right-4>
+    <h4 style="font-size:0.8em">Purity</h4>
+    <h4 style="font-size:0.8em">abstraction</h4>
+    <h4 style="font-size:0.8em">and Referential Transparency</h4>
+    <h4 style="font-size:0.8em">with Class<span style="font-size:0.7em">es<span></h4>
+</div>
+
+<div>
+    <small>Wojtek Pituła @ Sony Electronics</small>
+    <small>//</small>
+    <small><a href="https://twitter.com/Krever01">@Krever01</a></small>
+    <br>
+    <small><a href="http://w.pitula.me/presentations">w.pitula.me/presentations</small>
+</div>
+
+----
+
+## Manage your <span class=blue>expectations</span>
+### <small style="color:grey">It's not agenda slide!</small>
+
+<br/>
+
+<div id=left class=fragment style="text-align: center">
+    <small>Part 1:</small>
+    <h2>Theory</h2>
+    <ul>
+        <li>correct</li>
+        <li>directly useless</li>
+    </ul>
+</div>
+
+
+<div id=right class=fragment style="text-align: center">
+    <small>Part 2:</small>
+    <h2>Practice</h2>
+    <ul>
+        <li>possibly incorrect</li>
+        <li>directly useful</li>
+    </ul>
+</div>
+
+notes:
+- I hate agenda slides
+- theory (useless but correct) vs practice(potentially both useful and incorrect + opinionated)
+
+----
+
+<h1 class=blue>theory</h1>
+
+<blockquote style="font-size:0.8em; color: grey">
+    Speakers read whitepapers so you don't have to
+    <footer style="text-align:left; font-size:0.6em">— Someone somewhere</footer>
+</blockquote>
+
+<div class="fragment">
+    <ul>
+        <li><span class="blue">Expression</span> problem</li>
+        <li><span class="blue">Initial</span> vs <span class="blue">Final</span> Encoding</li>
+        <li><span class="blue">Tagged</span> vs <span class="blue">Tagless</span> Encoding<span class="blue"></span>
+        </li>
+    </ul>
+    <br>
+    <small><span style="color: grey">Wake up in 10 minutes</span></small>
+</div>
+
+----
+
+## <span class=blue>Expression</span> problem
+
+++++
+
+#### <small><span class=blue>Expression</span> problem</small>
+
+<div style="display:grid">
+    <div style="grid-column:1;" class="fragment">
+        <span class="blue">Algrebra</span>:
+        <br>
+        <ul>
+            <li>Int literal</li>
+            <li>Negation</li>
+            <li>Addition</li>
+        </ul>
+    </div>
+    <div style="grid-column:2;" class="fragment">
+        <span class="blue">Expressions</span>:
+        <br>
+
+        <ul>
+            <li>`1`</li>
+            <li>`-2`</li>
+            <li>`1+-2+3`</li>
+        </ul>
+    </div>
+    <div style="grid-column:3" class="fragment">
+        <span class="blue">Interpreters</span>:<br>
+        <ul>
+            <li>Pretty printer</li>
+            <li>Evaluator</li>
+            <li>Optimizer</li>
+        </ul>
+    </div>
+</div>
+
+++++
+
+### It is all about
+## <span class="blue">multiple interpretations</span>
+
+
+----
+
+## <span class=blue>initial</span> vs <span class=blue>final</span> encoding
+
+++++
+
+## <span class=blue>initial</span> encoding
+
+<small style="color: grey">Often used with Free</small>
+
+++++
+
+<div>
+    <h4 style="margin-bottom:0"><small><span class=blue>initial</span> encoding</small></h4>
+    <h3>Algebra</h3>
+</div>
+
+```scala
+sealed trait DBOps
+case class SaveUser(user: User) extends DBOps
+case class FindUserById(id: String) extends DBOps
+case class Transaction(ops: Seq[DBOps]) extends DBOps
+```
+
+++++
+
+<div>
+    <h4 style="margin-bottom:0"><small><span class=blue>initial</span> encoding</small></h4>
+    <h3>Expressions</h3>
+</div>
+
+```scala
+val findId1: DBOps = FindUserById(1)
+
+val transaction1: DBOps =
+    Transaction(Seq(
+        SaveUser(user1),
+        FindUserById(user1.id)
+    ))
+```
+
+++++
+
+<div>
+    <h4 style="margin-bottom:0"><small><span class=blue>initial</span> encoding</small></h4>
+    <h3>Interpreters</h3>
+</div>
+
+```scala
+def show(exp: DBOps): String
+
+def usedUserIds(exp: DBOps): Seq[Int]
+```
+
+++++
+
+<div>
+    <h4 style="margin-bottom:0"><small><span class=blue>initial</span> encoding</small></h4>
+    <h3>Interpreter example</h3>
+</div>
+
+```scala
+def show(exp: DBOps): String = exp match {
+    case SaveUser(user)   => s"Saving $user"
+    case FindUserById(id) => s"Looking for user with id $id"
+    case Transaction(ops) => "Executing:\n" + ops.mkString("\n")
+}
+```
+
+++++
+
+<div>
+    <h4 style="margin-bottom:0"><small><span class=blue>initial</span> encoding</small></h4>
+    <h3>Interpretations</h3>
+</div>
+
+```scala
+val desc: String  = show(findId1)
+
+val ids: Seq[Int] = usedUserIds(transaction1)
+```
+
+++++
+
+## <span class=blue>final</span> encoding
+
+++++
+
+<div>
+    <h4 style="margin-bottom:0"><small><span class=blue>final</span> encoding</small></h4>
+    <h3>Algebra</h3>
+</div>
+
+```scala
+trait DBOps[T] {
+    def saveUser(user: User): T
+    def findUserById(id: Int): T
+    def transaction(ops: Seq[T]): T
+}
+```
+
+++++
+
+<div>
+    <h4 style="margin-bottom:0"><small><span class=blue>final</span> encoding</small></h4>
+    <h3>Expressions</h3>
+</div>
+
+```scala
+def findId1[T](db: DBOps[T]): T = db.findUserById(1)
+
+def transaction1[T](db: DBOps[T]): T =
+    db.transaction(Seq(
+        db.saveUser(user1),
+        db.findUserById(user1.id)
+    ))
+```
+
+++++
+
+<div>
+    <h4 style="margin-bottom:0"><small><span class=blue>final</span> encoding</small></h4>
+    <h3>Interpreters</h3>
+</div>
+
+```scala
+val show: DBOps[String]
+
+val usedUserIds: DBOps[Seq[Int]]
+```
+
+<small>potentially <span class="blue">implicit</span></small>
+
+++++
+
+<div>
+    <h4 style="margin-bottom:0"><small><span class=blue>final</span> encoding</small></h4>
+    <h3>Interpreter example</h3>
+</div>
+
+```scala
+val show: DBOps[String] = new DBOps[String] {
+def saveUser(user: User): String =
+    s"Saving $user"
+def findUserById(id: Int): String =
+    s"Looking for user with id $id"
+def transaction(ops: Seq[String]): String =
+    "Executing:\n" + ops.mkString("\n")
+}
+```
+
+++++
+
+<div>
+    <h4 style="margin-bottom:0"><small><span class=blue>initial</span> encoding</small></h4>
+    <h3>Interpretations</h3>
+</div>
+
+```scala
+val desc: String  = findId1(show)
+
+val ids: Seq[Int] = transaction1(usedUserIds)
+```
+
+++++
+
+<table>
+    <tr>
+        <td></td>
+        <th class="blue">Initial</th>
+        <th class="blue">Final</th>
+    </tr>
+    <tr>
+        <th>Algebra</th>
+        <td>values</td>
+        <td>methods</td>
+    </tr>
+    <tr>
+        <th>Expresions</th>
+        <td>values</td>
+        <td>methods</td>
+    </tr>
+    <tr>
+        <th>Interpreters</th>
+        <td>methods</td>
+        <td>values</td>
+    </tr>
+    <tr>
+        <th>Interpretations</th>
+        <td>interpreter applied on expression</td>
+        <td>expression executed with interpreter</td>
+    </tr>
+</table>
+
+----
+
+## <span class=blue>tagged</span> vs <span class=blue>tagless</span> encoding
+
+++++
+
+## <span class=blue>tagged</span> encoding
+
+
+```scala
+// Result ADT
+sealed trait Result
+case class FindByIdResult(user: Option[User])   extends Result
+case class SaveResult(id: Int)                  extends Result
+case class TransResult(subResults: Seq[Result]) extends Result
+```
+
+```scala
+// Initial interpreter & interpretations
+def executeDBQuery(exp: DBOps): Task[Result]
+val r: Task[Result] = executeDBQuery(findById1)
+```
+```scala
+// Final interpreter & interpretations
+val executeDBQuery: DBOps[Task[Result]]
+val r: Task[Result] = findById1(executeDBQuery)
+```
+
+++++
+
+## <span class=blue>tagless initial</span> encoding
+<small>Algebra & Expressions</small>
+
+```scala
+// Algebra
+sealed trait DBOps[Result]
+case class SaveUser(user: User) extends DBOps[Int]
+case class FindUserById(id: Int) extends DBOps[Option[User]]
+case class Transaction[HList: UnaryTCConstraint[?, DBOps](ops: HList) extends DBOps[HList]
+```
+
+```scala
+// Expressions
+val findId1: DBOps[Option[User]] = FindUserById(1)
+
+val transaction1: DBOps[Int :: Option[User] :: HNil] =
+    Transaction(Seq(
+        SaveUser(user1),
+        FindUserById(user1.id)
+    ))
+```
+
+++++
+
+## <span class=blue>tagless initial</span> encoding
+<small>Interpreters & Interpretations</small>
+
+```scala
+// Interpreters
+def show[T](exp: DBOps[T]): String
+def usedUserIds[T](exp: DBOps[T]): Seq[Int]
+
+def executeDBQuery[T](exp: DBOps[T]): Task[T]
+```
+```scala
+// Interpretations
+val userOpt: Task[Option[User]] = executeDBQuery(findId1)
+```
+
+++++
+
+## <span class=blue>tagless final</span> encoding
+<small>Algebra & Expressions</small>
+
+```scala
+// Algebra
+trait DBOps[F[_]] {
+    def saveUser(user: User): F[Int]
+    def findUserById(id: Int): F[Option[Int]]
+    def transaction[HList: UnaryTCConstraint[?, F]](
+        ops: HList): F[HList]
+}
+```
+
+```scala
+// Expressions
+def findId1[F[_]](db: DBOps[F]): F[Option[User]] =
+db.findUserById(1)
+
+def transaction1[F[_]](db: DBOps[F]): F[F[Int] :: F[Option[User]] :: HNil] =
+    db.transaction(Seq(
+        db.saveUser(user1),
+        db.findUserById(user1.id)
+    ))
+```
+
+++++
+
+## <span class=blue>tagless final</span> encoding
+<small>Interpreters & Interpretations</small>
+
+```scala
+// Interpreters
+val show: DBOps[Const[String, ?]]
+val usedUserIds: DBOps[Const[Seq[Int], _]]
+
+val executeDBQuery: DBOps[Task]
+```
+
+```scala
+// Interpretations
+val userOpt: Task[Option[User]] = findId1(executeDBQuery)
+```
+
+++++
+
+<table>
+    <tr>
+        <td></td>
+        <th class="blue">Tagged</th>
+        <th class="blue">Tagless</th>
+    </tr>
+    <tr>
+        <th>Algebra</th>
+        <td>plain</td>
+        <td>generic</td>
+    </tr>
+    <tr>
+        <th>Expresions</th>
+        <td>plain</td>
+        <td>generic</td>
+    </tr>
+    <tr>
+        <th>Interpreters</th>
+        <td>plain</td>
+        <td>generic</td>
+    </tr>
+    <tr>
+        <th>Interpretations</th>
+        <td>needs to be pattern-matched</td>
+        <td>properly typed</td>
+    </tr>
+</table>
+
+++++
+
+<span class="blue">Tagged</span> hides type info inside result value.
+<br>
+<span class="blue">Tagless</span> encodes type info in algebra signatures.
+
+
+----
+
+practice
+- FP in general and TF in particular is about security. Code security (via obfuscation) and job security (via the same obfuscation)
+- X rules for taglless final (a.k.a. I made this up)
+- rule 1: dont use it (directly)
+- rule 2: dont use ReaderT (reveals impl details)
+- rule 3: dont use StateT (in module decl) - (creates global state)
+
+
+++++
+
+method param vs class param vs type member
+-- you cant encapsulate via interface with method level (TCs are in method signature)
+same for readerT/naive ZIO
+
+
+++++
+
+application vs library
+
+++++
+
+cost of a tool vs cost of choosing a tool every time
+
+
+encapsulations
+interface with elements only meaningful from business logic perspective
+
+++++
+
+polymorphism
+- useful only when dealing with transformers because there is not enough moands
+- tests (gdzies na koncu)
+
+++++
+
+transformers are useless
+- po kolei przez transformery przejsc
+
+
+++++
+
+tagless is harder (deferred+monaderror)
+
+
