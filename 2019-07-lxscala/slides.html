@@ -315,6 +315,7 @@ val ids: Seq[Int] = transaction1(usedUserIds)
 
 ## <span class=blue>tagged</span> encoding
 
+ADT handling each possible result of algebra interpretation
 
 ```scala
 // Result ADT
@@ -324,21 +325,36 @@ case class SaveResult(id: Int)                  extends Result
 case class TransResult(subResults: Seq[Result]) extends Result
 ```
 
+++++
+
+## <span class=blue>tagged initial</span> encoding
+
+
 ```scala
-// Initial interpreter & interpretations
+// Initial interpreter
 def executeDBQuery(exp: DBOps): Task[Result]
+
+// Initial interpretation
 val r: Task[Result] = executeDBQuery(findById1)
 ```
+
+++++
+
+## <span class=blue>tagged final</span> encoding
+
 ```scala
-// Final interpreter & interpretations
+// Final interpreter
 val executeDBQuery: DBOps[Task[Result]]
+
+// Final interpretations
 val r: Task[Result] = findById1(executeDBQuery)
 ```
 
 ++++
 
 ## <span class=blue>tagless initial</span> encoding
-<small>Algebra & Expressions</small>
+
+Algebra becomes parametrized via GADTs
 
 ```scala
 // Algebra
@@ -363,7 +379,8 @@ val transaction1: DBOps[DBOps[Int] :: DBOps[Option[User]] :: HNil] =
 ++++
 
 ## <span class=blue>tagless initial</span> encoding
-<small>Interpreters & Interpretations</small>
+
+Interpreters are also parametrized
 
 ```scala
 // Interpreters
@@ -380,24 +397,22 @@ val userOpt: Task[Option[User]] = executeDBQuery(findId1)
 ++++
 
 ## <span class=blue>tagless final</span> encoding
-<small>Algebra & Expressions</small>
+
+Parametrized algebra via higher-kinded generic interface
 
 ```scala
 // Algebra
 trait DBOps[F[_]] {
     def saveUser(user: User): F[Int]
     def findUserById(id: Int): F[Option[Int]]
-    def transaction[HList: UnaryTCConstraint[?, F]](
-        ops: HList): F[HList]
+    def transaction[HList: UnaryTCConstraint[?, F]](ops: HList): F[HList]
 }
 ```
 
 ```scala
 // Expressions
-def findId1[F[_]](db: DBOps[F]): F[Option[User]] =
-db.findUserById(1)
-
-def transaction1[F[_]](db: DBOps[F]): F[F[Int] :: F[Option[User]] :: HNil] =
+def findId1[F[_]](db: DBOps[F]): F[Option[User]] = db.findUserById(1)
+def transaction1[F[_]](db: DBOps[F]) =
     db.transaction(Seq(
         db.saveUser(user1),
         db.findUserById(user1.id)
@@ -492,7 +507,6 @@ def communicateWithTheUser[F[_]: Console](): F[Unit]
 <h3 class="blue"><small>testability</small></h3>
 
 ### OOP already have that!
-<!--<small style="color: grey">And haskell don't - because it uses "statics" by default</small>-->
 
 <pre style="width: 50%; text-align: center"><code class="hljs lang-scala">class MyService(dao: MyDao) {}
 </code></pre>
@@ -513,7 +527,6 @@ def communicateWithTheUser[F[_]: Console](): F[Unit]
 <h3 class="blue"><small>Effects tracking</small></h3>
 
 ### OOP almost have that!
-<small style="color: grey">And haskell don't - because it uses "statics" by default</small>
 
 <pre style="width: 60%; text-align: center"><code class="hljs lang-scala">class MyService[F[_]](dao: MyDao[F]) {}
 </code></pre>
@@ -719,7 +732,9 @@ trait Foo {
 <pre style="font-size: 0.5em"><code class="hljs lang-scala">trait UserService[F[_]] { ... }
 
 object UserService {
-    class Default[F[_]]() extends UserService[F] { ... }
+    class Default[F[_]](dao: UserDao[F]) extends UserService[F] {
+        ...
+    }
 }
 </code></pre>
 
@@ -728,41 +743,91 @@ object UserService {
 #### Tip 3:
 ### <span class="blue">Don't</span> go beyond <span class="blue">Monad Error</span>
 
-cats-effect is order of magnitude more complex
+### <small style="color:grey">Unless your whole team knows what you're doing</small>
 
-classy optics is yet another order of magnitude
+++++
 
---prowonanie wielkosci, jakas hiperbola, moze animacja
+#### <small>Tip 3: <span class="blue">Don't</span> go beyond <span class="blue">Monad Error</span></small>
+
+<pre style="font-size: 0.5em"><code class="hljs lang-scala" data-trim data-noescape>trait UserService[F[_]] { ... }
+
+object UserService {
+    class Default[F[_]: <mark>Monad</mark>](dao: UserDao[F]) extends UserService[F] {
+        ...
+    }
+}
+</code></pre>
+
+++++
+
+<img src="img/cats.png" style="position: fixed; top:0; left:0; min-width: 100%; min-height: 100%; max-height: 100%; margin: 0; border: none; "/>
+
+++++
+
+<img src="img/movie-monster-size-comparison1.jpg">
 
 ----
 
 #### Tip 4:
 ### <span class="blue">Don't</span> use <span class="blue">monad transformers</span>
 
-## <small style="color:grey">In public methods</small>
+### <small style="color:grey">In public interfaces and global context</small>
+
+++++
+
+#### <small>Tip 4: <span class="blue">Don't</span> use <span class="blue">monad transformers</span> </small>
+
+<ul>
+    <li class="fragment">
+        <span class="blue" style="font-weight: bold">EitherT</span> in context = global error type
+    </li>
+    <li class="fragment">
+        <span class="blue" style="font-weight: bold">StateT</span>  in context = global state
+    </li>
+    <li class="fragment">
+        <span class="blue" style="font-weight: bold">ReaderT</span> in context = global dependencies
+    </li>
+</ul>
+
+
 
 ----
 
 #### Tip 5:
-### Use (<span class="blue">co</span>)<span class="blue">variance</span></span>
+### Use (<span class="blue">co</span>)<span class="blue">variance</span>
 
 ## <small style="color:grey">Unless you have good reason not to</small>
 
+++++
+
+#### <small>Tip 5: Use (<span class="blue">co</span>)<span class="blue">variance</span></small>
+<span class="blue">`F[_]`</span> is <span class="blue">`IO`</span> and every `IO` is <span class="blue">covaraint</span>.
+
+<pre style="font-size: 0.5em"><code class="hljs lang-scala" data-trim data-noescape>
+class Default[F[<mark>+</mark>_]:Monad] {
+    ...
+}
+</code></pre>
+
 ----
 
-1. Dont follow Haskell blindly
-2. Use TF in libraries!
-3. Use TF in apps if it feels worth the effort
-4. Try things
+<!-- -- data-background-color="#0074D9" -->
 
+<ul>
+    <li class="fragment"><h2>Dont follow Haskell blindly</h2></li>
+    <li class="fragment"><h2>Use TF in libraries!</h2></li>
+    <li class="fragment"><h2>Use TF in apps... maybe</h2></li>
+    <li class="fragment"><h2>Try things out</h2></li>
+</ul>
 
-cost of a tool vs cost of choosing a tool every time
+----
 
-polymorphism
-- useful only when dealing with transformers because there is not enough moands
-- tests (gdzies na koncu)
+## Thanks!
 
-kleisli w http4s do traceowania?
+Wojtek Pituła - [@Krever01](https://twitter.com/Krever01)
+
+[w.pitula.me/presentations](http://w.pitula.me/presentations/scalar-2018/index.html)
+
 
 
 
