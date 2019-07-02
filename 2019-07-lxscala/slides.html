@@ -332,10 +332,10 @@ case class TransResult(subResults: Seq[Result]) extends Result
 
 ```scala
 // Initial interpreter
-def executeDBQuery(exp: DBOps): Task[Result]
+def executeDBQuery(exp: DBOps): Result
 
 // Initial interpretation
-val r: Task[Result] = executeDBQuery(findById1)
+val r: Result = executeDBQuery(findById1)
 ```
 
 ++++
@@ -344,11 +344,32 @@ val r: Task[Result] = executeDBQuery(findById1)
 
 ```scala
 // Final interpreter
-val executeDBQuery: DBOps[Task[Result]]
+val executeDBQuery: DBOps[Result]
 
 // Final interpretations
-val r: Task[Result] = findById1(executeDBQuery)
+val r: Result = findById1(executeDBQuery)
 ```
+
+++++
+
+### Working with <span class=blue>tagged</span> encoding
+
+Pattern matching of result
+
+```scala
+val r: Result = findById1(executeDBQuery)
+r match {
+  case FindByIdResult(userOpt) => doSthWithIt
+  case _ => ???
+}
+
+```
+
+++++
+
+## <span class=blue>tagless</span> encoding
+
+Algebra parametrized with result type
 
 ++++
 
@@ -387,18 +408,19 @@ Interpreters are also parametrized
 def show[T](exp: DBOps[T]): String
 def usedUserIds[T](exp: DBOps[T]): Seq[Int]
 
-def executeDBQuery[T](exp: DBOps[T]): Task[T]
+def executeDBQuery[T](exp: DBOps[T]): T
+def executeDBQueryAsync[T](exp: DBOps[T]): Task[T]
 ```
 ```scala
 // Interpretations
-val userOpt: Task[Option[User]] = executeDBQuery(findId1)
+val userOpt: Task[Option[User]] = executeDBQueryAsync(findId1)
 ```
 
 ++++
 
 ## <span class=blue>tagless final</span> encoding
 
-Parametrized algebra via higher-kinded generic interface
+Parametrized algebra via higher-kinded type
 
 ```scala
 // Algebra
@@ -430,12 +452,13 @@ def transaction1[F[_]](db: DBOps[F]) =
 val show: DBOps[Const[String, ?]]
 val usedUserIds: DBOps[Const[Seq[Int], ?]]
 
-val executeDBQuery: DBOps[Task]
+val executeDBQuery: DBOps[Id]
+val executeDBQueryAsync: DBOps[Task]
 ```
 
 ```scala
 // Interpretations
-val userOpt: Task[Option[User]] = findId1(executeDBQuery)
+val userOpt: Task[Option[User]] = findId1(executeDBQueryAsync)
 ```
 
 ++++
@@ -482,11 +505,11 @@ val userOpt: Task[Option[User]] = findId1(executeDBQuery)
 
 ----
 
-## <span class="blue">Why</span> would you want to use <span class="blue">Tagles final</span>?
+## <span class="blue">Why</span> would you want to use <span class="blue">Tagless final</span>?
 
 ++++
 
-#### <span class="blue">Why</span> would you want to use <span class="blue">Tagles final</span>?
+#### <span class="blue">Why</span> would you want to use <span class="blue">Tagless final</span>?
 
 <h3 class="fragment">testability</h3>
 <h3 class="fragment">effects tracking</h3>
@@ -526,9 +549,12 @@ def communicateWithTheUser[F[_]: Console](): F[Unit]
 
 <h3 class="blue"><small>Effects tracking</small></h3>
 
-### OOP almost have that!
+### It can lie!
 
-<pre style="width: 60%; text-align: center"><code class="hljs lang-scala">class MyService[F[_]](dao: MyDao[F]) {}
+<pre style="width: 60%"><code class="hljs lang-scala">def foo[F[_]]: F[Int] = {
+    println("BAR")
+    throw new RuntimeException("X")
+}
 </code></pre>
 
 ++++
@@ -573,9 +599,11 @@ Ability to reuse code for different wrapper types
     <br>
     <ul>
         <li><a href="https://github.com/getquill/quill">Quill</a></li>
+        <li><a href="https://github.com/tpolecat/doobie">Doobie</a></li>
         <li><a href="https://github.com/julienrf/endpoints">Endpoints</a></li>
-        <li><a href="https://github.com/functional-streams-for-scala/fs2">fs2</a></li>
         <li><a href="https://github.com/softwaremill/sttp">sttp</a></li>
+        <li><a href="https://github.com/functional-streams-for-scala/fs2">fs2</a></li>
+        <li><a href="https://github.com/http4s/http4s">http4s</a></li>
     </ul>
 </div>
 
@@ -617,13 +645,30 @@ There are only 2 important contextes:
 * <code class="blue">IO</code>/<code class="blue">Task</code>/<code class="blue">ZIO</code> - runtime
 * <code class="blue">Id</code>/<code class="blue">Try</code> - tests
 
+++++
+
+<h4><span class="blue">Context polymorphism</span> in <span class="blue">applications</span></h4>
+
+Synchronous tests are valuable
+
+Business logic rarely ever needs <code class="blue">IO</code>
+
+----
+
+### <span class="blue">Why</span> would you want to use
+### <span class="blue">Tagless final</span> in <span class="blue">Application</span>?
+
+* <span class="fragment">better code <span class="blue">understandability</span> via effects tracking</span>
+* <span class="fragment">simple and synchronous <span class="blue">tests</span></span>
+* <span class="fragment">possibility to <span class="blue">change <code>IO</code></span></span>
+
 ----
 
 #### Tip 1:
 ## It's <span class="blue">not</span> for free
 
 <blockquote style="font-size:0.8em; color: grey; width: 100%">
-    <span class="blue">FP</span> in general and <span class="blue">Tagless Final</span> in particular is about <span class="blue">security</span> .
+    <span class="blue">FP</span> in general and <span class="blue">Tagless Final</span> in particular are about <span class="blue">security</span> .
     <br>
     Code security and job security, both achieved via <span class="blue">code obfuscation</span> .
     <footer style="text-align:left; font-size:0.6em">— Friend of mine</footer>
@@ -638,7 +683,6 @@ val u: UnsafeApi = ???
 </code></pre>
 
 <pre class="fragment"><code class="lang-scala hljs" style="font-size: 0.8em">import monix.eval.Task
-
 object SimpleSafeApi {
     def safeJdbcCall(): Task[Int] = Task(u.jdbcCall())
 }
@@ -673,7 +717,7 @@ object TFSafeApi {
 
 ```scala
 object Foo {
-    def findUser[F[_]: Monad](id: String): F[User]
+    def findUser[F[_]: Monad: DBOps](id: String): F[User]
 }
 ```
 
@@ -682,7 +726,7 @@ object Foo {
 ### Encoding 2: <span class="blue">Modules</span>
 
 ```scala
-class Foo[F[_]: Monad] {
+class Foo[F[_]: Monad](db: DBOps[F]) {
     def findUser(id: String): F[User]
 }
 ```
@@ -717,7 +761,9 @@ trait Foo {
 
 <small>Use implicits for typeclasses and normal parameters for dependencies</small>
 
-<pre style="font-size: 0.5em"><code class="hljs lang-scala">class RealUsersService[F[_]: Monad](repo: UsersRepo[F]) {
+<pre style="font-size: 0.5em"><code class="hljs lang-scala">class RealUsersService[F[_]: Monad](repo: UsersRepo[F])
+    extends UserService[F]
+{
     def authenticate(login: String, pass: String): F[Option[User]]
 }
 </code></pre>
@@ -737,6 +783,11 @@ object UserService {
     }
 }
 </code></pre>
+
+++++
+
+#### <small> Tip 2: Use <span class="blue">modules</span> and <span class="blue">interfaces</span></small>
+#### Check out <a href="https://github.com/fthomas/scala-steward">scala-steward</a> sources for examples
 
 ----
 
@@ -765,6 +816,20 @@ object UserService {
 ++++
 
 <img src="img/movie-monster-size-comparison1.jpg">
+
+++++
+
+#### <small>Tip 3: <span class="blue">Don't</span> go beyond <span class="blue">Monad Error</span></small>
+#### Use exact type directly when things get complicated
+
+<pre style="font-size: 0.5em"><code class="hljs lang-scala" data-trim data-noescape>trait UserService[F[_]] { ... }
+
+object UserService {
+    class Default(dao: UserDao[Task]) extends UserService[Task] {
+        ...
+    }
+}
+</code></pre>
 
 ----
 
@@ -801,7 +866,7 @@ object UserService {
 ++++
 
 #### <small>Tip 5: Use (<span class="blue">co</span>)<span class="blue">variance</span></small>
-<span class="blue">`F[_]`</span> is <span class="blue">`IO`</span> and every `IO` is <span class="blue">covaraint</span>.
+<span class="blue">`F[_]`</span> will be an <span class="blue">`IO`</span> and every `IO` is <span class="blue">covaraint</span>.
 
 <pre style="font-size: 0.5em"><code class="hljs lang-scala" data-trim data-noescape>
 class Default[F[<mark>+</mark>_]:Monad] {
@@ -826,8 +891,11 @@ class Default[F[<mark>+</mark>_]:Monad] {
 
 Wojtek Pituła - [@Krever01](https://twitter.com/Krever01)
 
-[w.pitula.me/presentations](http://w.pitula.me/presentations/scalar-2018/index.html)
-
+<div>
+    <small>Feedback maybe?</small>
+    <br>
+    [w.pitula.me/presentations](http://w.pitula.me/presentations/scalar-2018/index.html)
+</div>
 
 
 
