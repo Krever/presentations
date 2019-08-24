@@ -1,0 +1,135 @@
+<html>
+<head>
+    <link rel="stylesheet" href="../reveal.js/css/reveal.css">
+    <link rel="stylesheet" href="../reveal.js/css/theme/white.css">
+    <link rel="stylesheet" href="../reveal.js/lib/css/hljs-tomorrow.css">
+    <link href="https://fonts.googleapis.com/css?family=Creepster&display=swap" rel="stylesheet">
+
+    <script>
+        var link = document.createElement('link');
+        link.rel = 'stylesheet';
+        link.type = 'text/css';
+        link.href = window.location.search.match(/print-pdf/gi) ? '../reveal.js/css/print/pdf.css' : '../reveal.js/css/print/paper.css';
+        document.getElementsByTagName('head')[0].appendChild(link);
+    </script>
+    <style>
+        table.comic-table td {
+            text-align: center
+        }
+
+        .blink_me {
+            animation: blinker 0.5s linear infinite;
+        }
+
+        @keyframes blinker {
+            to {
+                color: red
+            }
+        }
+
+        #left-6 {
+            left: -8.33%;
+            text-align: left;
+            float: left;
+            width: 70%;
+            z-index: -10;
+        }
+
+        #right-4 {
+            left: 31.25%;
+            top: 75px;
+            float: right;
+            text-align: right;
+            z-index: -10;
+            width: 30%;
+        }
+
+        #left {
+            left: -8.33%;
+            text-align: left;
+            float: left;
+            width: 50%;
+            z-index: -10;
+        }
+
+        #right {
+            left: 31.25%;
+            top: 75px;
+            float: right;
+            text-align: right;
+            z-index: -10;
+            width: 50%;
+        }
+
+        /*primary color*/
+        .pclr {
+            color: #851e3e !important;
+        }
+        /*primary color*/
+        .sclr {
+            color: #051e3e !important;
+        }
+        .grey {
+            color: #9c9a9a !important;
+        }
+        .grey a {
+            text-decoration: none !important;
+            color: #8aa1c1;
+        }
+
+        .horror {
+            font-family: something-strange !important;
+        }
+
+        @font-face {
+            font-family: something-strange;
+            src: url(font/something-strange/Something-Strange.ttf);
+        }
+
+        div#right-corner {
+            display: block;
+            width: auto;
+            height: auto;
+
+            position: absolute;
+            top: 34.5%;
+            right: 1%;
+
+            z-index: 9999 !important;
+        }
+
+    </style>
+</head>
+<body>
+<div class="reveal">
+    <div class="slides">
+                <section data-markdown="slides.html"
+                         data-separator="^\r?\n----\r?\n$"
+                         data-separator-vertical="^\r?\n\+\+\+\+\r?\n$"
+                         data-separator-notes="^notes:"
+                         data-attributes="--\s(.*?)$"
+                         data-charset="utf-8">
+                </section>
+    </div>
+</div>
+<script src="../reveal.js/js/reveal.js"></script>
+<script src="../reveal.js/lib/js/head.min.js"></script>
+<script>
+    Reveal.initialize({
+        <!--autoPlayMedia: false,-->
+        slideNumber: 'c/t',
+        history: true,
+        dependencies: [
+            {src: '../reveal.js/plugin/markdown/marked.js'},
+            {src: '../reveal.js/plugin/markdown/markdown.js'},
+            {src: '../reveal.js/plugin/notes/notes.js', async: true},
+            {
+                src: '../reveal.js/plugin/highlight/highlight.js', async: true, callback: function () {
+                    hljs.initHighlightingOnLoad();
+                }
+            }
+        ]
+    });
+</script>
+</body>
+</html>
