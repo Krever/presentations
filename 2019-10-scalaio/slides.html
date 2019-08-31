@@ -1,6 +1,6 @@
-
 <!--Functional Frontend. Practical survival guide for backend engineers.-->
-<span class="horror sclr" style="float: left; font-size: 1.4em; font-weight: lighter">Functional</span><h3 class="horror sclr" style="float: right; font-size: 1.4em; font-weight: lighter">Practical</h3>
+<span class="horror sclr" style="float: left; font-size: 1.4em; font-weight: lighter">Functional</span><h3
+        class="horror sclr" style="float: right; font-size: 1.4em; font-weight: lighter">Practical</h3>
 <div style="clear: both;"></div>
 <span class="horror pclr" style="font-size: 3em">Frontend Survival Guide</span>
 <h3 class="horror sclr" style="font-size: 1.4em; font-weight: lighter">For backend engineers</h3>
@@ -15,178 +15,501 @@
 
 ----
 
-# Why this talk?
+## Why this talk?
 
 ++++
 
-I'm a simple backend engineer
-yet sometime I have to create ui
+<div id="left" style="width: 10%">
+    <span style="font-weight: bold;font-size: 1.5em; width: 10%">B<br>A<br>C<br>K<br>E<br>N<br>D</span>
+</div>
+
+<div id="right" style="width: 90%">
+    <img src="img/monks.jpg" style="float: left; width: 90%">
+</div>
 
 ++++
 
-# Frontend is different
+### But at some point ...
 
 ++++
 
-# Frontend is wild
+### Frontend calls
+
+<img src="img/junglewar1.jpeg">
 
 ++++
 
-# Frontend is complicated
+<div id="left">
+    <img src="img/dirty-hands.png" style="border: none">
+</div>
+
+<div>
+    <h2><span style="letter-spacing: .15em;">But a man's gotta do what a man's gotta do</span></h2>
+</div>
+
 
 ++++
 
-* languages
-    * scalajs, reasonml, elm, purescript, typescript, kotlinjs
-    * javascrips, clojurescript, coffee script
-    * webassembly, rust, scala-native
-* tools
-    * npm, node, yarn
-    * webpack, rollup
-    * scalajs-bundler, sbt-web
-* frameworks
-    * react, angular, vue
-        * scalajs-react, slinky
-    * laminar, binding.scala
-    * udash, korolev
-    * state managament - redux, mobx, react-refetch, diode
-* styling
-    * semantic, bootstrap, min.css, foundation
-    * less, sass, css, stylus
-    * rwd
-    * css-grid
-* communication
-    * graphql
-    * tapir/endpoints
-    * grpc
-    * websockets
-* other
-    * electron, node
-    * intellij, vscode
+# <span class="sclr horror" style="font-weight: lighter">Frontend</span><br/>is <span class="pclr">different</span>
+
+notes:
+because we program view not the logic
 
 ++++
 
-# Its not a tutorial
+# <span class="sclr horror" style="font-weight: lighter">Frontend</span><br/>is <span class="pclr">wild</span>
+
+notes:
+because ???
+if length
+
+++++
+
+# <span class="sclr horror" style="font-weight: lighter">Frontend</span><br/>is <span class="pclr">complicated</span>
+
+notes:
+because views are hard
+
+++++
+
+<div id="left" style="font-size: 0.7em">
+    <ul>
+        <li>languages</li>
+        <ul>
+            <li>scalajs, reasonml, elm, purescript, typescript, kotlinjs</li>
+            <li>javascrips, clojurescript, coffee script</li>
+            <li>webassembly, rust, scala-native</li>
+        </ul>
+        <li>frameworks</li>
+        <ul>
+            <li>react, angular, vue</li>
+            <ul>
+                <li>scalajs-react, slinky</li>
+            </ul>
+            <li>laminar, binding.scala</li>
+            <li>udash, korolev</li>
+            <li>state managament - redux, mobx, react-refetch, diode</li>
+        </ul>
+    </ul>
+</div>
+<div id="right" style="font-size: 0.7em">
+    <ul>
+        <li>styling</li>
+        <ul>
+            <li>semantic, bootstrap, min.css, foundation</li>
+            <li>less, sass, css, stylus</li>
+            <li>rwd</li>
+            <li>css-grid</li>
+        </ul>
+        <li>communication</li>
+        <ul>
+            <li>graphql</li>
+            <li>tapir/endpoints</li>
+            <li>grpc</li>
+            <li>websockets</li>
+        </ul>
+        <li>tools</li>
+        <ul>
+            <li>npm, node, yarn</li>
+            <li>webpack, rollup</li>
+            <li>scalajs-bundler, sbt-web</li>
+        </ul>
+    </ul>
+</div>
+
+++++
+
+### <span class="sclr">This talk</span> is <span class="pclr">not a tutorial</span>
+
+# <span class="sclr">It is a</span> <span class="pclr">survivial guide</span>
 
 ----
 
-Why me doing this talk?
+Why <span class="pclr">me</span> doing <span class="pclr">this</span> talk?
 
 ++++
 
-2013-07-01	Java EE
-    jquery, jsp, jsf
-2015-02-01	R&D + BigData
-    angular 2 beta
-    startup - budget manager
-    startup - ortofonica
-2017-02-01	Big Data + Microservices
-    js/react
-2018-02-01	Microservices + Automation
-    ts/react/biiiig
-    startup - confeerio
+<ul>
+    <li class="fragment" data-fragment-index="1"><span class="pclr">July 2013</span> - Java EE
+        <ul>
+            <li class="fragment" data-fragment-index="5">jquery, JSP, JSF</li>
+        </ul>
+    </li>
+    <li class="fragment" data-fragment-index="2"><span class="pclr">Feb 2015</span> - R&D + Big Data
+        <ul>
+            <li class="fragment" data-fragment-index="6">first SPA - angular 2 beta</li>
+            <li class="fragment" data-fragment-index="7">2x startup idea</li>
+        </ul>
+    </li>
+    <li class="fragment" data-fragment-index="3"><span class="pclr">Feb 2017</span> - Big Data + Microservices
+        <ul class="fragment" data-fragment-index="8">
+            <li>vanilla js prototyping</li>
+        </ul>
+    </li>
+    <li class="fragment" data-fragment-index="4"><span class="pclr">Feb 2018</span> - Microservices + Automation
+        <ul>
+            <li class="fragment" data-fragment-index="9">huge fronted - TS, react and more</li>
+            <li class="fragment" data-fragment-index="9">another startup idea</li>
+        </ul>
+    </li>
+</ul>
+
+++++
+
+Am I <span class="pclr">cursed</span>?
+<br>
+Or is frontend <span class="pclr">inevitible</span>?
 
 ----
 
+<ul class="grey" style="font-size: .5em; float: left">
+    <li>Language</li>
+    <li>Framework</li>
+    <li>Styling</li>
+    <li>Communication</li>
+    <li>Tooling</li>
+    <li>What else?</li>
+</ul>
 # Language
 
-* Language
-* Framework
-* Styling
-* Communication
-* Tooling
-* Other
+++++
+
+<table style="font-size: 0.8em">
+    <tr class="pclr">
+        <th>Language</th>
+        <th>Functional</th>
+        <th>Typed</th>
+        <th>Popular</th>
+    </tr>
+    <tr>
+        <td>Javascript</td>
+        <td class="fragment rev-sclr-fr" data-fragment-index="2">No</td>
+        <td>No</td>
+        <td class="fragment rev-sclr-fr" data-fragment-index="1">YES</td>
+    </tr>
+    <tr>
+        <td>Typescript</td>
+        <td class="fragment rev-sclr-fr" data-fragment-index="2">No</td>
+        <td class="green">Yes</td>
+        <td class="fragment rev-sclr-fr" data-fragment-index="1">Yes</td>
+    </tr>
+    <tr>
+        <td>Scala.js</td>
+        <td class="green">Yes</td>
+        <td class="green">Yes</td>
+        <td class="fragment rev-sclr-fr" data-fragment-index="4">Kind of</td>
+    </tr>
+    <tr>
+        <td>ReasonML</td>
+        <td class="green">Yes</td>
+        <td class="green">Yes</td>
+        <td class="fragment rev-sclr-fr" data-fragment-index="3">A bit</td>
+    </tr>
+    <tr>
+        <td>Elm</td>
+        <td class="green">Yes</td>
+        <td class="green">Yes</td>
+        <td class="fragment rev-sclr-fr" data-fragment-index="3">A bit</td>
+    </tr>
+    <tr>
+        <td>Purescript</td>
+        <td class="green">Yes</td>
+        <td class="green">Yes</td>
+        <td class="fragment rev-sclr-fr" data-fragment-index="3">A bit</td>
+    </tr>
+    <tr>
+        <td>Kotlin for JS</td>
+        <td class="fragment rev-sclr-fr" data-fragment-index="5">Kind of</td>
+        <td class="green">Yes</td>
+        <td class="fragment rev-sclr-fr" data-fragment-index="3">A bit</td>
+    </tr>
+    <tr>
+        <td>Clojurescript</td>
+        <td class="green">Yes</td>
+        <td>No</td>
+        <td class="fragment rev-sclr-fr" data-fragment-index="3">A bit</td>
+    </tr>
+    <tr>
+        <td>Coffeescript</td>
+        <td>No</td>
+        <td>No</td>
+        <td class="fragment rev-sclr-fr" data-fragment-index="6">Dead</td>
+    </tr>
+</table>
 
 ++++
 
-* scalajs, reasonml, elm, purescript, typescript, kotlinjs
-* javascrips, clojurescript, coffee script
-* webassembly, rust, scala-native
+<table style="font-size: 0.8em">
+    <tr class="pclr">
+        <th>Language</th>
+        <th>Functional</th>
+        <th>Typed</th>
+        <th>Popular</th>
+    </tr>
+    <tr>
+        <td>Javascript</td>
+        <td>No</td>
+        <td>No</td>
+        <td class="green">YES</td>
+    </tr>
+    <tr class="rev-sclr">
+        <td>Typescript</td>
+        <td>No</td>
+        <td class="green">Yes</td>
+        <td class="green">Yes</td>
+    </tr>
+    <tr class="rev-sclr">
+        <td>Scala.js</td>
+        <td class="green">Yes</td>
+        <td class="green">Yes</td>
+        <td class="yellow">Kind of</td>
+    </tr>
+    <tr class="rev-sclr">
+        <td>ReasonML</td>
+        <td class="green">Yes</td>
+        <td class="green">Yes</td>
+        <td>A bit</td>
+    </tr>
+    <tr class="rev-sclr">
+        <td>Elm</td>
+        <td class="green">Yes</td>
+        <td class="green">Yes</td>
+        <td>A bit</td>
+    </tr>
+    <tr class="rev-sclr">
+        <td>Purescript</td>
+        <td class="green">Yes</td>
+        <td class="green">Yes</td>
+        <td>A bit</td>
+    </tr>
+    <tr>
+        <td>Kotlin for JS</td>
+        <td class="yellow">Kind of</td>
+        <td class="green">Yes</td>
+        <td>A bit</td>
+    </tr>
+    <tr>
+        <td>Clojurescript</td>
+        <td class="green">Yes</td>
+        <td>No</td>
+        <td>A bit</td>
+    </tr>
+    <tr>
+        <td>Coffeescript</td>
+        <td>No</td>
+        <td>No</td>
+        <td>Dead</td>
+    </tr>
+</table>
+
+++++
+
+<h2 class="pclr">Typescript</h2>
+
+* + powerful type system
+* +- structural types
+* fp is hard and not idiomatic
+* most popular typed fronted - the default
+* bindings still dont work
+* unsafe - types lie
+
+++++
+
+<h2 class="pclr">ReasonML</h2>
+
+* ocaml base & ecosystem
+* mutability?
+
+++++
+
+<h2 class="pclr">Elm</h2>
+
+* opinionated
+  * redux model
+* separated from js
+* most popular typed fp
+* handicapped haskell (no typeclasses)
+* tooling
+* bus factor
+
+++++
+
+<h2 class="pclr">Purescript</h2>
+
+* real haskell
+* not so popular
+
+
+
+++++
+
+<h2 class="pclr">Scala.js</h2>
+
+* huge scala ecosystem
+* quite popular
+* bindings are not reliable
+* not approachable for js devs
+
+++++
+
+<span style="font-size: 1.5em">How about <span class="pclr">WebAssembly</span>?</span>
+
+++++
+
+<span style="font-size: 0.7em">How about <span class="pclr">WebAssembly</span>?</span>
+
+* not for general-purpose web
+* closer to scala-native, rust and other native languages
 
 ----
 
+<ul class="grey" style="font-size: .5em; float: left">
+    <li>Language</li>
+    <li>Framework</li>
+    <li>Styling</li>
+    <li>Communication</li>
+    <li>Tooling</li>
+    <li>What else?</li>
+</ul>
 # Framework
 
-* Language
-* Framework
-* Styling
-* Communication
-* Tooling
-* Other
+++++
+
+## Classics
+* react, angular, vue
 
 ++++
 
-* react, angular, vue
+## JS bindingins
+
 * scalajs-react, slinky
+* no angular?
+
+++++
+
+## Scala.js native
+
 * laminar, binding.scala
-* udash, korolev
-* state managament - redux, mobx, react-refetch, diode
+
+++++
+
+## Something different ?
+* udash, korolev, play
+
+++++
+
+## Appendix 1: State management
+
+* redux, mobx, react-refetch, diode
 
 ----
 
+<ul class="grey" style="font-size: .5em; float: left">
+    <li>Language</li>
+    <li>Framework</li>
+    <li>Styling</li>
+    <li>Communication</li>
+    <li>Tooling</li>
+    <li>What else?</li>
+</ul>
 # Styling
 
-* Language
-* Framework
-* Styling
-* Communication
-* Tooling
-* Other
-
 ++++
 
-* styling
-* semantic, bootstrap, min.css, foundation
+### Raw CSS is dead
+
 * less, sass, css, stylus
-* rwd
-* css-grid
-
-----
-
-# Communication
-
-* Language
-* Framework
-* Styling
-* Communication
-* Tooling
-* Other
 
 ++++
 
-* graphql
-* tapir/endpoints
-* grpc
-* websockets
+## CSS frameworks
+
+* semantic, bootstrap, min.css, foundation
+
+++++
+
+## Appendix 2: RWD
 
 ----
 
+<ul class="grey" style="font-size: .5em; float: left">
+    <li>Language</li>
+    <li>Framework</li>
+    <li>Styling</li>
+    <li>Communication</li>
+    <li>Tooling</li>
+    <li>What else?</li>
+</ul>
+<h1>Communication</h1>
+
+++++
+
+### Good old rest
+
+++++
+
+### Graphql
+
+++++
+
+### RPC
+
+* grpc-web
+* autowire
+* udash
+
+++++
+
+### Shared rest
+
+* tapir, endpoints
+
+++++
+
+### Websockets & SSE
+
+----
+
+<ul class="grey" style="font-size: .5em; float: left">
+    <li>Language</li>
+    <li>Framework</li>
+    <li>Styling</li>
+    <li>Communication</li>
+    <li>Tooling</li>
+    <li>What else?</li>
+</ul>
 # Tooling
 
-* Language
-* Framework
-* Styling
-* Communication
-* Tooling
-* Other
+++++
+
+## Essentials
+
+* npm & yarn
 
 ++++
 
-* npm, node, yarn
-* webpack, rollup
+## Bundling
+
+* webpack
+* rollup
+
+++++
+
+## Scala.js & sbt
+
 * scalajs-bundler, sbt-web
-* frameworks
 
 ----
 
+<ul class="grey" style="font-size: .5em; float: left">
+    <li>Language</li>
+    <li>Framework</li>
+    <li>Styling</li>
+    <li>Communication</li>
+    <li>Tooling</li>
+    <li>What else?</li>
+</ul>
 # What else?
-
-* Language
-* Framework
-* Styling
-* Communication
-* Tooling
-* Other
 
 ++++
 

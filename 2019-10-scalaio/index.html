@@ -3,7 +3,7 @@
     <link rel="stylesheet" href="../reveal.js/css/reveal.css">
     <link rel="stylesheet" href="../reveal.js/css/theme/white.css">
     <link rel="stylesheet" href="../reveal.js/lib/css/hljs-tomorrow.css">
-    <link href="https://fonts.googleapis.com/css?family=Creepster&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Arvo&display=swap" rel="stylesheet">
 
     <script>
         var link = document.createElement('link');
@@ -65,9 +65,33 @@
         .pclr {
             color: #851e3e !important;
         }
-        /*primary color*/
+        /*secondary color*/
         .sclr {
             color: #051e3e !important;
+        }
+        /*rev secondary color*/
+        .rev-sclr {
+            background-color: #051e3e !important;
+            color: white !important;
+        }
+        .reveal .slides section .fragment.rev-sclr-fr {
+            opacity: 1;
+            visibility: inherit;
+            transition-duration: 0.2s !important;
+        }
+        .reveal .slides section .fragment.rev-sclr-fr.current-fragment {
+            opacity: 1;
+            visibility: inherit;
+            transition-duration: 0.2s !important;
+            background-color: #051e3e !important;
+            color: white !important;
+        }
+
+        .green {
+            /*color: #851e3e !important;*/
+        }
+        .yellow {
+            /*color: #451e3e !important;*/
         }
         .grey {
             color: #9c9a9a !important;
@@ -79,6 +103,7 @@
 
         .horror {
             font-family: something-strange !important;
+            font-weight: lighter !important;
         }
 
         @font-face {
@@ -92,11 +117,22 @@
             height: auto;
 
             position: absolute;
-            top: 34.5%;
-            right: 1%;
+            bottom: 95%;
+            right: 90%;
 
             z-index: 9999 !important;
         }
+        .reveal,
+        .reveal h1,
+        .reveal h2,
+        .reveal h3,
+        .reveal h4,
+        .reveal h5,
+        .reveal h6 {
+            font-family: 'Arvo';
+            color: #051e3e;
+        }
+
 
     </style>
 </head>
