@@ -86,12 +86,12 @@
             background-color: #051e3e !important;
             color: white !important;
         }
-
-        .green {
-            /*color: #851e3e !important;*/
+        .reveal .slides section .fragment.pclr-fr {
+            color: #051e3e;
         }
-        .yellow {
-            /*color: #451e3e !important;*/
+        .reveal .slides section .fragment.pclr-fr.current-fragment {
+            color: #851e3e;
+            font-weight: bold;
         }
         .grey {
             color: #9c9a9a !important;
@@ -163,7 +163,9 @@
                 src: '../reveal.js/plugin/highlight/highlight.js', async: true, callback: function () {
                     hljs.initHighlightingOnLoad();
                 }
-            }
+            },
+            // { src: '../reveal.js/plugin/graphs/d3.v4.min.js' },
+            // { src: '../reveal.js/plugin/graphs/d3js.js' }
         ]
     });
 </script>

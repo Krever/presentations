@@ -29,13 +29,13 @@
 
 ++++
 
-### But at some point ...
+<div id="left" style="width: 90%; margin-top: 9%">
+    <img src="img/junglewar1.jpeg">
+</div>
 
-++++
-
-### Frontend calls
-
-<img src="img/junglewar1.jpeg">
+<div id="right" style="width: 10%">
+    <span style="font-weight: bold;font-size: 1.5em; width: 10%">F<br>R<br>O<br>N<br>T<br>E<br>N<br>D</span>
+</div>
 
 ++++
 
@@ -50,14 +50,50 @@
 
 ++++
 
-# <span class="sclr horror" style="font-weight: lighter">Frontend</span><br/>is <span class="pclr">different</span>
+### <span class="sclr horror" style="font-weight: lighter">Frontend</span> is <span class="pclr">different</span>
+
+<code><pre>
+class ShoppingList extends React.Component {
+    render() {
+        return (
+            <div className="shopping-list">
+                <h1>{this.props.name} - lista zakupów</h1>
+                <ul>
+                    <li>Instagram</li>
+                    <li>WhatsApp</li>
+                    <li>Oculus</li>
+                </ul>
+            </div>
+        );
+    }
+}
+</pre></code>
 
 notes:
 because we program view not the logic
 
 ++++
 
-# <span class="sclr horror" style="font-weight: lighter">Frontend</span><br/>is <span class="pclr">wild</span>
+### <span class="sclr horror" style="font-weight: lighter">Frontend</span> is <span class="pclr">wild</span>
+
+<table>
+    <tr>
+        <td style="vertical-align: middle">
+            <ul>
+                <li><code>if(array.length)</code></li>
+                <li><code>"11" + 1 = "111"</code></li>
+                <li><code>"11" - 1 = "10"</code></li>
+            </ul>
+        </td>
+        <td>
+            <img src="img/jstrinity.jpeg">
+        </td>
+    </tr>
+</table>
+
+<!--<br>-->
+
+
 
 notes:
 because ???
@@ -65,63 +101,74 @@ if length
 
 ++++
 
-# <span class="sclr horror" style="font-weight: lighter">Frontend</span><br/>is <span class="pclr">complicated</span>
+### <span class="sclr horror" style="font-weight: lighter">Frontend</span> is <span class="pclr">complicated</span>
 
-notes:
-because views are hard
-
-++++
-
-<div id="left" style="font-size: 0.7em">
-    <ul>
-        <li>languages</li>
-        <ul>
-            <li>scalajs, reasonml, elm, purescript, typescript, kotlinjs</li>
-            <li>javascrips, clojurescript, coffee script</li>
-            <li>webassembly, rust, scala-native</li>
-        </ul>
-        <li>frameworks</li>
-        <ul>
-            <li>react, angular, vue</li>
+<table style="font-size: 0.5em; box-shadow: inset 0px 0px 2px 2px grey;">
+    <tr>
+        <td>
             <ul>
-                <li>scalajs-react, slinky</li>
+                <li>languages
+                    <ul>
+                        <li>scalajs, reasonml, elm, purescript, typescript, kotlinjs</li>
+                        <li>javascrips, clojurescript, coffee script</li>
+                        <li>webassembly, rust, scala-native</li>
+                    </ul>
+                </li>
+                <li>frameworks
+                    <ul>
+                        <li>react, angular, vue
+                            <ul>
+                                <li>scalajs-react, slinky</li>
+                            </ul>
+                        </li>
+                        <li>laminar, binding.scala</li>
+                        <li>udash, korolev</li>
+                        <li>state managament - redux, mobx, react-refetch, diode</li>
+                    </ul>
+                </li>
             </ul>
-            <li>laminar, binding.scala</li>
-            <li>udash, korolev</li>
-            <li>state managament - redux, mobx, react-refetch, diode</li>
-        </ul>
-    </ul>
-</div>
-<div id="right" style="font-size: 0.7em">
-    <ul>
-        <li>styling</li>
-        <ul>
-            <li>semantic, bootstrap, min.css, foundation</li>
-            <li>less, sass, css, stylus</li>
-            <li>rwd</li>
-            <li>css-grid</li>
-        </ul>
-        <li>communication</li>
-        <ul>
-            <li>graphql</li>
-            <li>tapir/endpoints</li>
-            <li>grpc</li>
-            <li>websockets</li>
-        </ul>
-        <li>tools</li>
-        <ul>
-            <li>npm, node, yarn</li>
-            <li>webpack, rollup</li>
-            <li>scalajs-bundler, sbt-web</li>
-        </ul>
-    </ul>
-</div>
+        </td>
+        <td>
+            <ul>
+                <li>styling
+                    <ul>
+                        <li>semantic, bootstrap, min.css, foundation</li>
+                        <li>less, sass, css, stylus</li>
+                        <li>rwd</li>
+                        <li>css-grid</li>
+                    </ul>
+                </li>
+                <li>communication
+                    <ul>
+                        <li>graphql</li>
+                        <li>tapir/endpoints</li>
+                        <li>grpc</li>
+                        <li>websockets</li>
+                    </ul>
+                </li>
+                <li>tools
+                    <ul>
+                        <li>npm, node, yarn</li>
+                        <li>webpack, rollup</li>
+                        <li>scalajs-bundler, sbt-web</li>
+                    </ul>
+                </li>
+            </ul>
+        </td>
+    </tr>
+</table>
 
 ++++
 
-### <span class="sclr">This talk</span> is <span class="pclr">not a tutorial</span>
+#### <span class="sclr">This talk</span> is <span class="pclr">not a tutorial</span>
 
-# <span class="sclr">It is a</span> <span class="pclr">survivial guide</span>
+<h1 class="fragment"><span class="sclr">It is a</span> <span class="pclr">survival guide</span></h1>
+
+++++
+
+What does it mean?
+
+TODO
 
 ----
 
@@ -170,6 +217,7 @@ Or is frontend <span class="pclr">inevitible</span>?
     <li>Tooling</li>
     <li>What else?</li>
 </ul>
+
 # Language
 
 ++++
@@ -213,6 +261,12 @@ Or is frontend <span class="pclr">inevitible</span>?
     </tr>
     <tr>
         <td>Purescript</td>
+        <td class="green">Yes</td>
+        <td class="green">Yes</td>
+        <td class="fragment rev-sclr-fr" data-fragment-index="3">A bit</td>
+    </tr>
+    <tr>
+        <td>Fable</td>
         <td class="green">Yes</td>
         <td class="green">Yes</td>
         <td class="fragment rev-sclr-fr" data-fragment-index="3">A bit</td>
@@ -325,7 +379,7 @@ Or is frontend <span class="pclr">inevitible</span>?
 <h2 class="pclr">Elm</h2>
 
 * opinionated
-  * redux model
+* redux model
 * separated from js
 * most popular typed fp
 * handicapped haskell (no typeclasses)
@@ -337,8 +391,13 @@ Or is frontend <span class="pclr">inevitible</span>?
 <h2 class="pclr">Purescript</h2>
 
 * real haskell
-* not so popular
+* hard time competing with Elm
 
+++++
+
+<h2 class="pclr">Fable</h2>
+
+* F# -> JS
 
 
 ++++
@@ -371,36 +430,165 @@ Or is frontend <span class="pclr">inevitible</span>?
     <li>Tooling</li>
     <li>What else?</li>
 </ul>
-# Framework
+
+<h1 style="font-size:2.3em">Framework</h1>
 
 ++++
 
-## Classics
-* react, angular, vue
+<small style="line-height: 0.5em"><h4>Framework:</h4></small>
+<h2 class="pclr">Classics</h2>
+
+<table style="font-size: 1.2em">
+    <tr>
+        <td>React</td>
+        <td>Angular</td>
+        <td>Vue</td>
+    </tr>
+</table>
 
 ++++
 
-## JS bindingins
+<small style="line-height: 0.5em"><h4>Framework: Classics</h4></small>
+<h2 class="pclr">React</h2>
 
-* scalajs-react, slinky
-* no angular?
+<table>
+    <tr>
+        <td style="font-size: 0.7em">
+           <pre><code>
+class ShoppingList extends React.Component {
+  render() {
+    return (
+      <div className="shopping-list">
+        <h1>{this.props.name} - shooping list</h1>
+        <ul>
+          <li>Instagram</li>
+          <li>WhatsApp</li>
+          <li>Oculus</li>
+        </ul>
+      </div>
+    );
+  }
+}
+           </code></pre>
+        </td>
+        <td style="vertical-align: middle">
+            <ul>
+                <li>most popular</li>
+                <li>do-it-yourselft</li>
+            </ul>
+        </td>
+    </tr>
+</table>
 
 ++++
 
-## Scala.js native
+<small style="line-height: 0.5em"><h4>Framework: Classics</h4></small>
+<h2 class="pclr">Angular</h2>
 
-* laminar, binding.scala
+<table>
+    <tr>
+        <td style="font-size: 0.5em">
+           <pre><code>
+@Component({
+  selector:    'app-hero-list',
+  templateUrl: './hero-list.component.html',
+  providers:  [ HeroService ]
+})
+export class HeroListComponent implements OnInit {
+  heroes: Hero[];
+  selectedHero: Hero;
+  constructor(private service: HeroService) { }
+  ngOnInit() {
+    this.heroes = this.service.getHeroes();
+  }
+  selectHero(hero: Hero) { this.selectedHero = hero; }
+}
+           </code></pre>
+           <pre><code>
+<h2>Hero List</h2>
+<p><i>Pick a hero from the list</i></p>
+<ul>
+  <li *ngFor="let hero of heroes" (click)="selectHero(hero)">
+    {{hero.name}}
+  </li>
+</ul>
+
+<app-hero-detail *ngIf="selectedHero" [hero]="selectedHero"></app-hero-detail>
+           </code></pre>
+        </td>
+        <td style="vertical-align: middle">
+            <ul>
+                <li>proper framework</li>
+                <li>closer to typical backend</li>
+            </ul>
+        </td>
+    </tr>
+</table>
 
 ++++
 
-## Something different ?
-* udash, korolev, play
+<small style="line-height: 0.5em"><h4>Framework:</h4></small>
+<h2 class="pclr">Scala.js bindings</h2>
+
+<table style="font-size: 1.2em">
+    <tr>
+        <td>scalajs-react</td>
+        <td>slinky</td>
+    </tr>
+</table>
+
+<small>No angular or vue ☹</small>
 
 ++++
 
-## Appendix 1: State management
+<small style="line-height: 0.5em"><h4>Framework:</h4></small>
+<h2 class="pclr">Scala.js natives</h2>
 
-* redux, mobx, react-refetch, diode
+<table style="font-size: 1.2em">
+    <tr>
+        <td>Outwatch</td>
+        <td>Laminar</td>
+        <td>Binding.scala</td>
+    </tr>
+</table>
+
+++++
+
+TODO
+outwatch -vdom
+laminar direct dom
+busfactor
+
+++++
+
+<small style="line-height: 0.5em"><h4>Framework:</h4></small>
+<h2 class="pclr">Something different?</h2>
+
+<table style="font-size: 1.2em">
+    <tr>
+        <td class="fragment rev-sclr-fr">Udash</td>
+        <td class="fragment rev-sclr-fr">Korolev</td>
+        <td class="fragment rev-sclr-fr">Play</td>
+    </tr>
+</table>
+
+++++
+
+<small style="line-height: 0.5em"><h4>Framework:</h4></small>
+<h2>Appendix 1: <span class="pclr">State management</span></h2>
+
+<table style="font-size: 1.1em">
+    <tr>
+        <td class="fragment rev-sclr-fr">Redux</td>
+        <td class="fragment rev-sclr-fr">Mobx</td>
+        <td class="fragment rev-sclr-fr">diode</td>
+        <td class="fragment rev-sclr-fr">react-refetch</td>
+    </tr>
+</table>
+
+++++
+
+TODO describe
 
 ----
 
@@ -412,23 +600,125 @@ Or is frontend <span class="pclr">inevitible</span>?
     <li>Tooling</li>
     <li>What else?</li>
 </ul>
+
 # Styling
 
 ++++
 
-### Raw CSS is dead
+<small style="line-height: 0.5em"><h4>Styling:</h4></small>
+<h2 class="pclr">css Preprocessors</h2>
+Because raw <span class="pclr">CSS</span> is <span class="pclr">dead</span>
 
-* less, sass, css, stylus
+<code>.scss</code> → <code style="border: solid">sass</code> → <code>.css</code>
 
-++++
-
-## CSS frameworks
-
-* semantic, bootstrap, min.css, foundation
 
 ++++
 
-## Appendix 2: RWD
+<h4>Styling: <span class="pclr">CSS Preprocessors</span></h4>
+
+<table style="font-size: 1.1em">
+    <tr>
+        <td class="fragment" style="font-size: 0.7em">
+            <span class="pclr">Features:</span><br>
+            <ul>
+                <li>variables</li>
+                <li>imports</li>
+                <li>functions(a.k.a @mixins)</li>
+                <li>inheritance</li>
+                <li>loops</li>
+                <li>nesting</li>
+            </ul>
+        </td>
+        <td class="fragment" style="width: 40%; vertical-align: top">
+            <span class="pclr">Examples:</span><br>
+            <ul>
+                <li>less</li>
+                <li>sass</li>
+                <li>stylus</li>
+            </ul>
+        </td>
+    </tr>
+</table>
+
+++++
+
+<h4>Styling: <span class="pclr">CSS Preprocessors</span></h4>
+<h3>Example</h3>
+
+<pre><code style="font-size: 1em">@mixin transform($property) {
+  -webkit-transform: $property;
+  -ms-transform: $property;
+  transform: $property;
+}
+.box { @include transform(rotate(30deg)); }
+</code></pre>
+<pre><code style="font-size: 1em">.box {
+  -webkit-transform: rotate(30deg);
+  -ms-transform: rotate(30deg);
+  transform: rotate(30deg);
+}
+</code></pre>
+
+<!--<table width="100%">-->
+<!--    <tr>-->
+<!--        <td style="width: 45%">-->
+<!--            <pre><code style="font-size: 1em">-->
+<!--@mixin transform($property) {-->
+<!--  -webkit-transform: $property;-->
+<!--  -ms-transform: $property;-->
+<!--  transform: $property;-->
+<!--}-->
+<!--.box { @include transform(rotate(30deg)); }-->
+<!--            </code></pre>-->
+<!--        </td>-->
+<!--        <td>→</td>-->
+<!--        <td style="width: 45%">-->
+<!--                        <pre><code style="font-size: 1em">-->
+<!--.box {-->
+<!--  -webkit-transform: rotate(30deg);-->
+<!--  -ms-transform: rotate(30deg);-->
+<!--  transform: rotate(30deg);-->
+<!--}-->
+<!--            </code></pre>-->
+<!--        </td>-->
+<!--    </tr>-->
+<!--</table>-->
+
+++++
+
+
+<small style="line-height: 0.5em"><h4>Styling:</h4></small>
+<h2 class="pclr">UI toolkits</h2>
+
+classes → &#x2728;&#x2728;&#x2728;
+
+++++
+
+<h4>Styling: <span class="pclr">UI toolkits</span></h4>
+
+<table style="font-size: 1.1em">
+    <tr>
+        <td class="fragment rev-sclr-fr" data-fragment-index="1">Semantic</td>
+        <td class="fragment rev-sclr-fr" data-fragment-index="2">mini.css</td>
+        <td class="fragment rev-sclr-fr" data-fragment-index="3">Bootstrap</td>
+        <td class="fragment rev-sclr-fr" data-fragment-index="4">Foundation</td>
+    </tr>
+</table>
+
+<div style="position:relative; height:480px; margin:0 auto;">
+    <img class="fragment" data-fragment-index="1" src="img/semantic.png" style="position:absolute;top:0;left:0;" />
+    <img class="fragment" data-fragment-index="2" src="img/minicss.png" style="position:absolute;top:0;left:0;" />
+    <img class="fragment" data-fragment-index="3" src="img/bootstrap.png" style="position:absolute;top:0;left:0;" />
+    <img class="fragment" data-fragment-index="4" src="img/foundation.png" style="position:absolute;top:0;left:0;" />
+</div>
+
+++++
+
+
+<small style="line-height: 0.5em"><h4>Styling:</h4></small>
+<h2>Appendix 2: <span class="pclr">RWD</span></h2>
+
+TODO
 
 ----
 
@@ -444,29 +734,135 @@ Or is frontend <span class="pclr">inevitible</span>?
 
 ++++
 
-### Good old rest
+<small style="line-height: 0.5em"><h4>Communication:</h4></small>
+## Good old <span class="pclr">rest</span>
+
+<table style="">
+    <tr>
+        <td width="40%">
+            <ul>
+                <li>HTTP</li>
+                <li>Proper method</li>
+                <li>/user/{id}/cats</li>
+                <li>json</li>
+            </ul>
+        </td>
+        <td>
+            <ul>
+                <li>Very well known</li>
+                <li>Established standard</li>
+                <li>Not so efficient</li>
+                <li>Not so convenient for frontend</li>
+            </ul>
+        </td>
+    </tr>
+</table>
 
 ++++
 
-### Graphql
+<small style="line-height: 0.5em"><h4>Communication:</h4></small>
+## <span class="pclr">Graphql</span>
+
+
+* convenient for fronted
+* not so much for backend
+* nice code generation (everywhere)
+* a lot of tooling
+* can be exposed from db directly
 
 ++++
 
-### RPC
+<small style="line-height: 0.5em"><h4>Communication: <span class="pclr">Graphql</span></h4></small>
 
-* grpc-web
-* autowire
-* udash
+## Example
 
-++++
-
-### Shared rest
-
-* tapir, endpoints
+TODO
 
 ++++
 
-### Websockets & SSE
+<small style="line-height: 0.5em"><h4>Communication:</h4></small>
+## <span class="pclr">RPC</span>
+
+<table style="font-size: 1.1em">
+    <tr>
+        <td class="fragment" style="font-size: 0.7em">
+            <span class="pclr">Features:</span><br>
+            <ul>
+                <li>easily shared between fronted and backend</li>
+                <li>convenient for the backend</li>
+                <li>problematic on the fronted</li>
+            </ul>
+        </td>
+        <td class="fragment" style="width: 40%; vertical-align: top">
+            <span class="pclr">Examples:</span><br>
+            <ul>
+                <li class="fragment rev-sclr-fr">grpc-web</li>
+                <li class="fragment rev-sclr-fr">autowire</li>
+                <li class="fragment rev-sclr-fr">udash</li>
+            </ul>
+        </td>
+    </tr>
+</table>
+
+++++
+
+<small style="line-height: 0.5em"><h4>Communication:</h4></small>
+## <span class="pclr">Shared</span> REST
+
+<table style="font-size: 1.1em">
+    <tr>
+        <td class="fragment" style="font-size: 0.7em">
+            <span class="pclr">Features:</span><br>
+            <ul>
+                <li>easily shared between fronted and backend if both are scala</li>
+                <li>requires the same stack on both sides</li>
+                <li>all the benefits and problems of REST</li>
+            </ul>
+        </td>
+        <td class="fragment" style="width: 40%; vertical-align: top">
+            <span class="pclr">Examples:</span><br>
+            <ul>
+                <li class="fragment rev-sclr-fr">endpoints</li>
+                <li class="fragment rev-sclr-fr">tapir</li>
+                <li class="fragment rev-sclr-fr">typedapi</li>
+            </ul>
+        </td>
+    </tr>
+</table>
+
+++++
+
+<small style="line-height: 0.5em"><h4>Communication:</h4></small>
+## <span class="pclr">Websockets</span> & <span class="pclr">SSE</span>
+
+++++
+
+<small style="line-height: 0.5em"><h4>Communication:</h4></small>
+## <span class="pclr">Websockets</span> & <span class="pclr">SSE</span>
+
+<table style="font-size: 1.1em">
+    <tr>
+        <td style="font-size: 0.7em">
+            <span class="pclr">Websockets:</span><br>
+            <ul>
+                <li class="fragment">on top of raw TCP</li>
+                <li class="fragment">distinct from HTTP</li>
+                <li class="fragment">two directional</li>
+                <li class="fragment">binary</li>
+            </ul>
+        </td>
+        <td style="font-size: 0.7em">
+            <span class="pclr">Server-sent events:</span><br>
+            <ul>
+                <li class="fragment">raw HTTP</li>
+                <li class="fragment">part of HTML5</li>
+                <li class="fragment">one direction</li>
+                <li class="fragment">text</li>
+            </ul>
+        </td>
+    </tr>
+</table>
+
 
 ----
 
@@ -478,26 +874,166 @@ Or is frontend <span class="pclr">inevitible</span>?
     <li>Tooling</li>
     <li>What else?</li>
 </ul>
+
 # Tooling
 
 ++++
 
-## Essentials
 
-* npm & yarn
+<small style="line-height: 0.5em"><h4>Tooling:</h4></small>
+<h2 class="pclr">Essentials</h2>
 
-++++
-
-## Bundling
-
-* webpack
-* rollup
+NPM & Yarn
 
 ++++
 
-## Scala.js & sbt
+<img src="img/npm-traffic.png">
 
-* scalajs-bundler, sbt-web
+
+++++
+
+<img src="img/heaviest-npm.png" height="80%">
+
+++++
+
+<img src="img/npm-thor.jpg" height="80%">
+
+++++
+
+I could go like that for the rest of the day
+
+++++
+
+<small style="line-height: 0.5em"><h4>Tooling:</h4></small>
+## <span class="pclr">NPM</span> & <span class="pclr">Yarn</span>
+
+<table style="font-size: 1.1em">
+    <tr>
+        <td style="font-size: 0.7em; text-align: center">
+            <span class="pclr" style="text-align: center">NPM</span><br>
+            <ul>
+                <li class="fragment">orignal, true and only</li>
+                <li class="fragment">used to be slow</li>
+            </ul>
+        </td>
+        <td style="font-size: 0.7em; text-align: center">
+            <span class="pclr">Yarn</span><br>
+            <ul>
+                <li class="fragment">npm drop-in replacement</li>
+                <li class="fragment">created by facebook</li>
+                <li class="fragment">performance</li>
+                <li class="fragment">lock-files</li>
+            </ul>
+        </td>
+    </tr>
+</table>
+
+++++
+
+<small style="line-height: 0.5em"><h4>Tooling:</h4></small>
+## <span class="pclr">Bundling</span>
+
+Webpack & friends
+
+++++
+
+<small style="line-height: 0.5em"><h4>Tooling:</h4></small>
+## <span class="pclr">Bundling</span>
+
+<table style="font-size: 1.1em">
+    <tr>
+        <td style="font-size: 0.7em; width: 50%">
+            <ul>
+                <li class="fragment pclr-fr" data-fragment-index="1">scan roots for `import`/`require`</li>
+                <li class="fragment pclr-fr" data-fragment-index="2">transform</li>
+                <li class="fragment pclr-fr" data-fragment-index="3">join together</li>
+                <li class="fragment pclr-fr" data-fragment-index="4">produce a package</li>
+            </ul>
+        </td>
+        <td style="font-size: 0.7em; width: 50%; border: solid; height: 400px">
+            <div style="position:relative; margin:0 auto;">
+                <div class="fragment current-visible" data-fragment-index="1" style="position:absolute;top:0;left:0;">
+                    <code style="font-size: 0.7em">
+                        import { StringValidator } from "./StringValidator";
+                    </code>
+                    <br>
+                    <br>
+                    <code style="font-size: 0.7em">
+                        import s from './Button.css';
+                    </code>
+                </div>
+                <div class="fragment current-visible" data-fragment-index="2" style="position:absolute;top:0;left:0;">
+                    <ul>
+                        <li>.ts → .js</li>
+                        <li>.sass → .css</li>
+                        <li>.jpg → base64</li>
+                        <li>.js → .js</li>
+                        <li>any → any</li>
+                    </ul>
+                </div>
+                <div class="fragment current-visible" data-fragment-index="3" style="position:absolute;top:0;left:0;">
+                    <img src="img/blender.gif">
+                </div>
+                <div class="fragment current-visible" data-fragment-index="4" style="position:absolute;top:0;left:0;">
+                    <ul>
+                        <li>bundle.css</li>
+                        <li>bundle.js</li>
+                        <li>bundle-deps.js</li>
+                        <li>assets</li>
+                    </ul>
+                </div>
+            </div>
+        </td>
+    </tr>
+</table>
+
+++++
+
+
+<small style="line-height: 0.5em"><h4>Tooling:</h4></small>
+## Bundling <span class="pclr">in JS & TS</span>
+
+<table style="font-size: 1.5em">
+    <tr>
+        <td style="font-size: 0.7em; width: 50%">
+            Webpack
+        </td>
+        <td style="font-size: 0.7em; width: 50%; text-align: right">
+            Rollup
+        </td>
+    </tr>
+</table>
+
+++++
+
+<small style="line-height: 0.5em"><h4>Tooling:</h4></small>
+## Bundling <span class="pclr">in scala.js</span>
+
+sbt-web & scalajs-bundler
+
+++++
+
+<small style="line-height: 0.5em"><h4>Tooling: Bundling <span class="pclr">in scala.js</span></h4></small>
+
+## <span class="pclr">sbt-web</span>
+
+<ul>
+    <li class="fragment">webpack-like pipeline infrastructure</li>
+    <li class="fragment">designed for use in backend (play) apps</li>
+    <li class="fragment">ecosystem of plugins, e.g. sbt-sass, sbt-gzip</li>
+</ul>
+
+++++
+
+<small style="line-height: 0.5em"><h4>Tooling: Bundling <span class="pclr">in scala.js</span></h4></small>
+
+## <span class="pclr">scalajs-bundler</span>
+
+<ul>
+    <li class="fragment">wrapper around webpack & npm</li>
+    <li class="fragment">designed for fronted</li>
+    <li class="fragment">partial alternative to webjars</li>
+</ul>
 
 ----
 
@@ -509,14 +1045,89 @@ Or is frontend <span class="pclr">inevitible</span>?
     <li>Tooling</li>
     <li>What else?</li>
 </ul>
+
 # What else?
 
 ++++
 
-* electron, node
-* intellij, vscode
-* bootzooka
+<small style="line-height: 0.5em"><h4>What else?</h4></small>
+# <span class="pclr">Node</span>
+
+So you can backend when you frontend
+
+++++
+
+<small style="line-height: 0.5em"><h4>What else?</h4></small>
+# <span class="pclr">Electron</span>
+
+Alternative to mining bitcoins
+
+++++
+
+<small style="line-height: 0.5em"><h4>What else?</h4></small>
+# <span class="pclr">Editor</span>
+
+VS Code vs Intellij
+
+++++
+
+<small style="line-height: 0.5em"><h4>What else?</h4></small>
+# <span class="pclr">Bootzooka</span>
+
+<a href="https://github.com/softwaremill/bootzooka">by Softwaremill</a>
 
 ----
 
-????
+<!-- -- data-background-color="#851e3e" -->
+
+# Recap
+
+++++
+
+<!-- -- data-background-color="#851e3e" -->
+
+#### Whatever language you choose
+# beware of JS bindings
+
+++++
+
+
+<!-- -- data-background-color="#851e3e" -->
+
+#### React - do it yourself
+#### Angular - backendish framework
+#### Scala.js native - viable option
+
+++++
+
+<!-- -- data-background-color="#851e3e" -->
+
+## There are libs to make stuff pretty
+
+++++
+
+<!-- -- data-background-color="#851e3e" -->
+
+# Graphql
+## is a thing
+
+++++
+
+<!-- -- data-background-color="#851e3e" -->
+
+## Npm and webpack are
+# inevitable
+
+----
+
+## Thanks!
+
+Wojtek Pituła - [@Krever01](https://twitter.com/Krever01)
+
+<div>
+    <small>Feedback maybe?</small>
+    <br>
+    [w.pitula.me/presentations](http://w.pitula.me/presentations/scalar-2018/index.html)
+</div>
+
+
