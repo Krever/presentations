@@ -1,8 +1,12 @@
 <html>
 <head>
+    <meta charset="UTF-8">
     <link rel="stylesheet" href="../reveal.js/css/reveal.css">
     <link rel="stylesheet" href="../reveal.js/css/theme/white.css">
     <link rel="stylesheet" href="../reveal.js/lib/css/hljs-tomorrow.css">
+    <link href="https://fonts.googleapis.com/css?family=Cormorant+Garamond:400,700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Arvo&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Tinos:400,700&display=swap" rel="stylesheet">
 
     <script>
         var link = document.createElement('link');
@@ -12,36 +16,6 @@
         document.getElementsByTagName('head')[0].appendChild(link);
     </script>
     <style>
-        table.comic-table td {
-            text-align: center
-        }
-
-        .blink_me {
-            animation: blinker 0.5s linear infinite;
-        }
-
-        @keyframes blinker {
-            to {
-                color: red
-            }
-        }
-
-        #left-6 {
-            left: -8.33%;
-            text-align: left;
-            float: left;
-            width: 70%;
-            z-index: -10;
-        }
-
-        #right-4 {
-            left: 31.25%;
-            top: 75px;
-            float: right;
-            text-align: right;
-            z-index: -10;
-            width: 30%;
-        }
 
         #left {
             left: -8.33%;
@@ -60,21 +34,711 @@
             width: 50%;
         }
 
-        .blue {
-            color: #0074D9 !important;
+        /*primary color*/
+        .pclr {
+            /*color: #854442 !important;*/
+            /*color: #3c2f2f !important;*/
+            color: #4d648d !important;
+        }
+
+        /*secondary color*/
+        .sclr {
+            color: #051e3e !important;
+        }
+
+        /*rev secondary color*/
+        .rev-sclr {
+            background-color: #051e3e !important;
+            color: white !important;
+        }
+
+        .reveal .slides section .fragment.rev-sclr-fr {
+            opacity: 1;
+            visibility: inherit;
+            transition-duration: 0.2s !important;
+        }
+
+        .reveal .slides section .fragment.rev-sclr-fr.current-fragment {
+            opacity: 1;
+            visibility: inherit;
+            transition-duration: 0.2s !important;
+            background-color: #051e3e !important;
+            color: white !important;
+        }
+
+        .reveal .slides section .fragment.pclr-fr {
+            color: #051e3e;
+        }
+
+        .reveal .slides section .fragment.pclr-fr.current-fragment {
+            color: #851e3e;
+            font-weight: bold;
+        }
+
+        .grey {
+            color: #9c9a9a !important;
+        }
+
+        .grey a {
+            text-decoration: none !important;
+            color: #8aa1c1;
+        }
+
+        div#right-corner {
+            display: block;
+            width: auto;
+            height: auto;
+
+            position: absolute;
+            bottom: 95%;
+            right: 90%;
+
+            z-index: 9999 !important;
+        }
+
+        .reveal,
+        .reveal h1,
+        .reveal h2,
+        .reveal h3,
+        .reveal h4,
+        .reveal h5,
+        .reveal h6 {
+            font-family: 'Cormorant Garamond';
+            /*font-family: 'Tinos', serif;*/
+            /*font-weight: normal;*/
+            /*font-family: 'xxxx';*/
+            /*color: #3c2f2f;*/
+            /*color: #854442;*/
+            color: #1e1f26;
+            /*letter-spacing: 0.1em*/
         }
     </style>
 </head>
 <body>
 <div class="reveal">
     <div class="slides">
-                <section data-markdown="slides.html"
-                         data-separator="^\r?\n----\r?\n$"
-                         data-separator-vertical="^\r?\n\+\+\+\+\r?\n$"
-                         data-separator-notes="^notes:"
-                         data-attributes="--\s(.*?)$"
-                         data-charset="utf-8">
-                </section>
+        <section>
+            <h1>Magic of integrations</h1>
+            <h2><span class="pclr">ecosystem</span> better than any framework</h2>
+
+
+            <div>
+                <small>Wojtek Pituła @ Sony Electronics</small>
+                <small>//</small>
+                <small><a href="https://twitter.com/Krever01">@Krever01</a></small>
+                <br>
+                <small><a href="http://w.pitula.me/presentations">w.pitula.me/presentations</a></small>
+            </div>
+
+        </section>
+
+        <section>
+
+            <section>
+                <h2>We all love <span class="pclr">frameworks</span></h2>
+                Don't we?
+            </section>
+
+            <section>
+                <h2>frameworks are <span class="pclr">easy</span></h2>
+
+                To use.
+            </section>
+
+            <section>
+                <h2>frameworks are <span class="pclr">hard</span></h2>
+
+                To understand and compose.
+
+            </section>
+
+            <section>
+                <h2>Can we do <span class="pclr">better</span>?</h2>
+
+                Libraries maybe?
+
+            </section>
+
+            <section>
+                <h2>Composing <span class="pclr">libraries</span> into a <span class="pclr">stack</span> is hard</h2>
+
+                Most of the times.
+
+            </section>
+
+            <section>
+                <h2>But does it <span class="pclr">have to</span> be?</h2>
+            </section>
+        </section>
+
+        <section>
+
+            <section>
+
+                <h2>Let's create an <span class="pclr">APP</span></h2>
+
+                For taking notes.
+
+            </section>
+
+            <section>
+                <h2>We'll start with a <span class="pclr">note</span></h2>
+
+                <div style="text-align: center">
+        <pre style="display: inline-block; width: unset"><code data-trim data-noescape>
+        case class Note(title: String, text: String)
+        </code></pre>
+                </div>
+
+            </section>
+
+            <section>
+                <h2>Note can ba <span class="pclr">saved</span></h2>
+
+                <div style="text-align: center">
+        <pre style="display: inline-block; width: unset"><code data-trim data-noescape>
+        def save(note: Note): IO[Unit]
+        </code></pre>
+                </div>
+
+            </section>
+
+            <section>
+                <h2>Notes can ba <span class="pclr">retrived</span></h2>
+
+                <div style="text-align: center">
+        <pre style="display: inline-block; width: unset"><code data-trim data-noescape>
+        def getAll(): IO[List[Note]]
+        </code></pre>
+                </div>
+
+
+            </section>
+
+            <section>
+
+                <h2>How to <span class="pclr">expose</span> it?</h2>
+
+                REST, obviously.
+
+            </section>
+
+            <section>
+                <h2>Like <span class="pclr">this</span></h2>
+
+                <div style="text-align: center">
+        <pre style="display: inline-block; width: unset"><code data-trim data-noescape>
+        POST /notes
+        </code></pre>
+                </div>
+
+                <div style="text-align: center">
+        <pre style="display: inline-block; width: unset"><code data-trim data-noescape>
+        GET /notes
+        </code></pre>
+                </div>
+
+                <div style="text-align: center">
+        <pre style="display: inline-block; width: unset"><code data-trim data-noescape>
+        { "title": "my title", "text": "my text"}
+        </code></pre>
+                </div>
+
+            </section>
+
+            <section>
+                <h2>First hard <span class="pclr">choice</span></h2>
+
+                HTTP server.
+
+            </section>
+        </section>
+
+        <section>
+            <section>
+                <h3 style="line-height: 0">Meet</h3>
+                <h1><span class="pclr">Http4s</span></h1>
+                <aside class="notes">
+                    0.23.0
+                    ember
+                    https://leanpub.com/pfhais
+                </aside>
+            </section>
+            <section>
+                <h2>Http is <span class="pclr">functional</span></h2>
+
+                <div style="text-align: center">
+        <pre style="display: inline-block; width: unset"><code class="scala" data-trim data-noescape>
+        type HttpRoutes[F[_]] = HttpRequest[F] => F[Option[HttpResponse[F]]]
+        </code></pre>
+                </div>
+
+            </section>
+            <section>
+                <h2>Back to our <span class="pclr">API</span></h2>
+
+            </section>
+            <section>
+                <small style="line-height: 0.5em"><h4>Back to our <span class="pclr">API</span></h4></small>
+
+                <h2>That's its <span class="pclr">shape</span></h2>
+
+                <div style="text-align: center">
+        <pre style="display: inline-block; width: unset"><code class="scala" data-trim data-noescape>
+        trait NotesController[F[_]] {
+          def saveNote: HttpRoutes[F]
+          def getNotes: HttpRoutes[F]
+        }
+        </code></pre>
+                </div>
+
+            </section>
+            <section>
+                <small style="line-height: 0.5em"><h4>Back to our <span class="pclr">API</span></h4></small>
+
+                <h2>And that's how we <span class="pclr">use it</span></h2>
+
+                <div style="text-align: center">
+        <pre style="display: inline-block; width: unset"><code class="scala" data-trim data-noescape>
+          def startApp[F[_]: ConcurrentEffect: Timer]
+            (controller: NotesController[F]): F[ExitCode] = {
+            val services      = controller.getNotes <+> controller.saveNote
+            val httpApp       = Router("/" -> services).orNotFound
+            val serverBuilder = BlazeServerBuilder[F]
+                .bindHttp(8080, "localhost")
+                .withHttpApp(httpApp)
+            serverBuilder.serve.compile.drain
+              .as(ExitCode.Success)
+          }
+        </code></pre>
+                </div>
+
+
+            </section>
+            <section>
+                <small style="line-height: 0.5em"><h4>Back to our <span class="pclr">API</span></h4></small>
+
+                <h2>We also need an <span class="pclr">implementation</span></h2>
+
+                <div style="text-align: center">
+        <pre style="display: inline-block; width: unset"><code class="scala" data-trim data-noescape>
+        class DummyNotesController[F[_]: Sync] extends NotesController[F] {
+          val dsl = Http4sDsl[F]
+          import dsl._
+          override def saveNote = HttpRoutes.of[F] {
+            case POST -> Root / "notes" => Ok("Hello")
+          }
+          override def getNotes = HttpRoutes.of[F] {
+            case GET -> Root / "notes" => Ok("World")
+          }
+        }
+        </code></pre>
+                </div>
+
+            </section>
+
+            <section>
+                <h2>But where are our <span class="pclr">jsons</span>?</h2>
+
+                The second hard choice.
+            </section>
+
+        </section>
+
+        <section>
+
+            <section>
+                <h3 style="line-height: 0">Meet</h3>
+                <h1><span class="pclr">Circe</span></h1>
+            </section>
+
+            <section>
+                <h2>Circe is <span class="pclr">simple</span></h2>
+                <div style="text-align: center">
+                    <pre style="display: inline-block; width: unset"><code class="scala" data-trim data-noescape>
+                        import io.circe.generic.JsonCodec
+
+                        @JsonCodec
+                        case class Note(title: String, text: String)
+                    </code></pre>
+                </div>
+            </section>
+
+            <section>
+                <h2>Circe is <span class="pclr">pure</span></h2>
+                <div style="text-align: center">
+                    <pre style="display: inline-block; width: unset"><code class="scala" data-trim data-noescape>
+                        import io.circe._
+                        val json: Either[ParsingFailure, Json]  = parser.parse("{}")
+                        val data: Either[DecodingFailure, Note] = json.right.get.as[Note]
+                    </code></pre>
+                </div>
+            </section>
+
+            <section>
+                <h2>Does it <span class="pclr">integrate</span>?</h2>
+                Sure it does!
+            </section>
+
+            <section>
+                <small style="line-height: 0.5em"><h4>Integration 1</h4></small>
+                <h2><span class="pclr">http4s-circe</span></h2>
+                <div style="text-align: center">
+                    <pre style="display: inline-block; width: unset; font-size: 0.5em"><code class="scala" data-trim
+                                                                                             data-noescape>
+                      <mark>import org.http4s.circe.CirceEntityDecoder._
+                      import org.http4s.circe.CirceEntityEncoder._</mark>
+
+                      override def saveNote: HttpRoutes[F] = HttpRoutes.of[F] {
+                        case req @ POST -> Root / "notes" =>
+                          for {
+                            <mark>note <- req.as[NoteV1]</mark>
+                            resp <- Ok(s"Saved")
+                          } yield resp
+                      }
+
+                      override def getNotes: _root_.org.http4s.HttpRoutes[F] = HttpRoutes.of[F] {
+                        case GET -> Root / "notes" =>
+                          for {
+                            resp  <- Ok(<mark>List(Note("title", "text"))</mark>)
+                          } yield resp
+                      }
+                    </code></pre>
+                </div>
+            </section>
+
+            <section>
+                <h2>It's time for <span class="pclr">persistence</span></h2>
+                And the third hard choice.
+            </section>
+
+        </section>
+
+        <section>
+
+            <section>
+                <h3 style="line-height: 0">Meet</h3>
+                <h1><span class="pclr">Doobie</span> & <span class="pclr">Quill</span></h1>
+            </section>
+
+            <section>
+                But before we go there...
+                <div style="text-align: center">
+                    <pre style="display: inline-block; width: unset"><code class="scala" data-trim data-noescape>
+                        trait NotesRepository[F[_]] {
+
+                          def initialize(): F[Unit]
+
+                          def save(note: NoteV1): F[Unit]
+
+                          def getAll(): F[List[NoteV1]]
+
+                        }
+                    </code></pre>
+                </div>
+            </section>
+
+            <section>
+                Doobie is a real dope
+                <div style="text-align: center; font-size: 0.7em">
+                    <pre style="display: inline-block; width: unset"><code class="scala" data-trim data-noescape>
+                        class DoobieNotesRepository[F[_]: Bracket[?[_], Throwable]](xa: Transactor[F]) extends NotesRepository[F] {
+                          import doobie.implicits._
+                          import cats.syntax.all._
+
+                          def initialize(): F[Unit] = {
+                            val q = sql"create table if not exists notes_v1 ( title VARCHAR, text VARCHAR)".update
+                            q.run.transact(xa).as(())
+                          }
+
+                          override def save(note: NoteV1): F[Unit] = {
+                            val q = sql"insert into notes_v1 (title, text) values (${note.title}, ${note.text})".update
+                            q.run.transact(xa).as(())
+                          }
+
+                          override def getAll(): F[List[NoteV1]] = {
+                            val q = sql"select title, text from notes_v1".query[NoteV1]
+                            q.to[List].transact(xa)
+                          }
+                        }
+                    </code></pre>
+                </div>
+            </section>
+
+            <section>
+                <h2>SQL is <span class="pclr">great</span></h2>
+                But often it's not
+            </section>
+
+            <section>
+                <h1><span class="pclr">quill</span></h1>
+                To the rescue
+            </section>
+
+            <section>
+                <h2>Quill <span class="pclr">generates sql</span></h2>
+                In compile time
+            </section>
+
+            <section>
+                It really does
+                <div style="text-align: center;/* font-size: 0.7em*/">
+                    <pre style="display: inline-block; width: unset"><code class="scala" data-trim data-noescape>
+                        import io.getquill._
+
+                        val ctx = new SqlMirrorContext(MirrorSqlDialect, Literal)
+                        import ctx._
+                    </code></pre>
+                    <pre style="display: inline-block; width: unset"><code class="scala" data-trim data-noescape>
+                        case class Circle(x: Int, y: Int)
+                    </code></pre>
+                    <pre style="display: inline-block; width: unset"><code class="scala" data-trim data-noescape>
+                        val q = quote {
+                          query[Point].filter(p => p.x > 10)
+                        }
+                        ctx.run(q)
+                        // select x, y from circle where x > 10
+                    </code></pre>
+                </div>
+            </section>
+
+            <section>
+                <h2>Does it mean <span class="pclr">saying no</span> to doobie?</h2>
+                Not at all
+            </section>
+
+            <section>
+                <small style="line-height: 0.5em"><h4>Integration 2</h4></small>
+                <h2 style="line-height: 0.2em"><span class="pclr">doobie-quill</span></h2>
+                <div style="text-align: center">
+                    <pre style="display: inline-block; width: unset; font-size: 0.4em"><code class="scala" data-trim
+                                                                                             data-noescape>
+                        class QuillNotesRepository[F[_]: Bracket[?[_], Throwable]]
+                            (xa: Transactor[F], <mark>ctx: DoobieContext.H2[SnakeCase.type]</mark>)
+                            extends NotesRepository[F] {
+                          import ctx._
+                          private implicit val notesSchemaMeta = schemaMeta[NoteV1]("notes_v1")
+
+                          def initialize(): F[Unit] = {
+                            val q = sql"create table if not exists notes_v1 ( title VARCHAR, text VARCHAR)".update
+                            q.run.transact(xa).as(())
+                          }
+
+                          override def save(note: NoteV1): F[Unit] = {
+                            val q = quote { query[NoteV1].insert(lift(note)) }
+                            run(q).transact(xa).as(())
+                          }
+
+                          override def getAll(): F[List[NoteV1]] = {
+                            val q = quote { query[NoteV1] }
+                            run(q).transact(xa)
+                          }
+                        }
+                    </code></pre>
+                </div>
+            </section>
+
+            <section>
+                <h2>All data in memory... isn't it a little bit <span class="pclr">stupid</span>?</h2>
+                It is
+            </section>
+
+            <section>
+                <h2><span class="pclr">Streaming</span> steps in</h2>
+                And it's completely different game
+            </section>
+
+        </section>
+
+        <section>
+            <section>
+                <h3 style="line-height: 0">Meet</h3>
+                <h1><span class="pclr">Fs2</span></h1>
+            </section>
+
+            <section>
+                <h2>Fs2 is <span class="pclr">magic</span> of it's own</h2>
+                Dark, pure and functional
+            </section>
+
+            <section>
+                <h2>But don't be afraid</h2>
+                TODO fs2 example
+            </section>
+
+            <section>
+                <small style="line-height: 0.5em"><h4>Integration 3</h4></small>
+                <h3 style="line-height: 0.5em">Doobie's got your back</h3>
+                <div style="text-align: center">
+                    <pre style="display: inline-block; width: unset"><code class="scala" data-trim data-noescape>
+                        def getAll(): fs2.Stream[F, NoteV1]
+                    </code></pre>
+                    <pre style="display: inline-block; width: unset"><code class="scala" data-trim data-noescape>
+                        def getAll(): fs2.Stream[F, NoteV1] = {
+                          <mark>stream</mark>(query[NoteV1]).transact(xa)
+                        }
+                    </code></pre>
+                </div>
+            </section>
+
+            <section>
+                <h2>But what about <span class="pclr">http</span> layer?</h2>
+                Don't worry son...
+            </section>
+
+            <section>
+                <small style="line-height: 0.5em"><h4>Integration 4</h4></small>
+                <h3 style="line-height: 0.5em">Http4s' got your back too</h3>
+                <div style="text-align: center">
+                    <pre style="display: inline-block; width: unset"><code class="scala" data-trim data-noescape>
+                      override def getNotes: HttpRoutes[F] = HttpRoutes.of[F] {
+                        case GET -> Root / "notes" =>
+                          val notes: fs2.Stream[F, Note] = repository.getAll()
+                          Ok(<mark>notes</mark>)
+                      }
+                    </code></pre>
+                </div>
+            </section>
+
+            <section>
+                <h2>Now <span class="pclr">slow down</span></h2>
+                And write a client
+            </section>
+
+        </section>
+
+        <section>
+            <section>
+                <h3 style="line-height: 0">Meet</h3>
+                <h1><span class="pclr">Decline</span></h1>
+            </section>
+
+            <section>
+                <h2>Functional <span class="pclr">command line</span> parser</h2>
+                TODO decline example
+                <div style="text-align: center">
+                    <pre style="display: inline-block; width: unset"><code class="scala" data-trim data-noescape>
+                        magic get-notes --url localhost --port 8080
+                        magic add-note --title my --text not
+                        magic --help
+                    </code></pre>
+                </div>
+            </section>
+
+        </section>
+
+        <section>
+
+            So you want to creat an app
+            a TODO app
+            And you know what a function is.
+
+            Lets start simple
+            http4s
+            A function
+            HttpRequest => HttpResponse
+
+            post your note
+            and get your notes
+
+            but the serialization!
+            circe
+
+            does http4s know about circe?
+            sure it does!
+            http4s-circe
+
+            lets save your notes
+            doobie
+
+            but isnt writing raw sql a little old-fashioned?
+            quill!
+
+            does quill know about doobie?
+            sure it does!
+            quill-doobie
+
+            Maybe json in db?
+            doobie-postgres-circe
+
+            Lets complicate this a little
+            and parse links out of text
+            atto!
+
+            write a parser for links
+            parser is a monad
+
+            parse as user types
+            atto-fs2
+            stream can be pure
+
+            lets refined it!
+            ensure title is not empty
+            refined!
+
+            but other libs don't now `Refined`
+
+            how about api?
+            circe-refined!
+
+            how about db?
+            doobie-refined!
+
+            lets write console client
+            decline!
+            decline-refined
+            decline-enumeratum
+
+            lets move the linksparser to fronted
+
+            and call our backend
+            sttp
+            cats-effect & fs2
+
+            you know what, I heard grpc is great, lets use it
+            fs2-grpc
+
+            on the other hadn grpc is so 2000, we should use kafka!
+            fs2-kafka
+
+
+            cats
+            cats-effect
+            monix/zio/ce
+
+            fs2
+
+            refined
+            enumeratum
+            fuuid
+
+            scalacache
+            cats-retry
+            upperbound
+
+            decline
+            decline-refined
+            decline-enumeratum
+
+            maybe we could share the rest definitions?
+            endpoints/tapir
+            integrated with http4s, sttp and more
+
+
+            atto
+            scodec, scodec-stream
+            circe
+
+            sttp
+            http4s
+            tapir/endpoints
+
+            doobie
+            quill
+
+            fs2-kafka
+            fs2-grpc
+        </section>
     </div>
 </div>
 <script src="../reveal.js/js/reveal.js"></script>
