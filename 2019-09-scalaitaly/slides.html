@@ -315,6 +315,13 @@ val ids: Seq[Int] = transaction1(usedUserIds)
     </tr>
 </table>
 
+++++
+
+<span class="blue">Initial</span> encodes operations as data.
+<br>
+<span class="blue">Final</span> encodes operations as functions.
+
+
 ----
 
 ## <span class=blue>tagged</span> vs <span class=blue>tagless</span> encoding
@@ -337,7 +344,7 @@ case class TransResult(subResults: Seq[Result]) extends Result
 
 ## tagged <span class=blue>initial</span> encoding
 
-<pre><code class="hljs lang-scala" data-noescape>// Initial interpreter
+<pre class="fragment"><code class="hljs lang-scala" data-noescape>// Initial interpreter
 def executeDBQuery(exp: DBOps): <mark>Result</mark>
 
 // Initial interpretation
@@ -348,7 +355,7 @@ val r: <mark>Result</mark> = executeDBQuery(findById1)
 
 ## tagged <span class=blue>final</span> encoding
 
-<pre><code class="hljs lang-scala" data-noescape>// Final interpreter
+<pre class="fragment"><code class="hljs lang-scala" data-noescape>// Final interpreter
 val executeDBQuery: DBOps[<mark>Result</mark>]
 
 // Final interpretations
@@ -383,9 +390,8 @@ Algebra parametrized with result type
 ## <span class=blue>tagless initial</span> encoding
 
 Operations as generic data (GADT)
-
-<pre><code class="hljs lang-scala" data-noescape>
-// Algebra
+<div class="fragment">
+<pre><code class="hljs lang-scala" data-noescape>// Algebra
 sealed trait DBOps[<mark>Result</mark>]
 case class SaveUser(user: User)     extends DBOps[<mark>Int</mark>]
 case class FindUserById(id: Int)    extends DBOps[<mark>Option[User]</mark>]
@@ -397,6 +403,7 @@ val findId1: DBOps[<mark>Option[User]</mark>] = FindUserById(1)
 
 val saveMyUser: DBOps[<mark>Int</mark>] = SaveUser(myUser)
 </code></pre>
+</div>
 
 ++++
 
@@ -420,20 +427,22 @@ val userOpt: Task[<mark>Option[User]</mark>] = executeDBQueryAsync(findId1)
 
 Operations as higher-kind interface
 
-<pre><code class="hljs lang-scala" data-noescape>// Algebra
-trait DBOps[<mark>F[_]</mark>] {
+<div class="fragment">
+    <pre><code class="hljs lang-scala" data-noescape>// Algebra
+trait DBOps[<mark>F[\_]</mark>] {
     def saveUser(user: User): <mark>F[Int]</mark>
     def findUserById(id: Int): <mark>F[Option[Int]]</mark>
 }
 </code></pre>
 
-<pre><code class="hljs lang-scala" data-noescape>// Expressions
+    <pre><code class="hljs lang-scala" data-noescape>// Expressions
 def saveMyUser[<mark>F[_]</mark>](db: DBOps[<mark>F</mark>]): <mark>F[Int]</mark> =
     db.saveUser(myUser)
 
 def findId1[<mark>F[_]</mark>](db: DBOps[<mark>F</mark>]): <mark>F[Option[User]]</mark> =
     db.findUserById(1)
 </code></pre>
+</div>
 
 ++++
 
@@ -513,8 +522,9 @@ val userOpt: Task[<mark>Option[User]</mark>] = findId1(executeDBQueryAsync)
 
 Ability to test piece of logic in separation.
 
-```
-def communicateWithTheUser[F[_]: Console](): F[Unit]
+```scala
+def communicateWithTheUser[F[_]: Console](): F[Unit] =
+    Console[F].println("Hello")
 ```
 
 ++++
@@ -626,7 +636,7 @@ Ability to reuse code for different wrapper types
 
 <h4><small><span class="blue">Context polymorphism</span> in <span class="blue">applications</span></small></h4>
 
-Most speakers are library authors with library perspectives. Don't get biased.
+Many speakers are library authors with libraries in mind. Don't get biased.
 
 ++++
 
@@ -733,6 +743,7 @@ class Foo[F[_]: Monad](db: DBOps[F]) {
 trait Foo {
     type F[T]
     implicit def monad: Monad[F]
+    def dbOps: DBOps[F]
     def findUser(id: String): F[User]
 }
 ```
