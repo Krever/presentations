@@ -29,6 +29,8 @@ libraryDependencies ++= Seq(
   "io.circe"   %% "circe-refined" % circeVersion,
   // decline
   "com.monovore" %% "decline" % "0.5.0",
+  //sttp
+  "com.softwaremill.sttp" %% "core" % "1.6.6",
 )
 
 addCompilerPlugin("org.scalamacros" % "paradise"        % "2.1.0" cross CrossVersion.full)

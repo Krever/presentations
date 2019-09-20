@@ -21,8 +21,7 @@
 
 ----
 
-## Manage your <span class=blue>expectations</span>
-### <small style="color:grey">It's not agenda slide!</small>
+## <span class=blue>Agenda</span>?
 
 <br/>
 
@@ -336,7 +335,7 @@ case class TransResult(subResults: Seq[Result]) extends Result
 
 ++++
 
-## <span class=blue>tagged initial</span> encoding
+## tagged <span class=blue>initial</span> encoding
 
 <pre><code class="hljs lang-scala" data-noescape>// Initial interpreter
 def executeDBQuery(exp: DBOps): <mark>Result</mark>
@@ -347,7 +346,7 @@ val r: <mark>Result</mark> = executeDBQuery(findById1)
 
 ++++
 
-## <span class=blue>tagged final</span> encoding
+## tagged <span class=blue>final</span> encoding
 
 <pre><code class="hljs lang-scala" data-noescape>// Final interpreter
 val executeDBQuery: DBOps[<mark>Result</mark>]
@@ -441,20 +440,18 @@ def findId1[<mark>F[_]</mark>](db: DBOps[<mark>F</mark>]): <mark>F[Option[User]]
 ## <span class=blue>tagless final</span> encoding
 <small>Interpreters & Interpretations</small>
 
-```scala
-// Interpreters
+<pre><code class="hljs lang-scala" data-noescape>// Interpreters
 // type Const[T, U] = T
-val show: DBOps[Const[String, ?]]
-val usedUserIds: DBOps[Const[Seq[Int], ?]]
+val show: DBOps[<mark>Const[String, ?]</mark>]
+val usedUserIds: DBOps[<mark>Const[Seq[Int], ?]</mark>]
 
-val executeDBQuery: DBOps[Id]
-val executeDBQueryAsync: DBOps[Task]
-```
+val executeDBQuery: DBOps[<mark>Id</mark>]
+val executeDBQueryAsync: DBOps[<mark>Task</mark>]
+</code></pre>
 
-```scala
-// Interpretations
-val userOpt: Task[Option[User]] = findId1(executeDBQueryAsync)
-```
+<pre><code class="hljs lang-scala" data-noescape>// Interpretations
+val userOpt: Task[<mark>Option[User]</mark>] = findId1(executeDBQueryAsync)
+</code></pre>
 
 ++++
 
@@ -635,7 +632,7 @@ Most speakers are library authors with library perspectives. Don't get biased.
 
 <h4><span class="blue">Context polymorphism</span> in <span class="blue">applications</span></h4>
 
-There are only 2 important contextes:
+2 most important contextes:
 
 * <code class="blue">IO</code>/<code class="blue">Task</code>/<code class="blue">ZIO</code> - runtime
 * <code class="blue">Id</code>/<code class="blue">Try</code> - tests
@@ -888,13 +885,13 @@ class Default[F[<mark>+</mark>_]:Monad] {
 
 #### <small>Exploring example: <span class="blue">cats-tagless</span> & <span class="blue">slick</span></small>
 
-```
+```scala
 trait Repo[F[_]]{
     def getUser(id: Int): F[Option[User]]
 }
 ```
 
-```
+```scala
 object SlickRepo extends Repo[DBIO]{
     def getUser(id: Int): DBIO[Option[Int]] =
         users.filter(_.id === id).result
@@ -906,13 +903,13 @@ object SlickRepo extends Repo[DBIO]{
 #### <small>Exploring example: <span class="blue">cats-tagless</span> & <span class="blue">slick</span></small>
 
 
-```
+```scala
 import cats.tagless.autoFunctorK
 @autoFunctorK
 trait Repo[F[_]]{ ... }
 ```
 
-```
+```scala
 def dbioToTask[Profile <: BasicProfile](
     dbCfg: DatabaseConfig[Profile],
     scheduler: Scheduler = Scheduler.io("db-scheduler")
@@ -923,12 +920,12 @@ def dbioToTask[Profile <: BasicProfile](
 ```
 
 
-````
+```scala
 def convert(
     dbCfg: DatabaseConfig[MyProfile],
     dbioRepo: Repo[DBIO]): Repo[Task] = {
   import cats.tagless.syntax.all._
-  dbioPersistance.mapK(dbioToTask(dbCfg))
+  dbioRepo.mapK(dbioToTask(dbCfg))
 }
 ```
 
@@ -950,8 +947,6 @@ def convert(
 Wojtek Pituła - [@Krever01](https://twitter.com/Krever01)
 
 <div>
-    <small>Feedback maybe?</small>
-    <br>
     [w.pitula.me/presentations](http://w.pitula.me/presentations/scalar-2018/index.html)
 </div>
 

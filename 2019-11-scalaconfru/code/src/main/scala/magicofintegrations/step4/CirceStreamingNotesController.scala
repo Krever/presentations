@@ -1,11 +1,13 @@
 package magicofintegrations.step4
 
 import cats.effect.Sync
-import magicofintegrations.NotesController
+import magicofintegrations.step0
 import org.http4s.dsl.Http4sDsl
 
-class CirceStreamingNotesController[F[_]: Sync](repository: StreamingNotesRepository[F], delegate: NotesController[F])
-    extends NotesController[F] {
+class CirceStreamingNotesController[F[_]: Sync](
+    repository: StreamingNotesRepository[F],
+    delegate: step0.NotesController[F],
+) extends step0.NotesController[F] {
   import org.http4s._
   val dsl = Http4sDsl[F]
   import dsl._

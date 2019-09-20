@@ -615,7 +615,6 @@
 
             <section>
                 <h2>Functional <span class="pclr">command line</span> parser</h2>
-                TODO decline example
                 <div style="text-align: center">
                     <pre style="display: inline-block; width: unset"><code class="scala" data-trim data-noescape>
                         magic get-notes --url localhost --port 8080
@@ -625,6 +624,127 @@
                 </div>
             </section>
 
+            <section>
+                <h3>Decline is <span class="pclr">helpful</span></h3>
+                <div style="text-align: center">
+                    <pre style="display: inline-block; width: unset"><code class="scala" data-trim data-noescape>
+                        Usage:
+                            magic get-notes
+                            magic add-note
+
+                        Notes manager
+
+                        Options and flags:
+                            --help
+                                Display this help text.
+
+                        Subcommands:
+                            get-notes
+                                Get notes
+                            add-note
+                                Add note
+                    </code></pre>
+                </div>
+            </section>
+
+            <section>
+                <h3>How to <span class="pclr">use it</span>?</h3>
+                Step 0: Define commands (optional)
+                <div style="text-align: center">
+                    <pre style="display: inline-block; width: unset"><code class="scala" data-trim data-noescape>
+                        sealed trait MyCommand
+
+                        object MyCommand {
+                          case class GetNotes(url: String, port: Int)              extends MyCommand
+                          case class AddNote(url: String, port: Int, note: NoteV1) extends MyCommand
+                        }
+                    </code></pre>
+                </div>
+            </section>
+
+            <section>
+                <h3>How to <span class="pclr">use it</span>?</h3>
+                Step 1: Define an <code>Opt</code>
+                <div style="text-align: center">
+                    <pre style="display: inline-block; width: unset"><code class="scala" data-trim data-noescape>
+                        val urlOpt = Opts
+                          .option[String]("url", help = "Server url")
+                          .orElse(Opts.env[String]("MAGIC_URL", "Server url"))
+                          .withDefault("localhost")
+                    </code></pre>
+                </div>
+            </section>
+
+            <section>
+                <h3>How to <span class="pclr">use it</span>?</h3>
+                Step 2: Join <code>Opt</code>s together
+                <div style="text-align: center">
+                    <pre style="display: inline-block; width: unset"><code class="scala" data-trim data-noescape>
+                        val urlOpt: Opts[String] = ???
+                        val portOpt: Opts[Int] = ???
+                        val noteOpt: Opts[Note] = {
+                          val titleOpt: Opts[String] = ???
+                          val textOpt: Opts[String] = ???
+                          <mark>(titleOpt, textOpt).mapN(Note.apply)</mark>
+                        }
+                        val addNoteCmdOpt: Opts[MyCommand] = Opts
+                            .subcommand[MyCommand]("add-note", "Add note")(
+                                <mark>(urlOpt, portOpt, noteOpt).mapN(Command.AddNote.apply)</mark>
+                            )
+                        val getNotesCmdOpt: Opts[MyCommand] = ???
+
+                        <mark>getNotesCmdOpt orElse addNoteCmdOpt</mark>
+                    </code></pre>
+                </div>
+            </section>
+
+            <section>
+                <h3>How to <span class="pclr">use it</span>?</h3>
+                Step 3: Use as entrypoint
+                <div style="text-align: center">
+                    <pre style="display: inline-block; width: unset"><code class="scala" data-trim data-noescape>
+                      def main(args: List[String]): Unit = {
+                        val command = Command("magic", "Notes manager")(myOpts)
+                        Command.opts.parse(args, sys.env) match {
+                          case Left(help)  => System.err.println(help)
+                          case Right(args) => doSth(args)
+                        }
+                      }
+                    </code></pre>
+                    <pre style="display: inline-block; width: unset"><code class="scala" data-trim data-noescape>
+                      object Main
+                        extends CommandApp(
+                          name   = "magic",
+                          header = "Notes manager",
+                          main = {
+                            Command.opts.map(args => doSth(args))
+                          },
+                        )
+                    </code></pre>
+                </div>
+            </section>
+
+            <section>
+                <h3>Interface is <span class="pclr">prepared</span></h3>
+                Time to consume the API
+            </section>
+
+        </section>
+
+        <section>
+            <section>
+                <h3 style="line-height: 0">Meet</h3>
+                <h1><span class="pclr">sttp</span></h1>
+            </section>
+
+            <section>
+                <h2>Sttp is <span class="pclr">generic</span></h2>
+                <div style="text-align: center">
+                    <pre style="display: inline-block; width: unset"><code class="scala" data-trim data-noescape>
+
+                    </code></pre>
+                </div>
+            </section>
         </section>
 
         <section>
