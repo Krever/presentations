@@ -1,7 +1,7 @@
 package magicofintegrations.step2
 
 import cats.effect.Sync
-import magicofintegrations.model.NoteV1
+import magicofintegrations.model.Note
 import org.http4s.HttpRoutes
 import org.http4s.dsl.Http4sDsl
 import magicofintegrations.step0
@@ -17,7 +17,7 @@ class CirceNotesController[F[_]: Sync](repository: NotesRepository[F]) extends s
   override def saveNote: HttpRoutes[F] = HttpRoutes.of[F] {
     case req @ POST -> Root / "notes" =>
       for {
-        note <- req.as[NoteV1]
+        note <- req.as[Note]
         _    <- repository.save(note)
         resp <- Ok(s"Saved")
       } yield resp

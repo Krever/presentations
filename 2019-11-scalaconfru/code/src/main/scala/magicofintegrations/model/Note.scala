@@ -5,11 +5,11 @@ import eu.timepit.refined.types.string.NonEmptyString
 import io.circe.generic.JsonCodec
 
 @JsonCodec
-case class NoteV1(title: String, text: String)
+case class Note(title: String, text: String)
 
-object NoteV1 {
+object Note {
 
-  def sample = NoteV1("My awesome title", "And my awesome text")
+  def sample = Note("My awesome title", "And my awesome text")
 
 }
 

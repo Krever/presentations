@@ -256,6 +256,9 @@
 
         <section>
             <section>
+                <h1>Http <span class="pclr">Server</span></h1>
+            </section>
+            <section>
                 <h3 style="line-height: 0">Meet</h3>
                 <h1><span class="pclr">Http4s</span></h1>
                 <aside class="notes">
@@ -346,10 +349,25 @@
         </section>
 
         <section>
+            <section>
+                <h2>Json <span class="pclr">(De)Serialization</span></h2>
+            </section>
 
             <section>
                 <h3 style="line-height: 0">Meet</h3>
                 <h1><span class="pclr">Circe</span></h1>
+            </section>
+
+            <section>
+                <h2>Circe is <span class="pclr">pure</span></h2>
+                No exceptions, no reflection
+                <div style="text-align: center">
+                    <pre style="display: inline-block; width: unset"><code class="scala" data-trim data-noescape>
+                        import io.circe._
+                        val json: Either[ParsingFailure, Json]  = parser.parse("{}")
+                        val data: Either[DecodingFailure, Note] = json.right.get.as[Note]
+                    </code></pre>
+                </div>
             </section>
 
             <section>
@@ -360,17 +378,6 @@
 
                         @JsonCodec
                         case class Note(title: String, text: String)
-                    </code></pre>
-                </div>
-            </section>
-
-            <section>
-                <h2>Circe is <span class="pclr">pure</span></h2>
-                <div style="text-align: center">
-                    <pre style="display: inline-block; width: unset"><code class="scala" data-trim data-noescape>
-                        import io.circe._
-                        val json: Either[ParsingFailure, Json]  = parser.parse("{}")
-                        val data: Either[DecodingFailure, Note] = json.right.get.as[Note]
                     </code></pre>
                 </div>
             </section>
@@ -392,7 +399,7 @@
                       override def saveNote: HttpRoutes[F] = HttpRoutes.of[F] {
                         case req @ POST -> Root / "notes" =>
                           for {
-                            <mark>note <- req.as[NoteV1]</mark>
+                            <mark>note <- req.as[Note]</mark>
                             resp <- Ok(s"Saved")
                           } yield resp
                       }
@@ -417,6 +424,10 @@
         <section>
 
             <section>
+                <h2>Database <span class="pclr">Persistance</span></h2>
+            </section>
+
+            <section>
                 <h3 style="line-height: 0">Meet</h3>
                 <h1><span class="pclr">Doobie</span> & <span class="pclr">Quill</span></h1>
             </section>
@@ -439,7 +450,7 @@
             </section>
 
             <section>
-                Doobie is a real dope
+                <span class="pclr" style="font-weight: bold;">Doobie</span> is a real dope
                 <div style="text-align: center; font-size: 0.7em">
                     <pre style="display: inline-block; width: unset"><code class="scala" data-trim data-noescape>
                         class DoobieNotesRepository[F[_]: Bracket[?[_], Throwable]](xa: Transactor[F]) extends NotesRepository[F] {
@@ -489,10 +500,10 @@
                         val ctx = new SqlMirrorContext(MirrorSqlDialect, Literal)
                         import ctx._
                     </code></pre>
-                    <pre style="display: inline-block; width: unset"><code class="scala" data-trim data-noescape>
+                    <pre class="fragment" style="display: inline-block; width: unset"><code class="scala" data-trim data-noescape>
                         case class Circle(x: Int, y: Int)
                     </code></pre>
-                    <pre style="display: inline-block; width: unset"><code class="scala" data-trim data-noescape>
+                    <pre class="fragment" style="display: inline-block; width: unset"><code class="scala" data-trim data-noescape>
                         val q = quote {
                           query[Point].filter(p => p.x > 10)
                         }
@@ -545,12 +556,17 @@
 
             <section>
                 <h2><span class="pclr">Streaming</span> steps in</h2>
-                And it's completely different game
+                And brings another choice to make
             </section>
 
         </section>
 
         <section>
+
+            <section>
+                <h2><span class="pclr">Stream</span> processing</h2>
+            </section>
+
             <section>
                 <h3 style="line-height: 0">Meet</h3>
                 <h1><span class="pclr">Fs2</span></h1>
@@ -562,20 +578,36 @@
             </section>
 
             <section>
-                <h2>But don't be afraid</h2>
-                TODO fs2 example
+                <h2>But don't be <span class="pclr">afraid</span></h2>
+                It's like collection but deferred and effectful
+                <div style="text-align: center">
+                    <pre style="display: inline-block; width: unset"><code class="scala" data-trim data-noescape>
+                      val converter: Stream[IO, Unit] =
+                        io.file.readAll[IO](Paths.get("testdata/fahrenheit.txt"), blocker, 4096)
+                          .through(text.utf8Decode)
+                          .through(text.lines)
+                          .filter(s => !s.trim.isEmpty && !s.startsWith("//"))
+                          .map(line => fahrenheitToCelsius(line.toDouble).toString)
+                          .intersperse("\n")
+                          .through(text.utf8Encode)
+                          .through(io.file.writeAll(Paths.get("testdata/celsius.txt"), blocker))
+                    </code></pre>
+                </div>
             </section>
 
             <section>
                 <small style="line-height: 0.5em"><h4>Integration 3</h4></small>
-                <h3 style="line-height: 0.5em">Doobie's got your back</h3>
+                <h3 style="line-height: 0.5em">Doobie's <span class="pclr">got your back</span></h3>
                 <div style="text-align: center">
                     <pre style="display: inline-block; width: unset"><code class="scala" data-trim data-noescape>
-                        def getAll(): fs2.Stream[F, NoteV1]
+                        trait StreamingNotesRepository[F[_]] {
+                          def getAllStream(): fs2.Stream[F, Note]
+                        }
                     </code></pre>
                     <pre style="display: inline-block; width: unset"><code class="scala" data-trim data-noescape>
-                        def getAll(): fs2.Stream[F, NoteV1] = {
-                          <mark>stream</mark>(query[NoteV1]).transact(xa)
+                        import ctx._
+                        def getAllStream(): fs2.Stream[F, NoteV1] = {
+                          <mark>stream</mark>(query[Note]).transact(xa)
                         }
                     </code></pre>
                 </div>
@@ -588,7 +620,7 @@
 
             <section>
                 <small style="line-height: 0.5em"><h4>Integration 4</h4></small>
-                <h3 style="line-height: 0.5em">Http4s' got your back too</h3>
+                <h3 style="line-height: 0.5em">Http4s' <span class="pclr">got your back</span> too</h3>
                 <div style="text-align: center">
                     <pre style="display: inline-block; width: unset"><code class="scala" data-trim data-noescape>
                       override def getNotes: HttpRoutes[F] = HttpRoutes.of[F] {
@@ -609,12 +641,17 @@
 
         <section>
             <section>
+                <h2>Client <span class="pclr">App</span></h2>
+                A console one
+            </section>
+
+            <section>
                 <h3 style="line-height: 0">Meet</h3>
                 <h1><span class="pclr">Decline</span></h1>
             </section>
 
             <section>
-                <h2>Functional <span class="pclr">command line</span> parser</h2>
+                <h2>Functional <br><span class="pclr">command line</span><br> parser</h2>
                 <div style="text-align: center">
                     <pre style="display: inline-block; width: unset"><code class="scala" data-trim data-noescape>
                         magic get-notes --url localhost --port 8080
@@ -649,7 +686,7 @@
 
             <section>
                 <h3>How to <span class="pclr">use it</span>?</h3>
-                Step 0: Define commands (optional)
+                Step 0: Define commands datatypes (optional)
                 <div style="text-align: center">
                     <pre style="display: inline-block; width: unset"><code class="scala" data-trim data-noescape>
                         sealed trait MyCommand
@@ -712,14 +749,13 @@
                       }
                     </code></pre>
                     <pre style="display: inline-block; width: unset"><code class="scala" data-trim data-noescape>
-                      object Main
-                        extends CommandApp(
-                          name   = "magic",
-                          header = "Notes manager",
-                          main = {
-                            Command.opts.map(args => doSth(args))
-                          },
-                        )
+                      object Main extends CommandApp(
+                        name   = "magic",
+                        header = "Notes manager",
+                        main = {
+                          Command.opts.map(args => doSth(args))
+                        },
+                      )
                     </code></pre>
                 </div>
             </section>
@@ -733,6 +769,22 @@
 
         <section>
             <section>
+                <h2>Http <span class="pclr">client</span></h2>
+            </section>
+
+            <section>
+                <h3><span class="pclr">Api</span> strikes back</h3>
+                <div style="text-align: center">
+                    <pre style="display: inline-block; width: unset"><code class="scala" data-trim data-noescape>
+                      trait ApiClient[F[_]] {
+                        def addNote(note: Note): F[Unit]
+                        def getNotes(): F[List[Note]]
+                      }
+                    </code></pre>
+                </div>
+            </section>
+
+            <section>
                 <h3 style="line-height: 0">Meet</h3>
                 <h1><span class="pclr">sttp</span></h1>
             </section>
@@ -741,10 +793,146 @@
                 <h2>Sttp is <span class="pclr">generic</span></h2>
                 <div style="text-align: center">
                     <pre style="display: inline-block; width: unset"><code class="scala" data-trim data-noescape>
-
+                        trait SttpBackend[R[_], -S] {
+                          def send[T](request: Request[T, S]): R[Response[T]]
+                        }
                     </code></pre>
                 </div>
             </section>
+
+            <section>
+                <h2>Sttp is <span class="pclr">pleasant</span> to use</h2>
+                <div style="text-align: center">
+                    <pre style="display: inline-block; width: unset"><code class="scala" data-trim data-noescape>
+                      override def addNote(note: Note): F[Unit] = {
+                        sttp
+                          .post(uri"$url/notes")
+                          .body(note)
+                          .send()
+                          .map(_.body.leftMap(new RuntimeException(_)))
+                          .rethrow
+                          .as(())
+                      }
+                    </code></pre>
+                </div>
+            </section>
+
+            <section>
+                <small style="line-height: 0.5em"><h4>Integration 5 & 6</h4></small>
+                <h3 style="line-height: 0.5em">Sttp + cats-effect + fs2 = <span class="pclr">♥</span></h3>
+                <div style="text-align: center">
+                    <pre style="display: inline-block; width: unset"><code class="scala" data-trim data-noescape>
+                        implicit val backend: SttpBackend[IO, fs2.Stream[IO, ByteBuffer]] =
+                            AsyncHttpClientFs2Backend[IO]()
+                    </code></pre>
+                </div>
+            </section>
+
+            <section>
+                <h2>How about <span class="pclr">streaming</span>?</h2>
+                Yet again
+            </section>
+
+            <section>
+                <small style="line-height: 0.5em"><h4>Integration 7</h4></small>
+                <h3 style="line-height: 0.5em">Sttp + fs2 + circe = <span class="pclr">♥</span></h3>
+                <div style="text-align: center">
+                    <pre style="display: inline-block; width: unset"><code class="scala" data-trim data-noescape>
+                        override def getNotesStream(): fs2.Stream[F, Note] = {
+                            val response: F[fs2.Stream[F, ByteBuffer]] = sttp
+                              .get(uri"$url/notes")
+                              .response(<mark>asStream[fs2.Stream[F, ByteBuffer]]</mark>)
+                              .send()
+                              .map(_.body.leftMap(new RuntimeException(_)))
+                              .rethrow
+
+                            fs2.Stream
+                              .eval(response)
+                              .flatten
+                              .flatMap(b => fs2.Stream.emits(b.array()))
+                              .through(<mark>io.circe.fs2.byteStreamParser[F]</mark>)
+                              .map(_.as[Note])
+                              .rethrow
+                          }
+                    </code></pre>
+                </div>
+            </section>
+        </section>
+
+        <section>
+
+            <section>
+                <h2>What <span class="pclr">else</span>?</h2>
+            </section>
+
+
+            <section>
+                <h3>More typesafety: <span class="pclr">refined</span></h3>
+                todo
+            </section>
+
+            <section>
+                <h3>Enums: <span class="pclr">enumeratum</span></h3>
+                todo
+            </section>
+
+            <section>
+                <h3>Single API definition: <br><span class="pclr">Endpoints & tapir</span></h3>
+                todo
+            </section>
+
+            <section>
+                <h3>Text parsing: <span class="pclr">atto</span></h3>
+                todo
+            </section>
+
+            <section>
+                <h3>Bytes parsing: <span class="pclr">scodec</span></h3>
+                todo
+            </section>
+
+            <section>
+                <h3>Kafka: <span class="pclr">fs2-kafka</span></h3>
+                todo
+            </section>
+
+            <section>
+                <h3>gRPC: <span class="pclr">fs2-grpc</span></h3>
+                todo
+            </section>
+
+            <section>
+                <h3>Caching: <span class="pclr">scalacache</span></h3>
+                todo
+            </section>
+
+        </section>
+
+        <section>
+            <section>
+                <h1>How is this <span class="pclr">possible</span>?</h1>
+            </section>
+
+            <section>
+                <small><h3>How is this <span class="pclr">possible</span>?</h3></small>
+                <h2>Pillar one: <span class="pclr">typelcasses</span> </h2>
+            </section>
+
+            <section>
+                <small><h3>How is this <span class="pclr">possible</span>?</h3></small>
+                <h2>Pillar two: <span class="pclr">cats</span> </h2>
+            </section>
+
+            <section>
+                <small><h3>How is this <span class="pclr">possible</span>?</h3></small>
+                <h2>Pillar three: <br><span class="pclr">cats-effects</span> </h2>
+            </section>
+
+            <section>
+                <small><h3>How is this <span class="pclr">possible</span>?</h3></small>
+                <h2>Pillar four: <span class="pclr">fs2</span> </h2>
+            </section>
+
         </section>
 
         <section>

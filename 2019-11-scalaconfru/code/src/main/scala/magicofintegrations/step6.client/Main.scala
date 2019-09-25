@@ -1,19 +1,25 @@
 package magicofintegrations.step6.client
 
+import java.nio.ByteBuffer
+
+import cats.effect.{Console, ExitCode, IO, IOApp}
+import magicofintegrations.step5.client.NotesCommand
 import cats.syntax.all._
-import com.monovore.decline._
-import magicofintegrations.model.NoteV1
-import magicofintegrations.step5
-object Main
-    extends CommandApp(
-      name   = "magic",
-      header = "Notes manager",
-      main = {
-        step5.client.Command.opts.map({
-          case step5.client.Command.GetNotes(url, port) =>
-            println(s"Get from $url $port")
-          case step5.client.Command.AddNote(url, port, note) =>
-            println(s"Add $note at $url $port")
-        })
-      },
-    )
+import com.softwaremill.sttp.SttpBackend
+import com.softwaremill.sttp.asynchttpclient.fs2.AsyncHttpClientFs2Backend
+
+object Main extends IOApp {
+
+  override def run(args: List[String]): IO[ExitCode] = {
+    val console: Console[IO]                                          = Console.io
+    implicit val backend: SttpBackend[IO, fs2.Stream[IO, ByteBuffer]] = AsyncHttpClientFs2Backend[IO]()
+    val handler                                                       = new ApiCmdHandler(SttpApiClient.factory[IO], console)
+    (NotesCommand.command.parse(args, sys.env) match {
+      case Left(help) => console.putStrLn(help.toString())
+      case Right(value) =>
+        handler.handle(value)
+    }).as(ExitCode.Success)
+
+  }
+
+}

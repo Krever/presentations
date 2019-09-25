@@ -1,27 +1,24 @@
 package magicofintegrations.step4
 
-import cats.Applicative
 import cats.effect.Bracket
 import doobie.quill.DoobieContext
 import doobie.util.transactor.Transactor
-import magicofintegrations.model.NoteV1
+import io.getquill._
+import magicofintegrations.model.Note
+import magicofintegrations.step3.QuillNotesRepository
 
 import scala.language.higherKinds
-
-import io.getquill._
 class QuillStreamingNotesRepository[F[_]: Bracket[?[_], Throwable]](
     xa: Transactor[F],
     ctx: DoobieContext.H2[SnakeCase.type],
-) extends StreamingNotesRepository[F] {
-  import doobie.implicits._
-  import cats.syntax.all._
+) extends QuillNotesRepository[F](xa, ctx)
+    with StreamingNotesRepository[F] {
   import ctx._
+  import doobie.implicits._
 
-  private implicit val notesSchemaMeta = schemaMeta[NoteV1]("notes_v1")
-
-  override def getAll(): fs2.Stream[F, NoteV1] = {
+  override def getAllStream(): fs2.Stream[F, Note] = {
     stream {
-      query[NoteV1]
+      query[Note]
     }.transact(xa)
   }
 }

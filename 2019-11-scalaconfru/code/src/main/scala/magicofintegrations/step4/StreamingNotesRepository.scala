@@ -4,10 +4,10 @@ import cats.Applicative
 import cats.effect.Bracket
 import doobie.quill.DoobieContext
 import doobie.util.transactor.Transactor
-import magicofintegrations.model.NoteV1
+import magicofintegrations.model.Note
 
 import scala.language.higherKinds
 
 trait StreamingNotesRepository[F[_]] {
-  def getAll(): fs2.Stream[F, NoteV1]
+  def getAllStream(): fs2.Stream[F, Note]
 }

@@ -1,17 +1,17 @@
 package magicofintegrations.step2
 
 import cats.effect._
-import doobie.quill.DoobieContext
+import cats.syntax.all._
 import doobie.util.transactor.Transactor
 import magicofintegrations.step0
-import cats.syntax.all._
+import org.http4s.HttpRoutes
 
-class Main[F[_]: ConcurrentEffect: Timer](controller: step0.NotesController[F], repo: NotesRepository[F]) {
+class Main[F[_]: ConcurrentEffect: Timer](routes: HttpRoutes[F], repo: NotesRepository[F]) {
 
   def run: F[ExitCode] = {
     for {
       _    <- repo.initialize()
-      code <- new step0.Main(controller).run
+      code <- new step0.Main(routes).run
     } yield code
   }
 }
@@ -27,7 +27,7 @@ object Main extends IOApp {
 
     val notesController: step0.NotesController[IO] = new CirceNotesController[IO](repo)
 
-    new Main(notesController, repo).run
+    new Main(notesController.allRoutes, repo).run
   }
 
 }

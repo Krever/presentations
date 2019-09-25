@@ -5,7 +5,7 @@ import cats.effect.Bracket
 import doobie.quill.DoobieContext
 import doobie.util.transactor.Transactor
 import doobie.util.update.Update
-import magicofintegrations.model.NoteV1
+import magicofintegrations.model.Note
 
 import scala.language.higherKinds
 
@@ -18,13 +18,13 @@ class DoobieNotesRepository[F[_]: Bracket[?[_], Throwable]](xa: Transactor[F]) e
     q.run.transact(xa).as(())
   }
 
-  override def save(note: NoteV1): F[Unit] = {
+  override def save(note: Note): F[Unit] = {
     val q = sql"insert into notes_v1 (title, text) values (${note.title}, ${note.text})".update
     q.run.transact(xa).as(())
   }
 
-  override def getAll(): F[List[NoteV1]] = {
-    val q = sql"select title, text from notes_v1".query[NoteV1]
+  override def getAll(): F[List[Note]] = {
+    val q = sql"select title, text from notes_v1".query[Note]
     q.to[List].transact(xa)
   }
 }

@@ -5,7 +5,7 @@ version := "0.1"
 scalaVersion := "2.12.8"
 
 val http4sVersion      = "0.20.10"
-val circeVersion       = "0.11.0"
+val circeVersion       = "0.12.1"
 lazy val doobieVersion = "0.7.0"
 
 libraryDependencies ++= Seq(
@@ -30,7 +30,12 @@ libraryDependencies ++= Seq(
   // decline
   "com.monovore" %% "decline" % "0.5.0",
   //sttp
-  "com.softwaremill.sttp" %% "core" % "1.6.6",
+  "com.softwaremill.sttp" %% "core"                          % "1.6.7",
+  "com.softwaremill.sttp" %% "circe"                         % "1.6.7",
+  "com.softwaremill.sttp" %% "async-http-client-backend-fs2" % "1.6.7",
+  "io.circe"              %% "circe-fs2"                     % "0.12.0",
+  //console4cats
+  "dev.profunktor" %% "console4cats" % "0.8.0",
 )
 
 addCompilerPlugin("org.scalamacros" % "paradise"        % "2.1.0" cross CrossVersion.full)

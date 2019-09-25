@@ -10,7 +10,7 @@ object Main extends IOApp {
 
     val notesController: step0.NotesController[IO] = new CirceDummyNotesController[IO]()
 
-    new step0.Main(notesController).run
+    new step0.Main(notesController.allRoutes).run
 
   }
 }

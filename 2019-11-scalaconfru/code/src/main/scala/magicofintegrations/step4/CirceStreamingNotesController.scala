@@ -1,23 +1,22 @@
 package magicofintegrations.step4
 
-import cats.effect.Sync
-import magicofintegrations.step0
-import org.http4s.dsl.Http4sDsl
+import cats.effect.{ConcurrentEffect, Sync}
+import magicofintegrations.step2.{CirceNotesController, NotesRepository}
+import cats.syntax.all._
 
 class CirceStreamingNotesController[F[_]: Sync](
-    repository: StreamingNotesRepository[F],
-    delegate: step0.NotesController[F],
-) extends step0.NotesController[F] {
+    repository: StreamingNotesRepository[F] with NotesRepository[F],
+) extends CirceNotesController[F](repository)
+    with StreamingNotesController[F] {
   import org.http4s._
-  val dsl = Http4sDsl[F]
   import dsl._
   import org.http4s.circe.CirceEntityEncoder._
 
-  override def saveNote: HttpRoutes[F] = delegate.saveNote
-
-  override def getNotes: HttpRoutes[F] = HttpRoutes.of[F] {
+  override def getNotesStream: HttpRoutes[F] = HttpRoutes.of[F] {
     case GET -> Root / "notes" =>
-      val notes = repository.getAll()
+      val notes = repository.getAllStream()
       Ok(notes)
   }
+
+  override def allRoutes(implicit c: ConcurrentEffect[F]): HttpRoutes[F] = super.allRoutes <+> getNotesStream
 }
