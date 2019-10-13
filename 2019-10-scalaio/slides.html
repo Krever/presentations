@@ -91,14 +91,6 @@ because we program view not the logic
     </tr>
 </table>
 
-<!--<br>-->
-
-
-
-notes:
-because ???
-if length
-
 ++++
 
 ### <span class="sclr horror" style="font-weight: lighter">Frontend</span> is <span class="pclr">complicated</span>
@@ -168,7 +160,9 @@ if length
 
 What does it mean?
 
-TODO
+<h3 class="fragment">It <span class="pclr">Won't</span> tell you how to do stuff</h3>
+<h3 class="fragment">It <span class="pclr">will</span> tell you what to expect</h3>
+
 
 ----
 
@@ -363,18 +357,16 @@ Or is frontend <span class="pclr">inevitible</span>?
 * created by microsoft
 * powerful ☺ but unsound ☹ type system
 * structural types ☺☹
-* fp is possible but hard and not idiomatic
+* FP is possible but hard and not idiomatic
 * most popular typed fronted language
 * bindings still dont work
-* unsafe - types lie - json
 
 ++++
 
 <h2 class="pclr">ReasonML</h2>
 
-* created by facebook
+* created at facebook
 * ocaml base & ecosystem
-* mutability?
 
 ++++
 
@@ -382,35 +374,68 @@ Or is frontend <span class="pclr">inevitible</span>?
 
 * Created by Evan Czaplicki
 * opinionated
-* redux model
-* separated from js
-* most popular typed fp
-* handicapped haskell (no typeclasses)
-* tooling
-* bus factor
+* built-in redux model
+* strongly separated from  JS
+* reduced haskell (no typeclasses)
+* good tooling
 
 ++++
 
 <h2 class="pclr">Purescript</h2>
 
-* real haskell
+* closest to haskell
 * hard time competing with Elm
 
 ++++
 
 <h2 class="pclr">Fable</h2>
 
-* F# -> JS
+* F# for web
 
 
 ++++
 
 <h2 class="pclr">Scala.js</h2>
 
-* huge scala ecosystem
-* quite popular
-* bindings are not reliable
+* scala ecosystem
 * not approachable for js devs
+
+++++
+
+<span style="font-size: 1.5em">So what's wrong with <span class="pclr">TypeScript</span>?</span>
+
+++++
+
+<span style="font-size: 0.7em">So what's wrong with <span class="pclr">TypeScript</span>?</span>
+
+It's too easy to lie and too hard to enforce the truth
+
+<pre style="display: inline-block; width: unset"><code data-trim data-noescape class="typescript">
+const fetchNotes = () => {
+    fetch(request) <mark>as Note[]</mark>
+}
+</code></pre>
+
+So people will just make assumptions and hope for the best
+
+++++
+
+<span style="font-size: 0.7em">So what's wrong with <span class="pclr">TypeScript</span>?</span>
+
+Also:
+
+<ul style="font-size: 0.8em">
+    <li>JS Bindings</li>
+    <li>JS Runtime</li>
+    <li>JS Compatibility, e.g:
+        <ul>
+            <li>No pattern matching</li>
+            <li>Statement based</li>
+        </ul>
+    </li>
+</ul>
+
+Other than that, <span class="pclr">it's really nice language</span>
 
 ++++
 
@@ -507,7 +532,7 @@ export class HeroListComponent implements OnInit {
   selectHero(hero: Hero) { this.selectedHero = hero; }
 }
            </code></pre>
-           <pre><code>
+            <pre><code>
 <h2>Hero List</h2>
 <p><i>Pick a hero from the list</i></p>
 <ul>
@@ -522,7 +547,7 @@ export class HeroListComponent implements OnInit {
         <td style="vertical-align: middle">
             <ul>
                 <li>proper framework</li>
-                <li>closer to typical backend</li>
+                <li>closer to OOP backend</li>
             </ul>
         </td>
     </tr>
@@ -535,8 +560,20 @@ export class HeroListComponent implements OnInit {
 
 <table style="font-size: 1.2em">
     <tr>
-        <td>scalajs-react</td>
-        <td>slinky</td>
+        <td style="text-align: center">
+            <span class="sclr">scalajs-react</span>
+            <ul style="font-size: 0.8em" class="fragment">
+                <li>plain scala</li>
+                <li>well-seasoned</li>
+            </ul>
+        </td>
+        <td style="text-align: center">
+            <span class="sclr">slinky</span>
+            <ul style="font-size: 0.8em" class="fragment">
+                <li>macros</li>
+                <li>new and fancy</li>
+            </ul>
+        </td>
     </tr>
 </table>
 
@@ -544,7 +581,12 @@ export class HeroListComponent implements OnInit {
 
 ++++
 
-TODO
+
+<span style="font-size: 0.7em">Framework: <span class="pclr">Scala.js bindings</span></span>
+
+## JS bindings can fail you
+
+Always
 
 ++++
 
@@ -553,18 +595,32 @@ TODO
 
 <table style="font-size: 1.2em">
     <tr>
-        <td>Outwatch</td>
-        <td>Laminar</td>
-        <td>Binding.scala</td>
+        <td style="text-align: center">
+            <span class="sclr">Binding.scala</span>
+            <ul style="font-size: 0.8em" class="fragment">
+                <li>no vdom</li>
+                <li>macros</li>
+            </ul>
+        </td>
+        <td style="text-align: center">
+            <span class="sclr">Outwatch</span>
+            <ul style="font-size: 0.8em" class="fragment">
+                <li>vdom</li>
+                <li>plain scala</li>
+            </ul>
+        </td>
+        <td style="text-align: center">
+            <span class="sclr">Laminar</span>
+            <ul style="font-size: 0.8em" class="fragment">
+                <li>similar to Binding.scala</li>
+                <li>different tradeoffs</li>
+                <li>my favourite</li>
+            </ul>
+        </td>
     </tr>
 </table>
 
-++++
-
-TODO
-outwatch -vdom
-laminar direct dom
-busfactor
+<small>Bus factor is there ☹</small>
 
 ++++
 
@@ -584,18 +640,30 @@ busfactor
 <small style="line-height: 0.5em"><h4>Framework:</h4></small>
 <h2>Appendix 1: <span class="pclr">State management</span></h2>
 
-<table style="font-size: 1.1em">
+<table style="font-size: 1.2em">
     <tr>
-        <td class="fragment rev-sclr-fr">Redux</td>
-        <td class="fragment rev-sclr-fr">Mobx</td>
-        <td class="fragment rev-sclr-fr">diode</td>
-        <td class="fragment rev-sclr-fr">react-refetch</td>
+        <td style="text-align: center">
+            <span class="sclr">redux</span>
+            <ul style="font-size: 0.8em" class="fragment">
+                <li>boilerplate factory</li>
+            </ul>
+        </td>
+        <td style="text-align: center">
+            <span class="sclr">diode</span>
+            <ul style="font-size: 0.8em" class="fragment">
+                <li>scala-native</li>
+            </ul>
+        </td>
+        <td style="text-align: center">
+            <span class="sclr">react-refetch</span>
+            <ul style="font-size: 0.8em" class="fragment">
+                <li>super-simple</li>
+            </ul>
+        </td>
     </tr>
 </table>
 
-++++
-
-TODO describe
+<small>There is more: <span class="pclr">mobx, redux-observable, redux-saga, react hooks</span></small>
 
 ----
 
@@ -625,7 +693,7 @@ Because raw <span class="pclr">CSS</span> is <span class="pclr">dead</span>
 
 <table style="font-size: 1.1em">
     <tr>
-        <td class="fragment" style="font-size: 0.7em">
+        <td style="font-size: 0.7em">
             <span class="pclr">Features:</span><br>
             <ul>
                 <li>variables</li>
@@ -636,7 +704,7 @@ Because raw <span class="pclr">CSS</span> is <span class="pclr">dead</span>
                 <li>nesting</li>
             </ul>
         </td>
-        <td class="fragment" style="width: 40%; vertical-align: top">
+        <td style="width: 40%; vertical-align: top">
             <span class="pclr">Examples:</span><br>
             <ul>
                 <li>less</li>
@@ -651,7 +719,7 @@ Because raw <span class="pclr">CSS</span> is <span class="pclr">dead</span>
 
 <h4>Styling: <span class="pclr">CSS Preprocessors</span></h4>
 <h3>Example</h3>
-
+<small>Input:</small>
 <pre><code style="font-size: 1em">@mixin transform($property) {
   -webkit-transform: $property;
   -ms-transform: $property;
@@ -659,6 +727,7 @@ Because raw <span class="pclr">CSS</span> is <span class="pclr">dead</span>
 }
 .box { @include transform(rotate(30deg)); }
 </code></pre>
+<small>Output:</small>
 <pre><code style="font-size: 1em">.box {
   -webkit-transform: rotate(30deg);
   -ms-transform: rotate(30deg);
@@ -713,19 +782,22 @@ classes → &#x2728;&#x2728;&#x2728;
 </table>
 
 <div style="position:relative; height:480px; margin:0 auto;">
-    <img class="fragment" data-fragment-index="1" src="img/semantic.png" style="position:absolute;top:0;left:0;" />
-    <img class="fragment" data-fragment-index="2" src="img/minicss.png" style="position:absolute;top:0;left:0;" />
-    <img class="fragment" data-fragment-index="3" src="img/bootstrap.png" style="position:absolute;top:0;left:0;" />
-    <img class="fragment" data-fragment-index="4" src="img/foundation.png" style="position:absolute;top:0;left:0;" />
+    <img class="fragment" data-fragment-index="1" src="img/semantic.png" style="position:absolute;top:0;left:0;"/>
+    <img class="fragment" data-fragment-index="2" src="img/minicss.png" style="position:absolute;top:0;left:0;"/>
+    <img class="fragment" data-fragment-index="3" src="img/bootstrap.png" style="position:absolute;top:0;left:0;"/>
+    <img class="fragment" data-fragment-index="4" src="img/foundation.png" style="position:absolute;top:0;left:0;"/>
 </div>
 
 ++++
 
 
 <small style="line-height: 0.5em"><h4>Styling:</h4></small>
-<h2>Appendix 2: <span class="pclr">RWD</span></h2>
+<h2>Appendix 2: <span style="font-weight: bold"><span class="pclr">R</span>esponsive <span class="pclr">W</span>eb <span
+        class="pclr">D</span>esign</span></h2>
 
-TODO
+<img src="img/rwd.gif">
+
+<small>Or simply: Adjust your layout to the screen size</small>
 
 ----
 
@@ -747,7 +819,7 @@ TODO
 
 <table style="">
     <tr>
-        <td width="40%">
+        <td width="50%">
             <ul>
                 <li>HTTP</li>
                 <li>Proper method</li>
@@ -756,7 +828,7 @@ TODO
             </ul>
         </td>
         <td>
-            <ul>
+            <ul style="font-size: 0.8em">
                 <li>Very well known</li>
                 <li>Established standard</li>
                 <li>Not so efficient</li>
@@ -782,9 +854,11 @@ TODO
 
 <small style="line-height: 0.5em"><h4>Communication: <span class="pclr">Graphql</span></h4></small>
 
-## Example
+## How does it work?
 
-TODO
+* Servers exposes <span class="pclr">schema</span> (types, operations)
+* Client codebase contains <span class="pclr">queries</span>
+* Code can be generated based on <span class="pclr">queries</span> and <span class="pclr">schema</span>
 
 ++++
 
@@ -793,15 +867,16 @@ TODO
 
 <table style="font-size: 1.1em">
     <tr>
-        <td class="fragment" style="font-size: 0.7em">
+        <td style="font-size: 0.7em">
             <span class="pclr">Features:</span><br>
             <ul>
                 <li>easily shared between fronted and backend</li>
                 <li>convenient for the backend</li>
                 <li>problematic on the fronted</li>
+                <li>usually requires single language</li>
             </ul>
         </td>
-        <td class="fragment" style="width: 40%; vertical-align: top">
+        <td style="width: 40%; vertical-align: top">
             <span class="pclr">Examples:</span><br>
             <ul>
                 <li class="fragment rev-sclr-fr">grpc-web</li>
@@ -819,15 +894,15 @@ TODO
 
 <table style="font-size: 1.1em">
     <tr>
-        <td class="fragment" style="font-size: 0.7em">
+        <td style="font-size: 0.7em">
             <span class="pclr">Features:</span><br>
             <ul>
-                <li>easily shared between fronted and backend if both are scala</li>
+                <li>easily shared between fronted and backend if both are written in Scala</li>
                 <li>requires the same stack on both sides</li>
                 <li>all the benefits and problems of REST</li>
             </ul>
         </td>
-        <td class="fragment" style="width: 40%; vertical-align: top">
+        <td style="width: 40%; vertical-align: top">
             <span class="pclr">Examples:</span><br>
             <ul>
                 <li class="fragment rev-sclr-fr">endpoints</li>
@@ -843,11 +918,6 @@ TODO
 <small style="line-height: 0.5em"><h4>Communication:</h4></small>
 ## <span class="pclr">Websockets</span> & <span class="pclr">SSE</span>
 
-++++
-
-<small style="line-height: 0.5em"><h4>Communication:</h4></small>
-## <span class="pclr">Websockets</span> & <span class="pclr">SSE</span>
-
 <table style="font-size: 1.1em">
     <tr>
         <td style="font-size: 0.7em">
@@ -855,7 +925,7 @@ TODO
             <ul>
                 <li class="fragment">on top of raw TCP</li>
                 <li class="fragment">distinct from HTTP</li>
-                <li class="fragment">two directional</li>
+                <li class="fragment">bidirectional</li>
                 <li class="fragment">binary</li>
             </ul>
         </td>
@@ -870,6 +940,8 @@ TODO
         </td>
     </tr>
 </table>
+
+<span class="fragment">Most of the time <span class="pclr">SSE</span> is enough</span>
 
 
 ----
@@ -893,6 +965,8 @@ TODO
 
 NPM & Yarn
 
+<small>To get your libraries from internetz</small>
+
 ++++
 
 <img src="img/npm-traffic.png">
@@ -906,8 +980,7 @@ NPM & Yarn
 
 <img src="img/npm-thor.jpg" height="80%">
 
-++++
-
+notes:
 I could go like that for the rest of the day
 
 ++++
@@ -929,8 +1002,8 @@ I could go like that for the rest of the day
             <ul>
                 <li class="fragment">npm drop-in replacement</li>
                 <li class="fragment">created by facebook</li>
-                <li class="fragment">performance</li>
-                <li class="fragment">lock-files</li>
+                <li class="fragment">better performance</li>
+                <li class="fragment">added lock-files</li>
             </ul>
         </td>
     </tr>
@@ -1039,8 +1112,8 @@ sbt-web & scalajs-bundler
 
 <ul>
     <li class="fragment">wrapper around webpack & npm</li>
-    <li class="fragment">designed for fronted</li>
-    <li class="fragment">webjars is a partial alternative</li>
+    <li class="fragment">designed for frontend</li>
+    <li class="fragment">webjars are a partial alternative</li>
 </ul>
 
 ----
@@ -1102,9 +1175,9 @@ VS Code vs Intellij
 
 <!-- -- data-background-color="#851e3e" -->
 
-#### React - do it yourself
+#### React - do it yourself lib
 #### Angular - backendish framework
-#### Scala.js native - viable option
+#### Scala.js native libs - viable option
 
 ++++
 
@@ -1133,9 +1206,9 @@ VS Code vs Intellij
 Wojtek Pituła - [@Krever01](https://twitter.com/Krever01)
 
 <div>
-    <small>Feedback maybe?</small>
-    <br>
     [w.pitula.me/presentations](http://w.pitula.me/presentations/scalar-2018/index.html)
+    <br>
+    <small>You can leave feedback there ^</small>
 </div>
 
 
