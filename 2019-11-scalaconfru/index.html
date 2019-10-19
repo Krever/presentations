@@ -119,7 +119,7 @@
     <div class="slides">
         <section>
             <h1>Magic of integrations</h1>
-            <h2><span class="pclr">ecosystem</span> better than any framework</h2>
+            <h3><span class="pclr">ecosystem</span> better than any framework</h3>
 
 
             <div>
@@ -371,7 +371,7 @@
             </section>
 
             <section>
-                <h2>Circe is <span class="pclr">simple</span></h2>
+                <h2>Circe is <span class="pclr">easy</span></h2>
                 <div style="text-align: center">
                     <pre style="display: inline-block; width: unset"><code class="scala" data-trim data-noescape>
                         import io.circe.generic.JsonCodec
@@ -651,6 +651,7 @@
             </section>
 
             <section>
+                <h4><span class="pclr">Decline</span></h4>
                 <h2>Functional <br><span class="pclr">command line</span><br> parser</h2>
                 <div style="text-align: center">
                     <pre style="display: inline-block; width: unset"><code class="scala" data-trim data-noescape>
@@ -865,20 +866,11 @@
                 <h2>What <span class="pclr">else</span>?</h2>
             </section>
 
-
-            <section>
-                <h3>More typesafety: <span class="pclr">refined</span></h3>
-                todo
-            </section>
-
-            <section>
-                <h3>Enums: <span class="pclr">enumeratum</span></h3>
-                todo
-            </section>
-
             <section>
                 <h3>Single API definition: <br><span class="pclr">Endpoints & tapir</span></h3>
-                todo
+                Share your endpoints (url, method, body format) between client, server + generate docs
+                <br>
+                <b>Works with <span class="pclr">http4s</span>, <span class="pclr">sttp</span> and more</b>
             </section>
 
             <section>
@@ -902,6 +894,85 @@
             </section>
 
             <section>
+                <h3>More typesafety: <span class="pclr">refined</span></h3>
+                <pre style="display: inline-block; width: unset"><code class="scala" data-trim data-noescape>
+                    val x: Int Refined Positive
+                </code></pre>
+                <br>
+                Integrates with:
+                <table>
+                    <tr>
+                        <td>
+                            <ul>
+                                <li>doobie</li>
+                                <li>circe</li>
+                            </ul>
+                        </td>
+                        <td>
+                            <ul>
+                                <li>cats</li>
+                                <li>decline</li>
+                            </ul>
+                            <br>
+                        </td>
+                        <td>
+                            <ul>
+                                <li>scodec</li>
+                                <li>atto</li>
+                            </ul>
+                            <br>
+                        </td>
+                    </tr>
+                </table>
+                and MUCH more
+            </section>
+
+            <section>
+                <h3>Enums: <span class="pclr">enumeratum</span></h3>
+                <table>
+                    <tr>
+                        <td>
+                            <pre style="display: inline-block; width: unset; font-size: 0.4em"><code class="scala" data-trim data-noescape>
+                                sealed trait Greeting extends EnumEntry
+                                object Greeting extends Enum[Greeting] {
+                                  case object Hello   extends Greeting
+                                  case object GoodBye extends Greeting
+                                  case object Hi      extends Greeting
+                                  case object Bye     extends Greeting
+
+                                  val values = findValues
+                                }
+                            </code></pre>
+                        </td>
+                        <td style="vertical-align: top; text-align: center">
+                            Integrates with:
+                            <table>
+                                <tr>
+                                    <td>
+                                        <ul>
+                                            <li>doobie</li>
+                                            <li>quill</li>
+                                            <li>circe</li>
+                                        </ul>
+                                        <br>
+                                    </td>
+                                    <td>
+                                        <ul>
+                                            <li>decline</li>
+                                            <li>scodec</li>
+                                            <li>atto</li>
+                                        </ul>
+                                        <br>
+                                    </td>
+                                </tr>
+                            </table>
+                            <span>and MUCH more</span>
+                        </td>
+                    </tr>
+                </table>
+            </section>
+
+            <section>
                 <h3>Caching: <span class="pclr">scalacache</span></h3>
                 todo
             </section>
@@ -915,137 +986,42 @@
 
             <section>
                 <small><h3>How is this <span class="pclr">possible</span>?</h3></small>
-                <h2>Pillar one: <span class="pclr">typelcasses</span> </h2>
+                <h2>Pillar one: <span class="pclr">typeclasses</span> </h2>
+                Integration between modules A & B can be provided via module C
             </section>
 
             <section>
                 <small><h3>How is this <span class="pclr">possible</span>?</h3></small>
                 <h2>Pillar two: <span class="pclr">cats</span> </h2>
+                Common interfaces for most generic things
             </section>
 
             <section>
                 <small><h3>How is this <span class="pclr">possible</span>?</h3></small>
                 <h2>Pillar three: <br><span class="pclr">cats-effects</span> </h2>
+                Common interfaces for effectful things
             </section>
 
             <section>
                 <small><h3>How is this <span class="pclr">possible</span>?</h3></small>
                 <h2>Pillar four: <span class="pclr">fs2</span> </h2>
+                Effect-polymorphic stream implementation
             </section>
 
         </section>
 
         <section>
-
-            So you want to creat an app
-            a TODO app
-            And you know what a function is.
-
-            Lets start simple
-            http4s
-            A function
-            HttpRequest => HttpResponse
-
-            post your note
-            and get your notes
-
-            but the serialization!
-            circe
-
-            does http4s know about circe?
-            sure it does!
-            http4s-circe
-
-            lets save your notes
-            doobie
-
-            but isnt writing raw sql a little old-fashioned?
-            quill!
-
-            does quill know about doobie?
-            sure it does!
-            quill-doobie
-
-            Maybe json in db?
             doobie-postgres-circe
-
-            Lets complicate this a little
-            and parse links out of text
-            atto!
-
-            write a parser for links
-            parser is a monad
-
-            parse as user types
             atto-fs2
-            stream can be pure
-
-            lets refined it!
-            ensure title is not empty
-            refined!
-
-            but other libs don't now `Refined`
-
-            how about api?
             circe-refined!
-
-            how about db?
             doobie-refined!
-
-            lets write console client
-            decline!
-            decline-refined
-            decline-enumeratum
-
-            lets move the linksparser to fronted
-
-            and call our backend
-            sttp
-            cats-effect & fs2
-
-            you know what, I heard grpc is great, lets use it
-            fs2-grpc
-
-            on the other hadn grpc is so 2000, we should use kafka!
-            fs2-kafka
-
-
-            cats
-            cats-effect
-            monix/zio/ce
-
-            fs2
-
-            refined
-            enumeratum
             fuuid
-
             scalacache
             cats-retry
             upperbound
-
-            decline
             decline-refined
             decline-enumeratum
-
-            maybe we could share the rest definitions?
-            endpoints/tapir
-            integrated with http4s, sttp and more
-
-
-            atto
-            scodec, scodec-stream
-            circe
-
-            sttp
-            http4s
-            tapir/endpoints
-
-            doobie
-            quill
-
-            fs2-kafka
-            fs2-grpc
+            scodec-stream
         </section>
     </div>
 </div>

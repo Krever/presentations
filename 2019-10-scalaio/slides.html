@@ -67,7 +67,8 @@ class ShoppingList extends React.Component {
         );
     }
 }
-</pre></code>
+</pre>
+</code>
 
 notes:
 because we program view not the logic
@@ -237,51 +238,51 @@ Or is frontend <span class="pclr">inevitible</span>?
     </tr>
     <tr>
         <td>Scala.js</td>
-        <td class="green">Yes</td>
+        <td class="fragment rev-sclr-fr" data-fragment-index="5">Yes</td>
         <td class="green">Yes</td>
         <td class="fragment rev-sclr-fr" data-fragment-index="4">Kind of</td>
     </tr>
     <tr>
         <td>ReasonML</td>
-        <td class="green">Yes</td>
+        <td class="fragment rev-sclr-fr" data-fragment-index="5">Yes</td>
         <td class="green">Yes</td>
         <td class="fragment rev-sclr-fr" data-fragment-index="3">A bit</td>
     </tr>
     <tr>
         <td>Elm</td>
-        <td class="green">Yes</td>
+        <td class="fragment rev-sclr-fr" data-fragment-index="5">Yes</td>
         <td class="green">Yes</td>
         <td class="fragment rev-sclr-fr" data-fragment-index="3">A bit</td>
     </tr>
     <tr>
         <td>Purescript</td>
-        <td class="green">Yes</td>
+        <td class="fragment rev-sclr-fr" data-fragment-index="5">Yes</td>
         <td class="green">Yes</td>
         <td class="fragment rev-sclr-fr" data-fragment-index="3">A bit</td>
     </tr>
     <tr>
         <td>Fable</td>
-        <td class="green">Yes</td>
-        <td class="green">Yes</td>
-        <td class="fragment rev-sclr-fr" data-fragment-index="3">A bit</td>
-    </tr>
-    <tr>
-        <td>Kotlin for JS</td>
-        <td class="fragment rev-sclr-fr" data-fragment-index="5">Kind of</td>
+        <td class="fragment rev-sclr-fr" data-fragment-index="5">Yes</td>
         <td class="green">Yes</td>
         <td class="fragment rev-sclr-fr" data-fragment-index="3">A bit</td>
     </tr>
     <tr>
         <td>Clojurescript</td>
-        <td class="green">Yes</td>
+        <td class="fragment rev-sclr-fr" data-fragment-index="5">Yes</td>
         <td>No</td>
+        <td class="fragment rev-sclr-fr" data-fragment-index="3">A bit</td>
+    </tr>
+    <tr>
+        <td>Kotlin for JS</td>
+        <td class="fragment rev-sclr-fr" data-fragment-index="6">Kind of</td>
+        <td class="green">Yes</td>
         <td class="fragment rev-sclr-fr" data-fragment-index="3">A bit</td>
     </tr>
     <tr>
         <td>Coffeescript</td>
         <td>No</td>
         <td>No</td>
-        <td class="fragment rev-sclr-fr" data-fragment-index="6">Dead</td>
+        <td class="fragment rev-sclr-fr" data-fragment-index="7">Dead</td>
     </tr>
 </table>
 
@@ -354,36 +355,40 @@ Or is frontend <span class="pclr">inevitible</span>?
 
 <h2 class="pclr">Typescript</h2>
 
-* created by microsoft
-* powerful ☺ but unsound ☹ type system
-* structural types ☺☹
-* FP is possible but hard and not idiomatic
-* most popular typed fronted language
-* bindings still dont work
+<ul>
+    <li class="fragment">created by Microsoft</li>
+    <li class="fragment">powerful ☺ but unsound ☹ type system</li>
+    <li class="fragment">structural types ☺☹</li>
+    <li class="fragment">FP is possible but hard and not idiomatic</li>
+    <li class="fragment">most popular typed fronted language</li>
+    <li class="fragment">bindings still dont work</li>
+</ul>
 
 ++++
 
 <h2 class="pclr">ReasonML</h2>
 
-* created at facebook
+* created at Facebook
 * ocaml base & ecosystem
 
 ++++
 
 <h2 class="pclr">Elm</h2>
 
-* Created by Evan Czaplicki
-* opinionated
-* built-in redux model
-* strongly separated from  JS
-* reduced haskell (no typeclasses)
-* good tooling
+<ul>
+    <li class="fragment">Created by Evan Czaplicki</li>
+    <li class="fragment">opinionated</li>
+    <li class="fragment">built-in redux model</li>
+    <li class="fragment">strongly separated from JS</li>
+    <li class="fragment">reduced haskell (no typeclasses)</li>
+    <li class="fragment">good tooling</li>
+</ul>
 
 ++++
 
 <h2 class="pclr">Purescript</h2>
 
-* closest to haskell
+* closest to Haskell
 * hard time competing with Elm
 
 ++++
@@ -398,7 +403,7 @@ Or is frontend <span class="pclr">inevitible</span>?
 <h2 class="pclr">Scala.js</h2>
 
 * scala ecosystem
-* not approachable for js devs
+* hardly approachable for js devs
 
 ++++
 
@@ -555,6 +560,48 @@ export class HeroListComponent implements OnInit {
 
 ++++
 
+<small style="line-height: 0.5em"><h4>Framework: Classics</h4></small>
+<h2 class="pclr">Vue.js</h2>
+
+<table>
+    <tr>
+        <td style="font-size: 0.5em">
+           <pre><code>
+<div id="editor">
+  <textarea :value="input" @input="update"></textarea>
+  <div v-html="compiledMarkdown"></div>
+</div>
+           </code></pre>
+            <pre><code>
+new Vue({
+  el: '#editor',
+  data: {
+    input: '# hello'
+  },
+  computed: {
+    compiledMarkdown: function () {
+      return marked(this.input, { sanitize: true })
+    }
+  },
+  methods: {
+    update: _.debounce(function (e) {
+      this.input = e.target.value
+    }, 300)
+  }
+})
+           </code></pre>
+        </td>
+        <td style="vertical-align: middle; width: 40%">
+            <ul>
+                <li>youngest</li>
+                <li>tries to merge the best parts</li>
+            </ul>
+        </td>
+    </tr>
+</table>
+
+++++
+
 <small style="line-height: 0.5em"><h4>Framework:</h4></small>
 <h2 class="pclr">Scala.js bindings</h2>
 
@@ -665,6 +712,13 @@ Always
 
 <small>There is more: <span class="pclr">mobx, redux-observable, redux-saga, react hooks</span></small>
 
+
+++++
+
+<small style="line-height: 0.5em"><h4>Framework: Appendix 1: <span class="pclr">State management</span></h4></small>
+
+## <span class="pclr">React hooks</span> are awesome
+
 ----
 
 <ul class="grey" style="font-size: .5em; float: left">
@@ -680,11 +734,17 @@ Always
 
 ++++
 
+### If I was to create UI
+
+<img src="img/bad-interface.png"/>
+
+++++
+
 <small style="line-height: 0.5em"><h4>Styling:</h4></small>
 <h2 class="pclr">css Preprocessors</h2>
 Because raw <span class="pclr">CSS</span> is <span class="pclr">dead</span>
 
-<code>.scss</code> → <code style="border: solid">sass</code> → <code>.css</code>
+<code>.scss</code> → <code style="border: solid">sass processor</code> → <code>.css</code>
 
 
 ++++
@@ -859,6 +919,18 @@ classes → &#x2728;&#x2728;&#x2728;
 * Servers exposes <span class="pclr">schema</span> (types, operations)
 * Client codebase contains <span class="pclr">queries</span>
 * Code can be generated based on <span class="pclr">queries</span> and <span class="pclr">schema</span>
+
+++++
+
+<small style="line-height: 0.5em"><h4>Communication: <span class="pclr">Graphql</span></h4></small>
+
+## In Scala?
+
+* <span class="pclr">Sangria</span> - Seasoned, future-based
+* <span class="pclr">Caliban</span> - New and shiny, ZIO-based, published for scala.js(!), server-only for now
+
+<small>I recommend Caliban, because, you know, FP!</small>
+
 
 ++++
 
