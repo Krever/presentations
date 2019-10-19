@@ -357,6 +357,7 @@ Or is frontend <span class="pclr">inevitible</span>?
 
 <ul>
     <li class="fragment">created by Microsoft</li>
+    <li class="fragment">default for most new frontend libs (!)</li>
     <li class="fragment">powerful ☺ but unsound ☹ type system</li>
     <li class="fragment">structural types ☺☹</li>
     <li class="fragment">FP is possible but hard and not idiomatic</li>
@@ -552,7 +553,7 @@ export class HeroListComponent implements OnInit {
         <td style="vertical-align: middle">
             <ul>
                 <li>proper framework</li>
-                <li>closer to OOP backend</li>
+                <li>JavaEE for frontend</li>
             </ul>
         </td>
     </tr>
@@ -595,6 +596,7 @@ new Vue({
             <ul>
                 <li>youngest</li>
                 <li>tries to merge the best parts</li>
+                <li>tries to be super accesible at the cost of magic</li>
             </ul>
         </td>
     </tr>
@@ -625,6 +627,8 @@ new Vue({
 </table>
 
 <small>No angular or vue ☹</small>
+<br>
+<small style="color: grey">At least nothing active, popular and not generated from ts</small>
 
 ++++
 
@@ -634,6 +638,19 @@ new Vue({
 ## JS bindings can fail you
 
 Always
+
+++++
+
+<span style="font-size: 0.7em">Framework: <span class="pclr">Scala.js bindings</span></span>
+
+### JS bindings can be generated from TS
+
+<h4><a href="https://github.com/oyvindberg/ScalablyTyped">ScalablyTyped</a></h4>
+<small>
+    <a href="https://github.com/sjrd/scala-js-ts-importer">scala-js-ts-importer</a>
+    <br>
+    <a href="https://definitelyscala.com/">Definitely Scala</a>
+</small>
 
 ++++
 
@@ -870,7 +887,7 @@ classes → &#x2728;&#x2728;&#x2728;
     <li>What else?</li>
 </ul>
 
-# Communication
+## Communication
 
 ++++
 
@@ -904,11 +921,11 @@ classes → &#x2728;&#x2728;&#x2728;
 ## <span class="pclr">Graphql</span>
 
 
-* convenient for fronted
-* not so much for backend
-* nice code generation (everywhere)
+* convenient for the fronted
+* not so much for the backend
+* nice code generation
 * a lot of tooling
-* can be exposed from db directly
+* live subscriptions OOTB
 
 ++++
 
@@ -931,11 +948,24 @@ classes → &#x2728;&#x2728;&#x2728;
 
 <small>I recommend Caliban, because, you know, FP!</small>
 
+++++
+
+<small style="line-height: 0.5em"><h4>Communication: <span class="pclr">Graphql</span></h4></small>
+
+### Or maybe <span class="pclr">no backend</span> at all?
+
+With tools like <a href="https://www.prisma.io">Prisma</a>, <a href="https://www.graphile.org/postgraphile/">PostGraphile</a>
+and <a href="https://hasura.io/">Hasura</a> you can expose big part of
+the <br>
+<span style="font-weight: bold">API directly from the DB.</span>
+
 
 ++++
 
 <small style="line-height: 0.5em"><h4>Communication:</h4></small>
 ## <span class="pclr">RPC</span>
+
+<small>Remote Procedure Call</small>
 
 <table style="font-size: 1.1em">
     <tr>
@@ -1008,6 +1038,7 @@ classes → &#x2728;&#x2728;&#x2728;
                 <li class="fragment">part of HTML5</li>
                 <li class="fragment">one direction</li>
                 <li class="fragment">text</li>
+                <li class="fragment">with browser limits</li>
             </ul>
         </td>
     </tr>
@@ -1067,6 +1098,7 @@ I could go like that for the rest of the day
             <ul>
                 <li class="fragment">orignal, true and only</li>
                 <li class="fragment">used to be slow</li>
+                <li class="fragment">now almost on par with yarn</li>
             </ul>
         </td>
         <td style="font-size: 0.7em; text-align: center">
@@ -1074,8 +1106,12 @@ I could go like that for the rest of the day
             <ul>
                 <li class="fragment">npm drop-in replacement</li>
                 <li class="fragment">created by facebook</li>
-                <li class="fragment">better performance</li>
-                <li class="fragment">added lock-files</li>
+                <li class="fragment">originally created for:
+                <ul>
+                    <li class="fragment">better performance</li>
+                    <li class="fragment">lock-files</li>
+                </ul>
+                </li>
             </ul>
         </td>
     </tr>
@@ -1284,3 +1320,11 @@ Wojtek Pituła - [@Krever01](https://twitter.com/Krever01)
 </div>
 
 
+
+notes:
+todo:
+* react with func component
+* state mngmt with apollo and relay
+* "styled components" <- sprawdzic/dodac
+* ui toolkits - ant design <- sprawdzic/dodac
+* fp-ts, fantasy-land
