@@ -272,19 +272,29 @@
 
                 <div style="text-align: center">
         <pre style="display: inline-block; width: unset"><code class="scala" data-trim data-noescape>
+        HttpRequest => HttpResponse
+        </code></pre>
+                </div>
+
+            </section>
+            <section>
+                <h2>And so is <span class="pclr">http4s</span></h2>
+
+                <div style="text-align: center">
+        <pre style="display: inline-block; width: unset"><code class="scala" data-trim data-noescape>
         type HttpRoutes[F[_]] = HttpRequest[F] => F[Option[HttpResponse[F]]]
+        </code></pre>
+                </div>
+                Or to be exact
+                <div style="text-align: center">
+        <pre style="display: inline-block; width: unset"><code class="scala" data-trim data-noescape>
+        type HttpRoutes[F[_]] = Kleisli[OptionT[F, ?], Request[F], Response[F]]
         </code></pre>
                 </div>
 
             </section>
             <section>
                 <h2>Back to our <span class="pclr">API</span></h2>
-
-            </section>
-            <section>
-                <small style="line-height: 0.5em"><h4>Back to our <span class="pclr">API</span></h4></small>
-
-                <h2>That's its <span class="pclr">shape</span></h2>
 
                 <div style="text-align: center">
         <pre style="display: inline-block; width: unset"><code class="scala" data-trim data-noescape>
@@ -296,6 +306,7 @@
                 </div>
 
             </section>
+
             <section>
                 <small style="line-height: 0.5em"><h4>Back to our <span class="pclr">API</span></h4></small>
 
@@ -305,7 +316,7 @@
         <pre style="display: inline-block; width: unset"><code class="scala" data-trim data-noescape>
           def startApp[F[_]: ConcurrentEffect: Timer]
             (controller: NotesController[F]): F[ExitCode] = {
-            val services      = controller.getNotes <+> controller.saveNote
+            val services      = <mark>controller.getNotes <+> controller.saveNote</mark>
             val httpApp       = Router("/" -> services).orNotFound
             val serverBuilder = BlazeServerBuilder[F]
                 .bindHttp(8080, "localhost")
@@ -321,7 +332,7 @@
             <section>
                 <small style="line-height: 0.5em"><h4>Back to our <span class="pclr">API</span></h4></small>
 
-                <h2>We also need an <span class="pclr">implementation</span></h2>
+                <h2>And a basic <span class="pclr">implementation</span></h2>
 
                 <div style="text-align: center">
         <pre style="display: inline-block; width: unset"><code class="scala" data-trim data-noescape>
@@ -433,7 +444,7 @@
             </section>
 
             <section>
-                But before we go there...
+                But before we go...
                 <div style="text-align: center">
                     <pre style="display: inline-block; width: unset"><code class="scala" data-trim data-noescape>
                         trait NotesRepository[F[_]] {
@@ -463,12 +474,12 @@
                           }
 
                           override def save(note: NoteV1): F[Unit] = {
-                            val q = sql"insert into notes_v1 (title, text) values (${note.title}, ${note.text})".update
+                            val q = sql"insert into notes_v1 (title, text) values <mark>(${note.title}, ${note.text})</mark>".update
                             q.run.transact(xa).as(())
                           }
 
                           override def getAll(): F[List[NoteV1]] = {
-                            val q = sql"select title, text from notes_v1".query[NoteV1]
+                            val q = sql"select title, text from notes_v1".<mark>query[NoteV1]</mark>
                             q.to[List].transact(xa)
                           }
                         }
@@ -492,7 +503,7 @@
             </section>
 
             <section>
-                It really does
+                <h4>It really does</h4>
                 <div style="text-align: center;/* font-size: 0.7em*/">
                     <pre style="display: inline-block; width: unset"><code class="scala" data-trim data-noescape>
                         import io.getquill._
@@ -500,10 +511,10 @@
                         val ctx = new SqlMirrorContext(MirrorSqlDialect, Literal)
                         import ctx._
                     </code></pre>
-                    <pre class="fragment" style="display: inline-block; width: unset"><code class="scala" data-trim data-noescape>
+                    <pre class="fragment" data-fragment-index="2" style="display: inline-block; width: unset"><code class="scala" data-trim data-noescape>
                         case class Circle(x: Int, y: Int)
                     </code></pre>
-                    <pre class="fragment" style="display: inline-block; width: unset"><code class="scala" data-trim data-noescape>
+                    <pre class="fragment" data-fragment-index="3" style="display: inline-block; width: unset"><code class="scala" data-trim data-noescape>
                         val q = quote {
                           query[Point].filter(p => p.x > 10)
                         }
@@ -511,6 +522,7 @@
                         // select x, y from circle where x > 10
                     </code></pre>
                 </div>
+                <span class="fragment" data-fragment-index="3">No more running your app to check what query gets executed</span>
             </section>
 
             <section>
@@ -536,7 +548,7 @@
                           }
 
                           override def save(note: NoteV1): F[Unit] = {
-                            val q = quote { query[NoteV1].insert(lift(note)) }
+                            val q = <mark>quote { query[NoteV1].insert(lift(note)) }</mark>
                             run(q).transact(xa).as(())
                           }
 
@@ -574,7 +586,7 @@
 
             <section>
                 <h2>Fs2 is <span class="pclr">magic</span> of it's own</h2>
-                Dark, pure and functional
+                Powerful2, pure and functional
             </section>
 
             <section>
@@ -601,7 +613,7 @@
                 <div style="text-align: center">
                     <pre style="display: inline-block; width: unset"><code class="scala" data-trim data-noescape>
                         trait StreamingNotesRepository[F[_]] {
-                          def getAllStream(): fs2.Stream[F, Note]
+                          def getAllStream(): <mark>fs2.Stream[F, Note]</mark>
                         }
                     </code></pre>
                     <pre style="display: inline-block; width: unset"><code class="scala" data-trim data-noescape>
@@ -625,7 +637,7 @@
                     <pre style="display: inline-block; width: unset"><code class="scala" data-trim data-noescape>
                       override def getNotes: HttpRoutes[F] = HttpRoutes.of[F] {
                         case GET -> Root / "notes" =>
-                          val notes: fs2.Stream[F, Note] = repository.getAll()
+                          val notes: <mark>fs2.Stream[F, Note]</mark> = repository.getAll()
                           Ok(<mark>notes</mark>)
                       }
                     </code></pre>
@@ -641,8 +653,7 @@
 
         <section>
             <section>
-                <h2>Client <span class="pclr">App</span></h2>
-                A console one
+                <h2><span class="pclr">Console</span> client <span class="pclr">App</span></h2>
             </section>
 
             <section>
@@ -858,6 +869,22 @@
                     </code></pre>
                 </div>
             </section>
+
+            <section>
+                <h2>You don't like <span class="pclr">FP</span>?</h2>
+                No worries, you can still use sttp
+                <div style="text-align: center">
+                    <pre style="display: inline-block; width: unset"><code class="scala" data-trim data-noescape>
+                        implicit val backend: SttpBackend[<mark>Id</mark>, Nothing] =
+                            HttpURLConnectionBackend()
+
+                        val response: <mark>Response[String]</mark> = request.send()
+                    </code></pre>
+                    <br>
+                    No <code>F[_]</code>!
+                </div>
+            </section>
+
         </section>
 
         <section>
@@ -867,7 +894,7 @@
             </section>
 
             <section>
-                <h3>Single API definition: <br><span class="pclr">Endpoints & tapir</span></h3>
+                <h3>Single API definition: <br><span class="pclr">Endpoints</span>/<span class="pclr">tapir</span></h3>
                 Share your endpoints (url, method, body format) between client, server + generate docs
                 <br>
                 <b>Works with <span class="pclr">http4s</span>, <span class="pclr">sttp</span> and more</b>
@@ -875,7 +902,31 @@
 
             <section>
                 <h3>Text parsing: <span class="pclr">atto</span></h3>
-                todo
+                <div style="text-align: center">
+                    <pre style="display: inline-block; width: unset"><code class="scala" data-trim data-noescape>
+                        val ip: Parser[IP] =
+                          for {
+                            a <- ubyte
+                            _ <- char('.')
+                            b <- ubyte
+                            _ <- char('.')
+                            c <- ubyte
+                            _ <- char('.')
+                            d <- ubyte
+                          } yield IP(a, b, c, d)
+                    </code></pre>
+                </div>
+                Parser is a (cats) monad!
+            </section>
+
+            <section>
+                <h3>Text parsing: <span class="pclr">atto</span></h3>
+                <div style="text-align: center">
+                    <pre style="display: inline-block; width: unset"><code class="scala" data-trim data-noescape>
+                        myCharsStream.through(atto.fs2.Pipes.parseN(myParser))
+                    </code></pre>
+                </div>
+                Glory to incremental parsing!
             </section>
 
             <section>
@@ -894,9 +945,14 @@
             </section>
 
             <section>
+                <h3>Caching: <span class="pclr">scalacache</span></h3>
+                todo
+            </section>
+
+            <section>
                 <h3>More typesafety: <span class="pclr">refined</span></h3>
                 <pre style="display: inline-block; width: unset"><code class="scala" data-trim data-noescape>
-                    val x: Int Refined Positive
+                    val x: Int Refined Positive = -1 // compilation error
                 </code></pre>
                 <br>
                 Integrates with:
@@ -970,11 +1026,6 @@
                         </td>
                     </tr>
                 </table>
-            </section>
-
-            <section>
-                <h3>Caching: <span class="pclr">scalacache</span></h3>
-                todo
             </section>
 
         </section>
