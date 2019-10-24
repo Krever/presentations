@@ -19,22 +19,24 @@
 
 ++++
 
-<div id="left" style="width: 10%">
-    <span style="font-weight: bold;font-size: 1.5em; width: 10%">B<br>A<br>C<br>K<br>E<br>N<br>D</span>
+<div id="left">
+    <b>Backend<b/>
+        <img src="img/alt-backend.jpg" style="width: 100%">
 </div>
-
-<div id="right" style="width: 90%">
-    <img src="img/monks.jpg" style="float: left; width: 90%">
+<div id="right">
+    Frontend
+    <img src="img/alt-frontend.jpg" style="width: 100%">
 </div>
 
 ++++
 
-<div id="left" style="width: 90%; margin-top: 9%">
-    <img src="img/junglewar1.jpeg">
+<div id="left">
+    <b>Backend<b/>
+        <img src="img/monks.jpg" style="width: 100%">
 </div>
-
-<div id="right" style="width: 10%">
-    <span style="font-weight: bold;font-size: 1.5em; width: 10%">F<br>R<br>O<br>N<br>T<br>E<br>N<br>D</span>
+<div id="right">
+    Frontend
+    <img src="img/junglewar1.jpeg" style="width: 100%">
 </div>
 
 ++++
@@ -53,19 +55,17 @@
 ### <span class="sclr horror" style="font-weight: lighter">Frontend</span> is <span class="pclr">different</span>
 
 <code><pre>
-class ShoppingList extends React.Component {
-    render() {
-        return (
-            <div className="shopping-list">
-                <h1>{this.props.name} - lista zakupów</h1>
-                <ul>
-                    <li>Instagram</li>
-                    <li>WhatsApp</li>
-                    <li>Oculus</li>
-                </ul>
-            </div>
-        );
-    }
+conts ShoppingList = (props: MyProps) =>  {
+    return (
+        <div className="shopping-list">
+            <h1>{props.name} - shopping list</h1>
+            <ul>
+                <li>Instagram</li>
+                <li>WhatsApp</li>
+                <li>Oculus</li>
+            </ul>
+        </div>
+    )
 }
 </pre>
 </code>
@@ -445,6 +445,16 @@ Other than that, <span class="pclr">it's really nice language</span>
 
 ++++
 
+<span style="font-size: 1.5em">? <span class="pclr">FP</span> in <span class="pclr">TS</span> ?</span>
+
+fp-ts
+<br>
+ramda
+<br>
+fantasy-land
+
+++++
+
 <span style="font-size: 1.5em">How about <span class="pclr">WebAssembly</span>?</span>
 
 ++++
@@ -792,6 +802,8 @@ Because raw <span class="pclr">CSS</span> is <span class="pclr">dead</span>
     </tr>
 </table>
 
+<small>Alternative: styled-components</small>
+
 ++++
 
 <h4>Styling: <span class="pclr">CSS Preprocessors</span></h4>
@@ -812,33 +824,7 @@ Because raw <span class="pclr">CSS</span> is <span class="pclr">dead</span>
 }
 </code></pre>
 
-<!--<table width="100%">-->
-<!--    <tr>-->
-<!--        <td style="width: 45%">-->
-<!--            <pre><code style="font-size: 1em">-->
-<!--@mixin transform($property) {-->
-<!--  -webkit-transform: $property;-->
-<!--  -ms-transform: $property;-->
-<!--  transform: $property;-->
-<!--}-->
-<!--.box { @include transform(rotate(30deg)); }-->
-<!--            </code></pre>-->
-<!--        </td>-->
-<!--        <td>→</td>-->
-<!--        <td style="width: 45%">-->
-<!--                        <pre><code style="font-size: 1em">-->
-<!--.box {-->
-<!--  -webkit-transform: rotate(30deg);-->
-<!--  -ms-transform: rotate(30deg);-->
-<!--  transform: rotate(30deg);-->
-<!--}-->
-<!--            </code></pre>-->
-<!--        </td>-->
-<!--    </tr>-->
-<!--</table>-->
-
 ++++
-
 
 <small style="line-height: 0.5em"><h4>Styling:</h4></small>
 <h2 class="pclr">UI toolkits</h2>
@@ -858,12 +844,14 @@ classes → &#x2728;&#x2728;&#x2728;
     </tr>
 </table>
 
-<div style="position:relative; height:480px; margin:0 auto;">
+<div style="position:relative; height:450px; margin:0 auto; width: 90%">
     <img class="fragment" data-fragment-index="1" src="img/semantic.png" style="position:absolute;top:0;left:0;"/>
     <img class="fragment" data-fragment-index="2" src="img/minicss.png" style="position:absolute;top:0;left:0;"/>
     <img class="fragment" data-fragment-index="3" src="img/bootstrap.png" style="position:absolute;top:0;left:0;"/>
     <img class="fragment" data-fragment-index="4" src="img/foundation.png" style="position:absolute;top:0;left:0;"/>
 </div>
+
+<small>More: metro ui, material ui, ant design</small>
 
 ++++
 
@@ -936,6 +924,14 @@ classes → &#x2728;&#x2728;&#x2728;
 * Servers exposes <span class="pclr">schema</span> (types, operations)
 * Client codebase contains <span class="pclr">queries</span>
 * Code can be generated based on <span class="pclr">queries</span> and <span class="pclr">schema</span>
+
+++++
+
+<small style="line-height: 0.5em"><h4>Communication: <span class="pclr">Graphql</span></h4></small>
+
+## How does it work?
+
+<img src="img/accidental-graphql.png">
 
 ++++
 
@@ -1322,10 +1318,3 @@ Wojtek Pituła - [@Krever01](https://twitter.com/Krever01)
 
 
 notes:
-todo:
-* react with func component
-* state mngmt with apollo and relay
-* "styled components" <- sprawdzic/dodac
-* ui toolkits - ant design <- sprawdzic/dodac
-* fp-ts, fantasy-land
-* alternative intro images
