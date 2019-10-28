@@ -916,11 +916,11 @@
                           } yield IP(a, b, c, d)
                     </code></pre>
                 </div>
-                Parser is a (cats) monad!
+                <span style="font-weight: bold">Parser is a (cats) <span class="pclr">monad</span>!</span>
             </section>
 
             <section>
-                <h3>Text parsing: <span class="pclr">atto</span></h3>
+                <h3>Text parsing: <span class="pclr">atto-fs2</span></h3>
                 <div style="text-align: center">
                     <pre style="display: inline-block; width: unset"><code class="scala" data-trim data-noescape>
                         myCharsStream.through(atto.fs2.Pipes.parseN(myParser))
@@ -930,23 +930,81 @@
             </section>
 
             <section>
-                <h3>Bytes parsing: <span class="pclr">scodec</span></h3>
-                todo
+                <h3>Binary codecs: <span class="pclr">scodec</span></h3>
+                <div style="text-align: center">
+                    <pre style="display: inline-block; width: unset"><code class="scala" data-trim data-noescape>
+                            case class Point(x: Int, y: Int, z: Int)
+
+                            val pointCodec = (int8 :: int8 :: int8).as[Point]
+
+                            pointCodec.encode(Point(-5, 10, 1))
+                            // Successful(BitVector(24 bits, 0xfb0a01))
+
+                            pointCodec.decode(hex"0xfb0a01".bits)
+                            // Successful(DecodeResult(Point(-5, 10, 1), BitVector(empty)))
+                    </code></pre>
+                </div>
+                <span style="font-weight: bold">Works with <span class="pclr">fs2</span>, <span class="pclr">circe</span>
+                    and more!</span>
             </section>
 
             <section>
                 <h3>Kafka: <span class="pclr">fs2-kafka</span></h3>
-                todo
+                <div style="text-align: center">
+                    <pre style="display: inline-block; width: unset"><code class="scala" data-trim data-noescape>
+                            val stream =
+                              consumerStream[IO]
+                                .using(consumerSettings)
+                                .evalTap(_.subscribeTo("topic"))
+                                .flatMap(_.stream)
+                                .mapAsync(25) { committable =>
+                                  processRecord(committable.record)
+                                    .map { case (key, value) =>
+                                      val record = ProducerRecord("topic", key, value)
+                                      ProducerRecords.one(record, committable.offset)
+                                    }
+                                }
+                                .through(produce(producerSettings))
+                                .map(_.passthrough)
+                                .through(commitBatchWithin(500, 15.seconds))
+                    </code></pre>
+                </div>
+                <span style="font-weight: bold">Built on top of <span class="pclr">fs2</span> and <span class="pclr">cats-effect</span>
             </section>
 
             <section>
                 <h3>gRPC: <span class="pclr">fs2-grpc</span></h3>
-                todo
+
+                <div style="text-align: center">
+                    <pre style="display: inline-block; width: unset"><code class="scala" data-trim data-noescape>
+                        val helloService: ServerServiceDefinition = MyFs2Grpc.bindService(new MyImpl())
+                        ServerBuilder
+                          .forPort(9999)
+                          .addService(helloService)
+                          .addService(ProtoReflectionService.newInstance())
+                          .stream[IO] // or for any F: Sync
+                          .evalMap(server => IO(server.start())) // start server
+                          .evalMap(_ => IO.never) // server now running
+                    </code></pre>
+                </div>
+                <span style="font-weight: bold">Built on top of <span class="pclr">fs2</span> and <span class="pclr">cats-effect</span>
             </section>
 
             <section>
                 <h3>Caching: <span class="pclr">scalacache</span></h3>
-                todo
+                <div style="text-align: center">
+                    <pre style="display: inline-block; width: unset"><code class="scala" data-trim data-noescape>
+                        import scalacache.modes.try_._
+                        implicit val catsCache: Cache[Cat] = MemcachedCache("localhost:11211")
+
+                        def getCat(id: Int): Try[Cat] = memoize(Some(10.seconds)) {
+                          // Retrieve data from a remote API here ...
+                          Cat(id, s"cat ${id}", "black")
+                        }
+                    </code></pre>
+                </div>
+                <span style="font-weight: bold">Works with <span class="pclr">cats-effect</span>, <span class="pclr">Future</span>, <span
+                        class="pclr">Try</span>, and <span class="pclr">Id</span>!</span>
             </section>
 
             <section>
@@ -956,7 +1014,7 @@
                 </code></pre>
                 <br>
                 Integrates with:
-                <table>
+                <table style="font-weight: bold" class="pclr">
                     <tr>
                         <td>
                             <ul>
@@ -1002,7 +1060,7 @@
                         </td>
                         <td style="vertical-align: top; text-align: center">
                             Integrates with:
-                            <table>
+                            <table style="font-weight: bold" class="pclr">
                                 <tr>
                                     <td>
                                         <ul>
@@ -1062,16 +1120,11 @@
         </section>
 
         <section>
+            ciris!!
             doobie-postgres-circe
-            atto-fs2
-            circe-refined!
-            doobie-refined!
             fuuid
-            scalacache
             cats-retry
             upperbound
-            decline-refined
-            decline-enumeratum
             scodec-stream
         </section>
     </div>
