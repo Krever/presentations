@@ -36,6 +36,8 @@ libraryDependencies ++= Seq(
   "io.circe"              %% "circe-fs2"                     % "0.12.0",
   //console4cats
   "dev.profunktor" %% "console4cats" % "0.8.0",
+  //ciris
+  "is.cir" %% "ciris" % "1.0.0",
 )
 
 addCompilerPlugin("org.scalamacros" % "paradise"        % "2.1.0" cross CrossVersion.full)

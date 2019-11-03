@@ -137,6 +137,10 @@
             <section>
                 <h2>We all love <span class="pclr">frameworks</span></h2>
                 Don't we?
+
+                <aside class="notes">
+                    frameworks: play, django, angular, javaEE/spring, lagom, ruby on rails, spark
+                </aside>
             </section>
 
             <section>
@@ -219,29 +223,42 @@
 
                 <h2>How to <span class="pclr">expose</span> it?</h2>
 
-                REST, obviously.
+                <span class="fragment">REST, obviously.</span>
 
             </section>
 
             <section>
                 <h2>Like <span class="pclr">this</span></h2>
 
+                <div>
+                    <div style="text-align: center">
+                    <pre style="display: inline-block; width: unset"><code data-trim data-noescape>
+                    createNote
+                    </code></pre>
+                        <span style="font-size: 1.5em">~></span>
+                        <pre style="display: inline-block; width: unset"><code data-trim data-noescape>
+                    POST /notes
+                    </code></pre>
+                    </div>
+                </div>
                 <div style="text-align: center">
-        <pre style="display: inline-block; width: unset"><code data-trim data-noescape>
-        POST /notes
-        </code></pre>
+                    <pre style="display: inline-block; width: unset"><code data-trim data-noescape>
+                        getAllNotes
+                    </code></pre>
+                    <span style="font-size: 1.5em">~></span>
+                    <pre style="display: inline-block; width: unset"><code data-trim data-noescape>
+                        GET /notes
+                    </code></pre>
                 </div>
 
                 <div style="text-align: center">
-        <pre style="display: inline-block; width: unset"><code data-trim data-noescape>
-        GET /notes
-        </code></pre>
-                </div>
-
-                <div style="text-align: center">
-        <pre style="display: inline-block; width: unset"><code data-trim data-noescape>
-        { "title": "my title", "text": "my text"}
-        </code></pre>
+                    <pre style="display: inline-block; width: unset"><code data-trim data-noescape>
+                        Note
+                    </code></pre>
+                    <span style="font-size: 1.5em">~></span>
+                    <pre style="display: inline-block; width: unset"><code data-trim data-noescape>
+                        { "title": "my title", "text": "my text"}
+                    </code></pre>
                 </div>
 
             </section>
@@ -259,8 +276,31 @@
                 <h1>Http <span class="pclr">Server</span></h1>
             </section>
             <section>
-                <h3 style="line-height: 0">Meet</h3>
-                <h1><span class="pclr">Http4s</span></h1>
+                <h3 class="pclr" style="line-height: 0">Options</h3>
+                <table>
+                    <tr>
+                        <td style="width: 50%">
+                            <ul>
+                                <li>play</li>
+                                <li>finnagle</li>
+                                <li>http4s</li>
+                            </ul>
+                        </td>
+                        <td style="width: 50%">
+                            <ul>
+                                <li>akka-http</li>
+                                <li>cask</li>
+                                <li>spray</li>
+                            </ul>
+                        </td>
+                    </tr>
+                </table>
+            </section>
+            <section>
+                <h2 style="line-height: 0">Meet <span class="pclr">Http4s</span></h2>
+
+                <img src="img/magic-of-integrations_http4s.jpg" style="height: 80%"/>
+
                 <aside class="notes">
                     0.23.0
                     ember
@@ -281,15 +321,17 @@
                 <h2>And so is <span class="pclr">http4s</span></h2>
 
                 <div style="text-align: center">
-        <pre style="display: inline-block; width: unset"><code class="scala" data-trim data-noescape>
-        type HttpRoutes[F[_]] = HttpRequest[F] => F[Option[HttpResponse[F]]]
-        </code></pre>
+                    <pre style="display: inline-block; width: unset"><code class="scala" data-trim data-noescape>
+                    type HttpRoutes[F[_]] = HttpRequest[F] => F[Option[HttpResponse[F]]]
+                    </code></pre>
                 </div>
-                Or to be exact
-                <div style="text-align: center">
-        <pre style="display: inline-block; width: unset"><code class="scala" data-trim data-noescape>
-        type HttpRoutes[F[_]] = Kleisli[OptionT[F, ?], Request[F], Response[F]]
-        </code></pre>
+                <div class="fragment">
+                    Or to be exact
+                    <div style="text-align: center">
+                        <pre style="display: inline-block; width: unset"><code class="scala" data-trim data-noescape>
+                        type HttpRoutes[F[_]] = Kleisli[OptionT[F, ?], Request[F], Response[F]]
+                        </code></pre>
+                    </div>
                 </div>
 
             </section>
@@ -365,8 +407,33 @@
             </section>
 
             <section>
-                <h3 style="line-height: 0">Meet</h3>
-                <h1><span class="pclr">Circe</span></h1>
+                <h3 class="pclr" style="line-height: 0">Options</h3>
+                <table>
+                    <tr>
+                        <td style="width: 50%">
+                            <ul>
+                                <li>circe</li>
+                                <li>argonaut</li>
+                                <li>spray-json</li>
+                                <li>upickle</li>
+                            </ul>
+                        </td>
+                        <td style="width: 50%">
+                            <ul>
+                                <li>json4s</li>
+                                <li>play-json</li>
+                                <li>jsoniter-scala</li>
+                                <li>jackson</li>
+                            </ul>
+                        </td>
+                    </tr>
+                </table>
+            </section>
+
+            <section>
+                <h2 style="line-height: 0">Meet <span class="pclr">Circe</span></h2>
+
+                <img src="img/magic-of-integrations_circe.jpg" style="height: 80%"/>
             </section>
 
             <section>
@@ -439,8 +506,31 @@
             </section>
 
             <section>
-                <h3 style="line-height: 0">Meet</h3>
-                <h1><span class="pclr">Doobie</span> & <span class="pclr">Quill</span></h1>
+                <h3 class="pclr" style="line-height: 0">Options</h3>
+                <table>
+                    <tr>
+                        <td style="width: 50%">
+                            <ul>
+                                <li>doobie</li>
+                                <li>quill</li>
+                                <li>slick</li>
+                            </ul>
+                        </td>
+                        <td style="width: 50%">
+                            <ul>
+                                <li>scalikejdbc</li>
+                                <li>anorm</li>
+                                <li>skunk</li>
+                            </ul>
+                        </td>
+                    </tr>
+                </table>
+            </section>
+
+            <section>
+                <h2 style="line-height: 0">Meet <span class="pclr">doobie</span> & <span class="pclr">quill</span></h2>
+
+                <img src="img/magic-of-integrations_db.jpg" style="height: 80%"/>
             </section>
 
             <section>
@@ -451,9 +541,9 @@
 
                           def initialize(): F[Unit]
 
-                          def save(note: NoteV1): F[Unit]
+                          def save(note: Note): F[Unit]
 
-                          def getAll(): F[List[NoteV1]]
+                          def getAll(): F[List[Note]]
 
                         }
                     </code></pre>
@@ -473,13 +563,13 @@
                             q.run.transact(xa).as(())
                           }
 
-                          override def save(note: NoteV1): F[Unit] = {
+                          override def save(note: Note): F[Unit] = {
                             val q = sql"insert into notes_v1 (title, text) values <mark>(${note.title}, ${note.text})</mark>".update
                             q.run.transact(xa).as(())
                           }
 
-                          override def getAll(): F[List[NoteV1]] = {
-                            val q = sql"select title, text from notes_v1".<mark>query[NoteV1]</mark>
+                          override def getAll(): F[List[Note]] = {
+                            val q = sql"select title, text from notes_v1".<mark>query[Note]</mark>
                             q.to[List].transact(xa)
                           }
                         }
@@ -511,15 +601,17 @@
                         val ctx = new SqlMirrorContext(MirrorSqlDialect, Literal)
                         import ctx._
                     </code></pre>
-                    <pre class="fragment" data-fragment-index="2" style="display: inline-block; width: unset"><code class="scala" data-trim data-noescape>
-                        case class Circle(x: Int, y: Int)
+                    <pre class="fragment" data-fragment-index="2" style="display: inline-block; width: unset"><code
+                            class="scala" data-trim data-noescape>
+                        case class Point(x: Int, y: Int)
                     </code></pre>
-                    <pre class="fragment" data-fragment-index="3" style="display: inline-block; width: unset"><code class="scala" data-trim data-noescape>
+                    <pre class="fragment" data-fragment-index="3" style="display: inline-block; width: unset"><code
+                            class="scala" data-trim data-noescape>
                         val q = quote {
                           query[Point].filter(p => p.x > 10)
                         }
                         ctx.run(q)
-                        // select x, y from circle where x > 10
+                        // select x, y from point where x > 10
                     </code></pre>
                 </div>
                 <span class="fragment" data-fragment-index="3">No more running your app to check what query gets executed</span>
@@ -540,23 +632,90 @@
                             (xa: Transactor[F], <mark>ctx: DoobieContext.H2[SnakeCase.type]</mark>)
                             extends NotesRepository[F] {
                           import ctx._
-                          private implicit val notesSchemaMeta = schemaMeta[NoteV1]("notes_v1")
+                          private implicit val notesSchemaMeta = schemaMeta[Note]("notes_v1")
 
                           def initialize(): F[Unit] = {
                             val q = sql"create table if not exists notes_v1 ( title VARCHAR, text VARCHAR)".update
                             q.run.transact(xa).as(())
                           }
 
-                          override def save(note: NoteV1): F[Unit] = {
-                            val q = <mark>quote { query[NoteV1].insert(lift(note)) }</mark>
+                          override def save(note: Note): F[Unit] = {
+                            val q = <mark>quote { query[Note].insert(lift(note)) }</mark>
                             run(q).transact(xa).as(())
                           }
 
-                          override def getAll(): F[List[NoteV1]] = {
-                            val q = quote { query[NoteV1] }
+                          override def getAll(): F[List[Note]] = {
+                            val q = <mark>quote { query[Note] }</mark>
                             run(q).transact(xa)
                           }
                         }
+                    </code></pre>
+                </div>
+            </section>
+
+            <section>
+                <h3>But where is the <span class="pclr">Transactor</span>?</h3>
+                <div class="fragment" style="text-align: center">
+                    <pre style="display: inline-block; width: unset; font-size: 0.4em"><code class="scala" data-trim
+                                                                                             data-noescape>
+                          Transactor.fromDriverManager[IO](
+                            driver = "org.h2.Driver",
+                            url    = "jdbc:h2:mem:MyDatabase;DB_CLOSE_DELAY=-1",
+                          )
+                    </code></pre>
+                </div>
+            </section>
+
+            <section>
+                <h3>Not <span class="pclr">good enough</span>!</h3>
+                We need config!
+            </section>
+
+        </section>
+
+        <section>
+
+            <section>
+                <h2><span class="pclr">Configuration</span></h2>
+            </section>
+
+            <section>
+                <h3 class="pclr" style="line-height: 0">Options</h3>
+                <table>
+                    <tr>
+                        <td style="width: 50%">
+                            <ul>
+                                <li>typesafe-config</li>
+                                <li>pureconfig</li>
+                                <li>ciris</li>
+                            </ul>
+                        </td>
+                        <td style="width: 50%">
+                            <ul>
+                                <li>clear-config</li>
+                                <li>sconfig</li>
+                            </ul>
+                        </td>
+                    </tr>
+                </table>
+            </section>
+
+            <section>
+                <h2 style="line-height: 0">Meet <span class="pclr">ciris</span></h2>
+
+                <img src="img/magic-of-integrations_ciris.jpg" style="height: 80%"/>
+            </section>
+
+            <section>
+                TODO
+            </section>
+
+            <section>
+                <h2>Do you remember <span class="pclr">this</span>?</h2>
+                <div style="text-align: center">
+                    <pre style="display: inline-block; width: unset; font-size: 0.4em"><code class="scala" data-trim
+                                                                                             data-noescape>
+                        def getNotes(): F[List[Note]]
                     </code></pre>
                 </div>
             </section>
@@ -580,13 +739,34 @@
             </section>
 
             <section>
-                <h3 style="line-height: 0">Meet</h3>
-                <h1><span class="pclr">Fs2</span></h1>
+                <h3 class="pclr" style="line-height: 0">Options</h3>
+                <table>
+                    <tr>
+                        <td style="width: 50%">
+                            <ul>
+                                <li>monix-observable</li>
+                                <li>akka-streams</li>
+                            </ul>
+                        </td>
+                        <td style="width: 50%">
+                            <ul>
+                                <li>fs2</li>
+                                <li>zio-streams</li>
+                            </ul>
+                        </td>
+                    </tr>
+                </table>
+            </section>
+
+            <section>
+                <h2 style="line-height: 0">Meet <span class="pclr">fs2</span></h2>
+
+                <img src="img/magic-of-integrations_fs2.jpg" style="height: 80%"/>
             </section>
 
             <section>
                 <h2>Fs2 is <span class="pclr">magic</span> of it's own</h2>
-                Powerful2, pure and functional
+                Powerful, pure and functional
             </section>
 
             <section>
@@ -616,9 +796,10 @@
                           def getAllStream(): <mark>fs2.Stream[F, Note]</mark>
                         }
                     </code></pre>
-                    <pre style="display: inline-block; width: unset"><code class="scala" data-trim data-noescape>
+                    <pre class="fragment" style="display: inline-block; width: unset"><code class="scala" data-trim
+                                                                                            data-noescape>
                         import ctx._
-                        def getAllStream(): fs2.Stream[F, NoteV1] = {
+                        def getAllStream(): fs2.Stream[F, Note] = {
                           <mark>stream</mark>(query[Note]).transact(xa)
                         }
                     </code></pre>
@@ -657,8 +838,29 @@
             </section>
 
             <section>
-                <h3 style="line-height: 0">Meet</h3>
-                <h1><span class="pclr">Decline</span></h1>
+                <h3 class="pclr" style="line-height: 0">Options</h3>
+                <table>
+                    <tr>
+                        <td style="width: 50%">
+                            <ul>
+                                <li>decline</li>
+                                <li>scopt</li>
+                            </ul>
+                        </td>
+                        <td style="width: 50%">
+                            <ul>
+                                <li>case-app</li>
+                                <li>scallop</li>
+                            </ul>
+                        </td>
+                    </tr>
+                </table>
+            </section>
+
+            <section>
+                <h2 style="line-height: 0">Meet <span class="pclr">decline</span></h2>
+
+                <img src="img/magic-of-integrations_decline.jpg" style="height: 80%"/>
             </section>
 
             <section>
@@ -704,8 +906,8 @@
                         sealed trait MyCommand
 
                         object MyCommand {
-                          case class GetNotes(url: String, port: Int)              extends MyCommand
-                          case class AddNote(url: String, port: Int, note: NoteV1) extends MyCommand
+                          case class GetNotes(url: String, port: Int)            extends MyCommand
+                          case class AddNote(url: String, port: Int, note: Note) extends MyCommand
                         }
                     </code></pre>
                 </div>
@@ -785,6 +987,33 @@
             </section>
 
             <section>
+                <h3 class="pclr" style="line-height: 0">Options</h3>
+                <table>
+                    <tr>
+                        <td style="width: 50%">
+                            <ul>
+                                <li>http4s</li>
+                                <li>play</li>
+                                <li>sttp</li>
+                            </ul>
+                        </td>
+                        <td style="width: 50%">
+                            <ul>
+                                <li>akka-http</li>
+                                <li>scalaj-http</li>
+                            </ul>
+                        </td>
+                    </tr>
+                </table>
+            </section>
+
+            <section>
+                <h2 style="line-height: 0">Meet <span class="pclr">sttp</span></h2>
+
+                <img src="img/magic-of-integrations_sttp.jpg" style="height: 80%"/>
+            </section>
+
+            <section>
                 <h3><span class="pclr">Api</span> strikes back</h3>
                 <div style="text-align: center">
                     <pre style="display: inline-block; width: unset"><code class="scala" data-trim data-noescape>
@@ -794,11 +1023,6 @@
                       }
                     </code></pre>
                 </div>
-            </section>
-
-            <section>
-                <h3 style="line-height: 0">Meet</h3>
-                <h1><span class="pclr">sttp</span></h1>
             </section>
 
             <section>
@@ -891,6 +1115,7 @@
 
             <section>
                 <h2>What <span class="pclr">else</span>?</h2>
+                TODO: image with all circles
             </section>
 
             <section>
@@ -944,7 +1169,8 @@
                             // Successful(DecodeResult(Point(-5, 10, 1), BitVector(empty)))
                     </code></pre>
                 </div>
-                <span style="font-weight: bold">Works with <span class="pclr">fs2</span>, <span class="pclr">circe</span>
+                <span style="font-weight: bold">Works with <span class="pclr">fs2</span>, <span
+                        class="pclr">circe</span>
                     and more!</span>
             </section>
 
@@ -1013,32 +1239,34 @@
                     val x: Int Refined Positive = -1 // compilation error
                 </code></pre>
                 <br>
-                Integrates with:
-                <table style="font-weight: bold" class="pclr">
-                    <tr>
-                        <td>
-                            <ul>
-                                <li>doobie</li>
-                                <li>circe</li>
-                            </ul>
-                        </td>
-                        <td>
-                            <ul>
-                                <li>cats</li>
-                                <li>decline</li>
-                            </ul>
-                            <br>
-                        </td>
-                        <td>
-                            <ul>
-                                <li>scodec</li>
-                                <li>atto</li>
-                            </ul>
-                            <br>
-                        </td>
-                    </tr>
-                </table>
-                and MUCH more
+                <div class="fragment">
+                    Integrates with:
+                    <table style="font-weight: bold" class="pclr">
+                        <tr>
+                            <td>
+                                <ul>
+                                    <li>doobie</li>
+                                    <li>circe</li>
+                                </ul>
+                            </td>
+                            <td>
+                                <ul>
+                                    <li>cats</li>
+                                    <li>decline</li>
+                                </ul>
+                                <br>
+                            </td>
+                            <td>
+                                <ul>
+                                    <li>scodec</li>
+                                    <li>atto</li>
+                                </ul>
+                                <br>
+                            </td>
+                        </tr>
+                    </table>
+                    and MUCH more
+                </div>
             </section>
 
             <section>
@@ -1046,7 +1274,9 @@
                 <table>
                     <tr>
                         <td>
-                            <pre style="display: inline-block; width: unset; font-size: 0.4em"><code class="scala" data-trim data-noescape>
+                            <pre style="display: inline-block; width: unset; font-size: 0.4em"><code class="scala"
+                                                                                                     data-trim
+                                                                                                     data-noescape>
                                 sealed trait Greeting extends EnumEntry
                                 object Greeting extends Enum[Greeting] {
                                   case object Hello   extends Greeting
@@ -1086,6 +1316,13 @@
                 </table>
             </section>
 
+
+            <section>
+                <h2 style="line-height: 0">It's just <span class="pclr">impressive</span></h2>
+
+                <img src="img/magic-of-integrations_more.jpg" style="height: 80%"/>
+            </section>
+
         </section>
 
         <section>
@@ -1095,38 +1332,93 @@
 
             <section>
                 <small><h3>How is this <span class="pclr">possible</span>?</h3></small>
-                <h2>Pillar one: <span class="pclr">typeclasses</span> </h2>
+                <h2>Pillar one: <span class="pclr">typeclasses</span></h2>
                 Integration between modules A & B can be provided via module C
             </section>
 
             <section>
                 <small><h3>How is this <span class="pclr">possible</span>?</h3></small>
-                <h2>Pillar two: <span class="pclr">cats</span> </h2>
+                <h2>Pillar two: <span class="pclr">cats</span></h2>
                 Common interfaces for most generic things
             </section>
 
             <section>
-                <small><h3>How is this <span class="pclr">possible</span>?</h3></small>
-                <h2>Pillar three: <br><span class="pclr">cats-effects</span> </h2>
-                Common interfaces for effectful things
+                <h2 style="line-height: 0">Pillar two: <span class="pclr">cats</span></h2>
+
+                <img src="img/magic-of-integrations_cats.jpg" style="height: 80%"/>
             </section>
 
             <section>
                 <small><h3>How is this <span class="pclr">possible</span>?</h3></small>
-                <h2>Pillar four: <span class="pclr">fs2</span> </h2>
+                <h2>Pillar three: <br><span class="pclr">cats-effects</span></h2>
+                Common interfaces for effectful things
+            </section>
+
+            <section>
+                <h2 style="line-height: 0">Pillar three: <span class="pclr">cats-effects</span></h2>
+
+                <img src="img/magic-of-integrations_catseffect.jpg" style="height: 80%"/>
+            </section>
+
+            <section>
+                <small><h3>How is this <span class="pclr">possible</span>?</h3></small>
+                <h2>Pillar four: <span class="pclr">fs2</span></h2>
                 Effect-polymorphic stream implementation
+            </section>
+
+            <section>
+                <h2 style="line-height: 0">Pillar three: <span class="pclr">cats-effects</span></h2>
+
+                <img src="img/magic-of-integrations_fs2-full.jpg" style="height: 80%"/>
             </section>
 
         </section>
 
         <section>
-            ciris!!
-            doobie-postgres-circe
-            fuuid
-            cats-retry
-            upperbound
-            scodec-stream
-            small libs not related to cats or FP: diffx, chimney
+            <section>
+                <h1>Why is this <span class="pclr">important</span>?</h1>
+            </section>
+
+            <section>
+                <small><h3>Why is this <span class="pclr">important</span>?</h3></small>
+                <h1>Reuse of <span class="pclr">code</span></h1>
+            </section>
+
+            <section>
+                <small><h3>Why is this <span class="pclr">important</span>?</h3></small>
+                <h1>Reuse of <span class="pclr">knowledge</span></h1>
+            </section>
+
+
+            <section>
+                decline - cats-effect
+                integration - maven credentials
+                ciris!!
+                doobie-postgres-circe
+                fuuid
+                cats-retry
+                upperbound
+                scodec-stream
+                monocle (circe, refined)
+                small libs not related to cats or FP: diffx, chimney
+                gif for each opening
+                gif for each integration (or other animation)
+            </section>
+        </section>
+        <section>
+            <h2>Thanks!</h2>
+
+            <br>
+            Wojtek Pituła - <a href="https://twitter.com/Krever01">@Krever01</a>
+
+            <br>
+            <br>
+            <div>
+                <a href="https://w.pitula.me/presentations">w.pitula.me/presentations</a>
+                <br>
+                <small>You can leave feedback there ^</small>
+            </div>
+
         </section>
     </div>
 </div>
