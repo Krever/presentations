@@ -297,9 +297,9 @@
                 </table>
             </section>
             <section>
-                <h2 style="line-height: 0">Meet <span class="pclr">Http4s</span></h2>
+                <h1>Meet <span class="pclr">Http4s</span></h1>
 
-                <img src="img/magic-of-integrations_http4s.jpg" style="height: 80%"/>
+                <img src="img/magic-of-integrations_http4s.jpg" style="height: 50%"/>
 
                 <aside class="notes">
                     0.23.0
@@ -403,7 +403,7 @@
 
         <section>
             <section>
-                <h2>Json <span class="pclr">(De)Serialization</span></h2>
+                <h1>Json <span class="pclr">(De) Serialization</span></h1>
             </section>
 
             <section>
@@ -431,9 +431,9 @@
             </section>
 
             <section>
-                <h2 style="line-height: 0">Meet <span class="pclr">Circe</span></h2>
+                <h1>Meet <span class="pclr">Circe</span></h1>
 
-                <img src="img/magic-of-integrations_circe.jpg" style="height: 80%"/>
+                <img src="img/magic-of-integrations_circe.jpg" style="height: 50%"/>
             </section>
 
             <section>
@@ -502,7 +502,7 @@
         <section>
 
             <section>
-                <h2>Database <span class="pclr">Persistance</span></h2>
+                <h1>Database <span class="pclr">Persistance</span></h1>
             </section>
 
             <section>
@@ -528,9 +528,9 @@
             </section>
 
             <section>
-                <h2 style="line-height: 0">Meet <span class="pclr">doobie</span> & <span class="pclr">quill</span></h2>
+                <h2>Meet <span class="pclr">doobie</span> & <span class="pclr">quill</span></h2>
 
-                <img src="img/magic-of-integrations_db.jpg" style="height: 80%"/>
+                <img src="img/magic-of-integrations_db.jpg" style="height: 50%"/>
             </section>
 
             <section>
@@ -654,10 +654,34 @@
             </section>
 
             <section>
-                <h3>But where is the <span class="pclr">Transactor</span>?</h3>
-                <div class="fragment" style="text-align: center">
+                <small style="line-height: 0.5em"><h4>Bonus</h4></small>
+                <h3 style="line-height: 0.5em">doobie + postgres + circe = <span class="pclr">♥</span></h3>
+                <div style="text-align: center">
                     <pre style="display: inline-block; width: unset; font-size: 0.4em"><code class="scala" data-trim
                                                                                              data-noescape>
+                      import doobie.postgres.circe.json.implicits._
+
+                      sql"select '{}' :: json".query[Json]
+
+                      sql"select ${Json.obj()} :: json".query[Json]
+                    </code></pre>
+                </div>
+            </section>
+
+            <section>
+                <h3>But where is the <span class="pclr">Transactor</span>?</h3>
+                <div style="text-align: center">
+                    <pre style="display: inline-block; width: unset; font-size: 0.4em"><code class="scala" data-trim
+                                                                                             data-noescape>
+                          class DoobieNotesRepository[...](<mark>xa: Transactor[F]</mark>)
+                    </code></pre>
+                    <pre style="display: inline-block; width: unset; font-size: 0.4em"><code class="scala" data-trim
+                                                                                             data-noescape>
+                          class QuillNotesRepository[...](<mark>xa: Transactor[F]</mark>, ctx: DoobieContext.H2[SnakeCase.type])
+                    </code></pre>
+                    <pre class="fragment" style="display: inline-block; width: unset; font-size: 0.4em"><code
+                            class="scala" data-trim
+                            data-noescape>
                           Transactor.fromDriverManager[IO](
                             driver = "org.h2.Driver",
                             url    = "jdbc:h2:mem:MyDatabase;DB_CLOSE_DELAY=-1",
@@ -676,7 +700,7 @@
         <section>
 
             <section>
-                <h2><span class="pclr">Configuration</span></h2>
+                <h1><span class="pclr">Config</span>uration</h1>
             </section>
 
             <section>
@@ -701,13 +725,52 @@
             </section>
 
             <section>
-                <h2 style="line-height: 0">Meet <span class="pclr">ciris</span></h2>
+                <h1>Meet <span class="pclr">ciris</span></h1>
 
-                <img src="img/magic-of-integrations_ciris.jpg" style="height: 80%"/>
+                <img src="img/magic-of-integrations_ciris.jpg" style="height: 50%"/>
             </section>
 
             <section>
-                TODO
+                <small><h3>Ciris <span class="pclr" style="font-family: Helvetica, sans-serif">101</span></h3></small>
+
+                <h3>Extract</h3>
+                <div style="text-align: center">
+                    <pre style="display: inline-block; width: unset; font-size: 0.4em"><code class="scala" data-trim
+                                                                                             data-noescape>
+                        val port:ConfigValue[Int] =
+                            env("MAGIC_API_PORT")
+                              .or(prop("magic.api.port"))
+                              .as[Int]
+                              .default(8080)
+                    </code></pre>
+                </div>
+            </section>
+
+            <section>
+                <small><h3>Ciris <span class="pclr" style="font-family: Helvetica, sans-serif">101</span></h3></small>
+                <h3>Join</h3>
+                <div style="text-align: center">
+                    <pre style="display: inline-block; width: unset; font-size: 0.4em"><code class="scala" data-trim
+                                                                                             data-noescape>
+                        case class Api(address: String, port: Int)
+
+                        val address :ConfigValue[Int] = ???
+
+                        val apiConfig: ConfigValue[Api] =
+                            (address, port).<mark>parMapN</mark>(Api)
+                    </code></pre>
+                </div>
+            </section>
+
+            <section>
+                <small><h3>Ciris <span class="pclr" style="font-family: Helvetica, sans-serif">101</span></h3></small>
+                <h3>Load</h3>
+                <div style="text-align: center">
+                    <pre style="display: inline-block; width: unset; font-size: 0.4em"><code class="scala" data-trim
+                                                                                             data-noescape>
+                        val config: IO[Api] = apiConfig.load[IO]
+                    </code></pre>
+                </div>
             </section>
 
             <section>
@@ -735,7 +798,7 @@
         <section>
 
             <section>
-                <h2><span class="pclr">Stream</span> processing</h2>
+                <h1><span class="pclr">Stream</span> processing</h1>
             </section>
 
             <section>
@@ -759,9 +822,9 @@
             </section>
 
             <section>
-                <h2 style="line-height: 0">Meet <span class="pclr">fs2</span></h2>
+                <h1>Meet <span class="pclr">fs2</span></h1>
 
-                <img src="img/magic-of-integrations_fs2.jpg" style="height: 80%"/>
+                <img src="img/magic-of-integrations_fs2.jpg" style="height: 50%"/>
             </section>
 
             <section>
@@ -834,7 +897,7 @@
 
         <section>
             <section>
-                <h2><span class="pclr">Console</span> client <span class="pclr">App</span></h2>
+                <h1><span class="pclr">Console</span> <br>client <span class="pclr">App</span></h1>
             </section>
 
             <section>
@@ -858,9 +921,9 @@
             </section>
 
             <section>
-                <h2 style="line-height: 0">Meet <span class="pclr">decline</span></h2>
+                <h1>Meet <span class="pclr">decline</span></h1>
 
-                <img src="img/magic-of-integrations_decline.jpg" style="height: 80%"/>
+                <img src="img/magic-of-integrations_decline.jpg" style="height: 50%"/>
             </section>
 
             <section>
@@ -952,26 +1015,56 @@
             <section>
                 <h3>How to <span class="pclr">use it</span>?</h3>
                 Step 3: Use as entrypoint
-                <div style="text-align: center">
-                    <pre style="display: inline-block; width: unset"><code class="scala" data-trim data-noescape>
-                      def main(args: List[String]): Unit = {
-                        val command = Command("magic", "Notes manager")(myOpts)
-                        Command.opts.parse(args, sys.env) match {
-                          case Left(help)  => System.err.println(help)
-                          case Right(args) => doSth(args)
-                        }
-                      }
-                    </code></pre>
-                    <pre style="display: inline-block; width: unset"><code class="scala" data-trim data-noescape>
-                      object Main extends CommandApp(
-                        name   = "magic",
-                        header = "Notes manager",
-                        main = {
-                          Command.opts.map(args => doSth(args))
-                        },
-                      )
-                    </code></pre>
-                </div>
+                <table style="font-size: 0.5em">
+                    <tr>
+                        <td>
+                            <div style="text-align: center">
+                                <pre style="display: inline-block; width: unset"><code class="scala" data-trim
+                                                                                       data-noescape>
+                                  val command = Command(
+                                        name = "magic",
+                                        header = "Notes manager"
+                                    )(Command.opts)
+                                </code></pre>
+                                <br>
+                                <pre style="display: inline-block; width: unset"><code class="scala" data-trim
+                                                                                       data-noescape>
+                                  def main(args: List[String]): Unit = {
+                                   command.parse(args, sys.env) match {
+                                      case Left(help)  => System.err.println(help)
+                                      case Right(args) => doSth(args)
+                                    }
+                                  }
+                                </code></pre>
+                            </div>
+                        </td>
+                        <td style="vertical-align: middle">
+                            <div style="text-align: center">
+                                <pre style="display: inline-block; width: unset"><code class="scala" data-trim data-noescape>
+                                  object Main extends CommandApp(
+                                    name   = "magic",
+                                    header = "Notes manager",
+                                    main = Command.opts.map(doSth),
+                                  )
+                                </code></pre>
+                            </div>
+                        </td>
+                        <td style="vertical-align: middle">
+                            <div style="text-align: center">
+                                <pre style="display: inline-block; width: unset"><code class="scala" data-trim data-noescape>
+                                    object Main extends CommandIOApp(
+                                        name   = "magic",
+                                        header = "Notes manager",
+                                    ) {
+
+                                        override def main: Opts[IO[ExitCode]] =
+                                            Command.opts.map(doSth))
+                                    }
+                                </code></pre>
+                            </div>
+                        </td>
+                    </tr>
+                </table>
             </section>
 
             <section>
@@ -983,7 +1076,7 @@
 
         <section>
             <section>
-                <h2>Http <span class="pclr">client</span></h2>
+                <h1>Http <span class="pclr">client</span></h1>
             </section>
 
             <section>
@@ -1008,9 +1101,9 @@
             </section>
 
             <section>
-                <h2 style="line-height: 0">Meet <span class="pclr">sttp</span></h2>
+                <h2>Meet <span class="pclr">sttp</span></h2>
 
-                <img src="img/magic-of-integrations_sttp.jpg" style="height: 80%"/>
+                <img src="img/magic-of-integrations_sttp.jpg" style="height: 50%"/>
             </section>
 
             <section>
@@ -1114,8 +1207,7 @@
         <section>
 
             <section>
-                <h2>What <span class="pclr">else</span>?</h2>
-                TODO: image with all circles
+                <h1>What <span class="pclr">else</span>?</h1>
             </section>
 
             <section>
@@ -1318,9 +1410,33 @@
 
 
             <section>
-                <h2 style="line-height: 0">It's just <span class="pclr">impressive</span></h2>
+                <h2>Purely <span class="pclr">impressive</span></h2>
 
-                <img src="img/magic-of-integrations_more.jpg" style="height: 80%"/>
+                <img src="img/magic-of-integrations_more.jpg" style="height: 70%"/>
+            </section>
+
+            <section>
+                <h2>And there is <span class="pclr">even more</span>!</h2>
+                <table>
+                    <tr>
+                        <td>
+                            <ul>
+                                <li>monocle</li>
+                                <li>finch</li>
+                                <li>cats-retry</li>
+                            </ul>
+                        </td>
+                        <td>
+                            <ul>
+                                <li>console4cats</li>
+                                <li>log4cats</li>
+                                <li>fuuid</li>
+                            </ul>
+                        </td>
+                    </tr>
+                </table>
+                and MORE
+
             </section>
 
         </section>
@@ -1333,43 +1449,72 @@
             <section>
                 <small><h3>How is this <span class="pclr">possible</span>?</h3></small>
                 <h2>Pillar one: <span class="pclr">typeclasses</span></h2>
-                Integration between modules A & B can be provided via module C
+                <table>
+                    <tr>
+                        <td style="width: 80%">
+                            <img src="img/magic-of-integrations_typeclasses.jpg" style="height: 50%"/>
+                        </td>
+                        <td style="vertical-align: middle; text-align: center">
+                            Because
+                            <br>
+                            <span style="font-weight: bold" class="pclr">INTEGRATION</span>
+                            of libs A & B in lib C
+                        </td>
+                    </tr>
+                </table>
             </section>
 
             <section>
                 <small><h3>How is this <span class="pclr">possible</span>?</h3></small>
                 <h2>Pillar two: <span class="pclr">cats</span></h2>
-                Common interfaces for most generic things
-            </section>
-
-            <section>
-                <h2 style="line-height: 0">Pillar two: <span class="pclr">cats</span></h2>
-
-                <img src="img/magic-of-integrations_cats.jpg" style="height: 80%"/>
+                <table>
+                    <tr>
+                        <td style="width: 80%">
+                            <img src="img/magic-of-integrations_cats.jpg" style="height: 50%"/>
+                        </td>
+                        <td style="vertical-align: middle; text-align: center">
+                            Because
+                            <br>
+                            <span style="font-weight: bold" class="pclr">COMPOSITION</span>
+                        </td>
+                    </tr>
+                </table>
             </section>
 
             <section>
                 <small><h3>How is this <span class="pclr">possible</span>?</h3></small>
-                <h2>Pillar three: <br><span class="pclr">cats-effects</span></h2>
-                Common interfaces for effectful things
-            </section>
-
-            <section>
-                <h2 style="line-height: 0">Pillar three: <span class="pclr">cats-effects</span></h2>
-
-                <img src="img/magic-of-integrations_catseffect.jpg" style="height: 80%"/>
+                <h2>Pillar three: <span class="pclr">cats-effects</span></h2>
+                <table>
+                    <tr>
+                        <td style="width: 80%">
+                            <img src="img/magic-of-integrations_catseffect.jpg" style="height: 60%"/>
+                        </td>
+                        <td style="vertical-align: middle; text-align: center">
+                            Because
+                            <br>
+                            <span style="font-weight: bold" class="pclr">SIDE EFFECTS</span>
+                        </td>
+                    </tr>
+                </table>
             </section>
 
             <section>
                 <small><h3>How is this <span class="pclr">possible</span>?</h3></small>
                 <h2>Pillar four: <span class="pclr">fs2</span></h2>
-                Effect-polymorphic stream implementation
-            </section>
-
-            <section>
-                <h2 style="line-height: 0">Pillar three: <span class="pclr">cats-effects</span></h2>
-
-                <img src="img/magic-of-integrations_fs2-full.jpg" style="height: 80%"/>
+                <table>
+                    <tr>
+                        <td style="width: 80%">
+                            <img src="img/magic-of-integrations_fs2-full.jpg" style="height: 50%"/>
+                        </td>
+                        <td style="vertical-align: middle; text-align: center">
+                            Because
+                            <br>
+                            <span style="white-space:nowrap;">(side-effectful)</span>
+                            <br>
+                            <span style="font-weight: bold" class="pclr">STREAMS</span>
+                        </td>
+                    </tr>
+                </table>
             </section>
 
         </section>
@@ -1389,26 +1534,21 @@
                 <h1>Reuse of <span class="pclr">knowledge</span></h1>
             </section>
 
-
             <section>
-                decline - cats-effect
-                integration - maven credentials
-                ciris!!
-                doobie-postgres-circe
-                fuuid
-                cats-retry
-                upperbound
-                scodec-stream
-                monocle (circe, refined)
-                small libs not related to cats or FP: diffx, chimney
-                gif for each opening
-                gif for each integration (or other animation)
+                <small><h3>Why is this <span class="pclr">important</span>?</h3></small>
+                <h1>Similar <span class="pclr">programming model</span></h1>
             </section>
+
         </section>
         <section>
-            <h2>Thanks!</h2>
+            <section>
+                <h1>Other <span class="pclr">ecosystems</span></h1>
+                Akka | ZIO | Li Hayoi
+            </section>
 
-            <br>
+        </section>
+        <section>
+            <h1>Thanks!</h1>
             Wojtek Pituła - <a href="https://twitter.com/Krever01">@Krever01</a>
 
             <br>
@@ -1418,6 +1558,10 @@
                 <br>
                 <small>You can leave feedback there ^</small>
             </div>
+
+            <aside class="notes">
+                animation for integrations
+            </aside>
 
         </section>
     </div>

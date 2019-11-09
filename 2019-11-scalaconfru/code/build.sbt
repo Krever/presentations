@@ -28,7 +28,7 @@ libraryDependencies ++= Seq(
   "eu.timepit" %% "refined"       % "0.9.9",
   "io.circe"   %% "circe-refined" % circeVersion,
   // decline
-  "com.monovore" %% "decline" % "0.5.0",
+  "com.monovore" %% "decline" % "1.0.0",
   //sttp
   "com.softwaremill.sttp" %% "core"                          % "1.6.7",
   "com.softwaremill.sttp" %% "circe"                         % "1.6.7",
