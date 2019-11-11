@@ -197,7 +197,7 @@
             </section>
 
             <section>
-                <h2>Note can ba <span class="pclr">saved</span></h2>
+                <h2>Note can be <span class="pclr">saved</span></h2>
 
                 <div style="text-align: center">
         <pre style="display: inline-block; width: unset"><code data-trim data-noescape>
@@ -282,7 +282,7 @@
                         <td style="width: 50%">
                             <ul>
                                 <li>play</li>
-                                <li>finnagle</li>
+                                <li>finch</li>
                                 <li>http4s</li>
                             </ul>
                         </td>
@@ -932,7 +932,7 @@
                 <div style="text-align: center">
                     <pre style="display: inline-block; width: unset"><code class="scala" data-trim data-noescape>
                         magic get-notes --url localhost --port 8080
-                        magic add-note --title my --text not
+                        magic add-note --title my --text note
                         magic --help
                     </code></pre>
                 </div>
@@ -981,7 +981,7 @@
                 Step 1: Define an <code>Opt</code>
                 <div style="text-align: center">
                     <pre style="display: inline-block; width: unset"><code class="scala" data-trim data-noescape>
-                        val urlOpt = Opts
+                        val urlOpt: Opts[String] = Opts
                           .option[String]("url", help = "Server url")
                           .orElse(Opts.env[String]("MAGIC_URL", "Server url"))
                           .withDefault("localhost")
@@ -1015,7 +1015,7 @@
             <section>
                 <h3>How to <span class="pclr">use it</span>?</h3>
                 Step 3: Use as entrypoint
-                <table style="font-size: 0.5em">
+                <table style="font-size: 0.65em">
                     <tr>
                         <td>
                             <div style="text-align: center">
@@ -1031,8 +1031,10 @@
                                                                                        data-noescape>
                                   def main(args: List[String]): Unit = {
                                    command.parse(args, sys.env) match {
-                                      case Left(help)  => System.err.println(help)
-                                      case Right(args) => doSth(args)
+                                      case Left(help)  =>
+                                        System.err.println(help)
+                                      case Right(args) =>
+                                        doSth(args)
                                     }
                                   }
                                 </code></pre>
@@ -1056,8 +1058,8 @@
                                         name   = "magic",
                                         header = "Notes manager",
                                     ) {
-
-                                        override def main: Opts[IO[ExitCode]] =
+                                        override def main:
+                                                Opts[IO[ExitCode]] =
                                             Command.opts.map(doSth))
                                     }
                                 </code></pre>
@@ -1172,9 +1174,12 @@
                               .get(uri"$url/notes")
                               .response(<mark>asStream[fs2.Stream[F, ByteBuffer]]</mark>)
                               .send()
-                              .map(_.body.leftMap(new RuntimeException(_)))
-                              .rethrow
-
+                            ...
+                          }
+                    </code></pre>
+                    <pre class="fragment" style="display: inline-block; width: unset"><code class="scala" data-trim data-noescape>
+                        override def getNotesStream(): fs2.Stream[F, Note] = {
+                            ...
                             fs2.Stream
                               .eval(response)
                               .flatten
@@ -1567,6 +1572,8 @@
 
             <aside class="notes">
                 animation for integrations
+                circe-http4s = typeclass
+                typeclasses - remove blue color from circles
             </aside>
 
         </section>
