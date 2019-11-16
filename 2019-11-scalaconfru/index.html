@@ -323,8 +323,7 @@
             </section>
             <section>
                 <h2>And so is <span class="pclr">http4s</span></h2>
-
-                <div style="text-align: center">
+`                <div style="text-align: center">
                     <pre style="display: inline-block; width: unset"><code class="scala" data-trim data-noescape>
                     type HttpRoutes[F[_]] = HttpRequest[F] => F[Option[HttpResponse[F]]]
                     </code></pre>
@@ -356,6 +355,30 @@
             <section>
                 <small style="line-height: 0.5em"><h4>Back to our <span class="pclr">API</span></h4></small>
 
+                <h2>A basic <span class="pclr">implementation</span></h2>
+
+                <small>Effect-polymorphic via cats.effect.Sync!</small>
+
+                <div style="text-align: center">
+                    <pre style="display: inline-block; width: unset"><code class="scala" data-trim data-noescape>
+                    class DummyNotesController[F[_]: Sync] extends NotesController[F] {
+                      val dsl = Http4sDsl[F]
+                      import dsl._
+                      override def saveNote = HttpRoutes.of[F] {
+                        case POST -> Root / "notes" => Ok("Hello")
+                      }
+                      override def getNotes = HttpRoutes.of[F] {
+                        case GET -> Root / "notes" => Ok("World")
+                      }
+                    }
+                    </code></pre>
+                </div>
+
+            </section>
+
+            <section>
+                <small style="line-height: 0.5em"><h4>Back to our <span class="pclr">API</span></h4></small>
+
                 <h2>And that's how we <span class="pclr">use it</span></h2>
 
                 <div style="text-align: center">
@@ -372,28 +395,7 @@
           }
         </code></pre>
                 </div>
-
-
-            </section>
-            <section>
-                <small style="line-height: 0.5em"><h4>Back to our <span class="pclr">API</span></h4></small>
-
-                <h2>And a basic <span class="pclr">implementation</span></h2>
-
-                <div style="text-align: center">
-        <pre style="display: inline-block; width: unset"><code class="scala" data-trim data-noescape>
-        class DummyNotesController[F[_]: Sync] extends NotesController[F] {
-          val dsl = Http4sDsl[F]
-          import dsl._
-          override def saveNote = HttpRoutes.of[F] {
-            case POST -> Root / "notes" => Ok("Hello")
-          }
-          override def getNotes = HttpRoutes.of[F] {
-            case GET -> Root / "notes" => Ok("World")
-          }
-        }
-        </code></pre>
-                </div>
+                <small>Composed via cats.SemigroupK!</small>
 
             </section>
 
@@ -556,6 +558,8 @@
 
             <section>
                 <span class="pclr" style="font-weight: bold;">Doobie</span> is a real dope
+                <br>
+                <small>Effect-polymorphic via cats.effect.Bracket!</small>
                 <div style="text-align: center; font-size: 0.7em">
                     <pre style="display: inline-block; width: unset"><code class="scala" data-trim data-noescape>
                         class DoobieNotesRepository[F[_]: Bracket[?[_], Throwable]](xa: Transactor[F]) extends NotesRepository[F] {
@@ -593,7 +597,7 @@
 
             <section>
                 <h2>Quill <span class="pclr">generates sql</span></h2>
-                In compile time
+                In compilation time
             </section>
 
             <section>
@@ -741,7 +745,7 @@
                 <div style="text-align: center">
                     <pre style="display: inline-block; width: unset; font-size: 0.4em"><code class="scala" data-trim
                                                                                              data-noescape>
-                        val port:ConfigValue[Int] =
+                        val port: ConfigValue[Int] =
                             env("MAGIC_API_PORT")
                               .or(prop("magic.api.port"))
                               .as[Int]
@@ -758,12 +762,13 @@
                                                                                              data-noescape>
                         case class Api(address: String, port: Int)
 
-                        val address :ConfigValue[Int] = ???
+                        val address: ConfigValue[String] = ???
 
                         val apiConfig: ConfigValue[Api] =
                             (address, port).<mark>parMapN</mark>(Api)
                     </code></pre>
                 </div>
+                <small>Composed via cats.Parallel!</small>
             </section>
 
             <section>
@@ -775,6 +780,7 @@
                         val config: IO[Api] = apiConfig.load[IO]
                     </code></pre>
                 </div>
+                <small>Effect-polymorphic via cats.effect.Async!</small>
             </section>
 
             <section>
@@ -840,9 +846,9 @@
                 <h2>But don't be <span class="pclr">afraid</span></h2>
                 It's like collection but deferred and effectful
                 <div style="text-align: center">
-                    <pre style="display: inline-block; width: unset"><code class="scala" data-trim data-noescape>
+                    <pre style="display: inline-block; width: unset; font-size: 0.5em"><code class="scala" data-trim data-noescape>
                       val converter: Stream[IO, Unit] =
-                        io.file.readAll[IO](Paths.get("testdata/fahrenheit.txt"), blocker, 4096)
+                        fs2.io.file.readAll[IO](Paths.get("testdata/fahrenheit.txt"), blocker, 4096)
                           .through(text.utf8Decode)
                           .through(text.lines)
                           .filter(s => !s.trim.isEmpty && !s.startsWith("//"))
@@ -852,6 +858,7 @@
                           .through(io.file.writeAll(Paths.get("testdata/celsius.txt"), blocker))
                     </code></pre>
                 </div>
+                <small>And effect-polymorphic!</small>
             </section>
 
             <section>
@@ -943,29 +950,6 @@
             </section>
 
             <section>
-                <h3>Decline is <span class="pclr">helpful</span></h3>
-                <div style="text-align: center">
-                    <pre style="display: inline-block; width: unset"><code class="scala" data-trim data-noescape>
-                        Usage:
-                            magic get-notes
-                            magic add-note
-
-                        Notes manager
-
-                        Options and flags:
-                            --help
-                                Display this help text.
-
-                        Subcommands:
-                            get-notes
-                                Get notes
-                            add-note
-                                Add note
-                    </code></pre>
-                </div>
-            </section>
-
-            <section>
                 <h3>How to <span class="pclr">use it</span>?</h3>
                 Step 0: Define commands datatypes (optional)
                 <div style="text-align: center">
@@ -1003,17 +987,18 @@
                         val noteOpt: Opts[Note] = {
                           val titleOpt: Opts[String] = ???
                           val textOpt: Opts[String] = ???
-                          <mark>(titleOpt, textOpt).mapN(Note.apply)</mark>
+                          <mark>(titleOpt, textOpt).mapN(Note)</mark>
                         }
                         val addNoteCmdOpt: Opts[MyCommand] = Opts
                             .subcommand[MyCommand]("add-note", "Add note")(
-                                <mark>(urlOpt, portOpt, noteOpt).mapN(Command.AddNote.apply)</mark>
+                                <mark>(urlOpt, portOpt, noteOpt).mapN(Command.AddNote)</mark>
                             )
                         val getNotesCmdOpt: Opts[MyCommand] = ???
 
                         <mark>getNotesCmdOpt orElse addNoteCmdOpt</mark>
                     </code></pre>
                 </div>
+                <small>Composed via cats.Semigroupal!</small>
             </section>
 
             <section>
@@ -1071,6 +1056,30 @@
                         </td>
                     </tr>
                 </table>
+                <small>Cats-effect compatible!</small>
+            </section>
+
+            <section>
+                <h3>Decline is <span class="pclr">helpful</span></h3>
+                <div style="text-align: center">
+                    <pre style="display: inline-block; width: unset"><code class="scala" data-trim data-noescape>
+                        Usage:
+                            magic get-notes
+                            magic add-note
+
+                        Notes manager
+
+                        Options and flags:
+                            --help
+                                Display this help text.
+
+                        Subcommands:
+                            get-notes
+                                Get notes
+                            add-note
+                                Add note
+                    </code></pre>
+                </div>
             </section>
 
             <section>
@@ -1140,9 +1149,10 @@
                 <div style="text-align: center">
                     <pre style="display: inline-block; width: unset"><code class="scala" data-trim data-noescape>
                       override def addNote(note: Note): F[Unit] = {
+                        <mark class="fragment" data-fragment-index="1">import com.softwaremill.sttp.circe._</mark>
                         sttp
                           .post(uri"$url/notes")
-                          .body(note)
+                          <mark class="fragment" data-fragment-index="1">.body(note)</mark>
                           .send()
                           .map(_.body.leftMap(new RuntimeException(_)))
                           .rethrow
@@ -1150,6 +1160,7 @@
                       }
                     </code></pre>
                 </div>
+                <small class="fragment" data-fragment-index="1">Integrates with circe!</small>
             </section>
 
             <section>
@@ -1161,6 +1172,7 @@
                             AsyncHttpClientFs2Backend[IO]()
                     </code></pre>
                 </div>
+                <small>Effect-polymorphic!</small>
             </section>
 
             <section>
@@ -1550,8 +1562,45 @@
             </section>
 
             <section>
+                <small><h1>Reuse of <span class="pclr">knowledge</span></h1></small>
+                <br>
+                Composition & transformation:
+                <br>
+                <table>
+                    <tr>
+                        <td>
+                            <ul>
+                                <li>http4s <span class="pclr">HttpRoutes</span> & <span class="pclr">EntityDecoder</span></li>
+                                <li>circe <span class="pclr">Encoder</span> & <span class="pclr">Decoder</span></li>
+                                <li>doobie <span class="pclr">Read</span> & <span class="pclr">Write</span></li>
+                            </ul>
+                        </td>
+                        <td>
+                            <ul>
+                                <li>ciris <span class="pclr">ConfigValue</span> & <span class="pclr">ConfigDecoder</span></li>
+                                <li>decline <span class="pclr">Opts</span> & <span class="pclr">Argument</span></li>
+                                <li>atto <span class="pclr">Parser</span></li>
+                            </ul>
+                        </td>
+                    </tr>
+                </table>
+
+            </section>
+
+            <section>
                 <small><h3>Why is this <span class="pclr">important</span>?</h3></small>
                 <h1>Similar <span class="pclr">programming model</span></h1>
+            </section>
+
+            <section>
+                <small><h1>Similar <span class="pclr">programming model</span></h1></small>
+                <br>
+                <ul>
+                    <li>No side effects</li>
+                    <li>Effect-polymorphic</li>
+                    <li>Lawful composition</li>
+                    <li>Safe resource acquisition</li>
+                </ul>
             </section>
 
         </section>
