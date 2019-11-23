@@ -29,9 +29,7 @@ class QuillNotesRepository[F[_]: Bracket[?[_], Throwable]](xa: Transactor[F], ct
   }
 
   override def getAll(): F[List[Note]] = {
-    val q = quote {
-      query[Note]
-    }
+    val q = quote { query[Note] }
     run(q).transact(xa)
   }
 }

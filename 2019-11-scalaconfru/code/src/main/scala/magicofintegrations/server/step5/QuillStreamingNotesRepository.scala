@@ -17,8 +17,7 @@ class QuillStreamingNotesRepository[F[_]: Bracket[?[_], Throwable]](
   import doobie.implicits._
 
   override def getAllStream(): fs2.Stream[F, Note] = {
-    stream {
-      query[Note]
-    }.transact(xa)
+    val q = quote { query[Note] }
+    stream(q).transact(xa)
   }
 }

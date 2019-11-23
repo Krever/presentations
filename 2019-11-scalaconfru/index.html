@@ -299,6 +299,7 @@
                         </td>
                     </tr>
                 </table>
+                <b>Possible stacks: <span style="color: #980000">6</span></b></b>
             </section>
             <section>
                 <h1>Meet <span class="pclr">Http4s</span></h1>
@@ -322,8 +323,17 @@
 
             </section>
             <section>
-                <h2>And so is <span class="pclr">http4s</span></h2>
-`                <div style="text-align: center">
+                <h2>But its also <span class="pclr">effectful</span></h2>
+                <div style="text-align: center">
+                    <pre style="display: inline-block; width: unset"><code class="scala" data-trim data-noescape>
+                    HttpRequest[F] => F[Option[HttpResponse[F]]]
+                    </code></pre>
+                </div>
+            </section>
+            <section>
+                <h2>And so it is in <span class="pclr">http4s</span></h2>
+                `
+                <div style="text-align: center">
                     <pre style="display: inline-block; width: unset"><code class="scala" data-trim data-noescape>
                     type HttpRoutes[F[_]] = HttpRequest[F] => F[Option[HttpResponse[F]]]
                     </code></pre>
@@ -434,6 +444,7 @@
                         </td>
                     </tr>
                 </table>
+                <b>Possible stacks: 6 x 8 = <span style="color: #980000">48</span></b></b>
             </section>
 
             <section>
@@ -488,7 +499,7 @@
                           } yield resp
                       }
 
-                      override def getNotes: _root_.org.http4s.HttpRoutes[F] = HttpRoutes.of[F] {
+                      override def getNotes: HttpRoutes[F] = HttpRoutes.of[F] {
                         case GET -> Root / "notes" =>
                           for {
                             resp  <- Ok(<mark>List(Note("title", "text"))</mark>)
@@ -531,6 +542,7 @@
                         </td>
                     </tr>
                 </table>
+                <b>Possible stacks: 6 x 8 x 6 = <span style="color: #980000">288</span></b>
             </section>
 
             <section>
@@ -730,6 +742,7 @@
                         </td>
                     </tr>
                 </table>
+                <b>Possible stacks: 6 x 8 x 6 x 5 = <span style="color: #980000">1440</span></b>
             </section>
 
             <section>
@@ -829,6 +842,9 @@
                         </td>
                     </tr>
                 </table>
+                <b>Possible stacks:
+                    <br>6 x 8 x 6 x 5 x 4 = <span style="color: #980000">5760</span>
+                </b>
             </section>
 
             <section>
@@ -846,19 +862,47 @@
                 <h2>But don't be <span class="pclr">afraid</span></h2>
                 It's like collection but deferred and effectful
                 <div style="text-align: center">
-                    <pre style="display: inline-block; width: unset; font-size: 0.5em"><code class="scala" data-trim data-noescape>
-                      val converter: Stream[IO, Unit] =
-                        fs2.io.file.readAll[IO](Paths.get("testdata/fahrenheit.txt"), blocker, 4096)
-                          .through(text.utf8Decode)
-                          .through(text.lines)
-                          .filter(s => !s.trim.isEmpty && !s.startsWith("//"))
-                          .map(line => fahrenheitToCelsius(line.toDouble).toString)
-                          .intersperse("\n")
-                          .through(text.utf8Encode)
-                          .through(io.file.writeAll(Paths.get("testdata/celsius.txt"), blocker))
+                    <pre style="display: inline-block; width: unset; font-size: 0.5em"><code class="scala" data-trim
+                                                                                             data-noescape>
+                      val wordCountS: Stream[IO, Int] =
+                        Stream.emits(urls)
+                            .evalMap(client.fetch)
+                            .flatMap(_.body)
+                            .through(fs2.text.utf8Decode)
+                            .flatMap(body => Stream.emits(body.split(" "))
+                            .mapFold(_ => 1)
+                      // nothing got executed
+
+                      val wordCountIO: IO[Int] = wordCountS.compile.lastOrError
+                      // nothing got executed still
+
+                      wordcountIO.runSyncUnsafe()
+                      // now it got executed
                     </code></pre>
                 </div>
                 <small>And effect-polymorphic!</small>
+            </section>
+
+            <section>
+                <h2>And <span class="pclr">bracketing</span></h2>
+                Because resource-safety!
+                <div style="text-align: center">
+                    <pre style="display: inline-block; width: unset; font-size: 0.5em"><code class="scala" data-trim
+                                                                                             data-noescape>
+                      fs2.Stream[F, InputStream]
+                      fs2.Stream[F, ConnectionPool]
+                      fs2.Stream[F, ThreadPool]
+                    </code></pre>
+                    <br>
+                    <pre style="display: inline-block; width: unset; font-size: 0.5em"><code class="scala" data-trim
+                                                                                             data-noescape>
+                      val resource: Resource[F, InputStream] =
+                        connectionPoolStream
+                          .compile
+                          .resource
+                          .lastOrError
+                    </code></pre>
+                </div>
             </section>
 
             <section>
@@ -874,7 +918,9 @@
                                                                                             data-noescape>
                         import ctx._
                         def getAllStream(): fs2.Stream[F, Note] = {
-                          <mark>stream</mark>(query[Note]).transact(xa)
+                          val q = quote { query[Note] }
+                          // run(q).transact(xa)
+                          <mark>stream</mark>(q).transact(xa)
                         }
                     </code></pre>
                 </div>
@@ -904,6 +950,10 @@
                 And write a client
             </section>
 
+            <aside class="notes">
+                22 min
+            </aside>
+
         </section>
 
         <section>
@@ -929,6 +979,9 @@
                         </td>
                     </tr>
                 </table>
+                <b>Possible stacks:
+                    <br>6 x 8 x 6 x 5 x 4 x 4= <span style="color: #980000">23040</span>
+                </b>
             </section>
 
             <section>
@@ -1031,7 +1084,8 @@
                         </td>
                         <td style="vertical-align: middle">
                             <div style="text-align: center">
-                                <pre style="display: inline-block; width: unset"><code class="scala" data-trim data-noescape>
+                                <pre style="display: inline-block; width: unset"><code class="scala" data-trim
+                                                                                       data-noescape>
                                   object Main extends CommandApp(
                                     name   = "magic",
                                     header = "Notes manager",
@@ -1042,7 +1096,8 @@
                         </td>
                         <td style="vertical-align: middle">
                             <div style="text-align: center">
-                                <pre style="display: inline-block; width: unset"><code class="scala" data-trim data-noescape>
+                                <pre style="display: inline-block; width: unset"><code class="scala" data-trim
+                                                                                       data-noescape>
                                     object Main extends CommandIOApp(
                                         name   = "magic",
                                         header = "Notes manager",
@@ -1113,6 +1168,9 @@
                         </td>
                     </tr>
                 </table>
+                <b>Possible stacks:
+                    <br>6 x 8 x 6 x 5 x 4 x 4 x 5 = <span style="color: #980000">111520</span>
+                </b>
             </section>
 
             <section>
@@ -1193,7 +1251,8 @@
                             ...
                           }
                     </code></pre>
-                    <pre class="fragment" style="display: inline-block; width: unset"><code class="scala" data-trim data-noescape>
+                    <pre class="fragment" style="display: inline-block; width: unset"><code class="scala" data-trim
+                                                                                            data-noescape>
                         override def getNotesStream(): fs2.Stream[F, Note] = {
                             ...
                             fs2.Stream
@@ -1223,12 +1282,17 @@
                 </div>
             </section>
 
+            <aside class="notes">
+                29 minutes
+            </aside>
+
         </section>
 
         <section>
 
             <section>
                 <h1>What <span class="pclr">else</span>?</h1>
+                <span style="color: #980000">111520</span> different stacks and we've not even finished
             </section>
 
             <section>
@@ -1282,9 +1346,7 @@
                             // Successful(DecodeResult(Point(-5, 10, 1), BitVector(empty)))
                     </code></pre>
                 </div>
-                <span style="font-weight: bold">Works with <span class="pclr">fs2</span>, <span
-                        class="pclr">circe</span>
-                    and more!</span>
+                <span style="font-weight: bold">Works with <span class="pclr">fs2</span> and more!</span>
             </section>
 
             <section>
@@ -1443,7 +1505,7 @@
                         <td>
                             <ul>
                                 <li>monocle</li>
-                                <li>finch</li>
+                                <li>finnagle</li>
                                 <li>cats-retry</li>
                             </ul>
                         </td>
@@ -1570,14 +1632,16 @@
                     <tr>
                         <td>
                             <ul>
-                                <li>http4s <span class="pclr">HttpRoutes</span> & <span class="pclr">EntityDecoder</span></li>
+                                <li>http4s <span class="pclr">HttpRoutes</span> & <span
+                                        class="pclr">EntityDecoder</span></li>
                                 <li>circe <span class="pclr">Encoder</span> & <span class="pclr">Decoder</span></li>
                                 <li>doobie <span class="pclr">Read</span> & <span class="pclr">Write</span></li>
                             </ul>
                         </td>
                         <td>
                             <ul>
-                                <li>ciris <span class="pclr">ConfigValue</span> & <span class="pclr">ConfigDecoder</span></li>
+                                <li>ciris <span class="pclr">ConfigValue</span> & <span
+                                        class="pclr">ConfigDecoder</span></li>
                                 <li>decline <span class="pclr">Opts</span> & <span class="pclr">Argument</span></li>
                                 <li>atto <span class="pclr">Parser</span></li>
                             </ul>
@@ -1624,14 +1688,7 @@
             </div>
 
             <aside class="notes">
-                animation for integrations
-                circe-http4s = typeclass
-                typeclasses - remove blue color from circles
-                doobie-fs2 - show what changes (run -> stream)
                 cormorant
-                examples of knowledge reuse
-                examples of code reuse
-                examples of similar model
             </aside>
 
         </section>
