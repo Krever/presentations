@@ -1,0 +1,1021 @@
+<div id=left-6>
+    <h2 style="font-size:1.4em">Pragmatic</h2>
+    <h2 style="font-size:1.4em">object-oriented</h2>
+    <h2 style="font-size:2.3em" class=blue>tagless final</h2>
+</div>
+
+<div id=right-4>
+    <h4 style="font-size:0.8em">Purity</h4>
+    <h4 style="font-size:0.8em">abstraction</h4>
+    <h4 style="font-size:0.8em">and Referential Transparency</h4>
+    <h4 style="font-size:0.8em">with Class<span style="font-size:0.7em">es<span></h4>
+</div>
+
+<div>
+    <small>Wojtek Pituła @ Sony Electronics</small>
+    <small>//</small>
+    <small><a href="https://twitter.com/Krever01">@Krever01</a></small>
+    <br>
+    <small><a href="http://w.pitula.me/presentations">w.pitula.me/presentations</small>
+</div>
+
+----
+
+## <span class=blue>Agenda</span>?
+
+<br/>
+
+<div id=left class=fragment style="text-align: center">
+    <small>Part 1:</small>
+    <h2>Theory</h2>
+    <ul>
+        <li>correct</li>
+        <li>probably useless</li>
+    </ul>
+</div>
+
+
+<div id=right class=fragment style="text-align: center">
+    <small>Part 2:</small>
+    <h2>Practice</h2>
+    <ul>
+        <li>possibly incorrect</li>
+        <li>possibly useful</li>
+    </ul>
+</div>
+
+notes:
+- I hate agenda slides
+- theory (useless but correct) vs practice(potentially both useful and incorrect + opinionated)
+
+----
+
+<h1 class=blue>theory</h1>
+
+<blockquote style="font-size:0.8em; color: grey">
+    Speakers read whitepapers so we don't have to
+    <footer style="text-align:left; font-size:0.6em">— Someone somewhere</footer>
+</blockquote>
+
+<div class="fragment">
+    <ul>
+        <li><span class="blue">Expression</span> problem</li>
+        <li><span class="blue">Initial</span> vs <span class="blue">Final</span> Encoding</li>
+        <li><span class="blue">Tagged</span> vs <span class="blue">Tagless</span> Encoding<span class="blue"></span>
+        </li>
+    </ul>
+    <br>
+    <small><span style="color: grey">Wake up in 10 minutes</span></small>
+</div>
+
+----
+
+## <span class=blue>Expression</span> problem
+
+++++
+
+#### <small><span class=blue>Expression</span> problem</small>
+
+<div style="display:grid">
+    <div style="grid-column:1;" class="fragment">
+        <span class="blue">Algrebra</span>:
+        <br>
+        <ul>
+            <li>Int literal</li>
+            <li>Negation</li>
+            <li>Addition</li>
+        </ul>
+    </div>
+    <div style="grid-column:2;" class="fragment">
+        <span class="blue">Expressions</span>:
+        <br>
+
+        <ul>
+            <li>`1`</li>
+            <li>`-2`</li>
+            <li>`1+-2+3`</li>
+        </ul>
+    </div>
+    <div style="grid-column:3" class="fragment">
+        <span class="blue">Interpreters</span>:<br>
+        <ul>
+            <li>Pretty printer</li>
+            <li>Evaluator</li>
+            <li>Optimizer</li>
+        </ul>
+    </div>
+</div>
+
+++++
+
+### It is all about
+## <span class="blue">multiple interpretations</span>
+
+
+----
+
+## <span class=blue>initial</span> vs <span class=blue>final</span> encoding
+
+++++
+
+## <span class=blue>initial</span> encoding
+
+<small style="color: grey">Operations as data</small>
+
+++++
+
+<div>
+    <h4 style="margin-bottom:0"><small><span class=blue>initial</span> encoding</small></h4>
+    <h3>Algebra</h3>
+</div>
+<small style="color: grey">Data types</small>
+
+```scala
+sealed trait DBOps
+case class SaveUser(user: User)         extends DBOps
+case class FindUserById(id: String)     extends DBOps
+case class Transaction(ops: Seq[DBOps]) extends DBOps
+```
+
+++++
+
+<div>
+    <h4 style="margin-bottom:0"><small><span class=blue>initial</span> encoding</small></h4>
+    <h3>Expressions</h3>
+</div>
+<small style="color: grey">Values</small>
+
+```scala
+val findId1: DBOps = FindUserById(1)
+
+val transaction1: DBOps =
+    Transaction(Seq(
+        SaveUser(user1),
+        FindUserById(user1.id)
+    ))
+```
+
+++++
+
+<div>
+    <h4 style="margin-bottom:0"><small><span class=blue>initial</span> encoding</small></h4>
+    <h3>Interpreters</h3>
+</div>
+<small style="color: grey">Functions</small>
+
+```scala
+def show(exp: DBOps): String
+
+def usedUserIds(exp: DBOps): Seq[Int]
+```
+
+++++
+
+<div>
+    <h4 style="margin-bottom:0"><small><span class=blue>initial</span> encoding</small></h4>
+    <h3>Interpreter example</h3>
+</div>
+
+```scala
+def show(exp: DBOps): String = exp match {
+    case SaveUser(user)   => s"Saving $user"
+    case FindUserById(id) => s"Looking for user with id $id"
+    case Transaction(ops) => "Executing:\n" + ops.mkString("\n")
+}
+```
+
+++++
+
+<div>
+    <h4 style="margin-bottom:0"><small><span class=blue>initial</span> encoding</small></h4>
+    <h3>Interpretations</h3>
+</div>
+<small style="color: grey">Function application</small>
+
+```scala
+val desc: String  = show(findId1)
+
+val ids: Seq[Int] = usedUserIds(transaction1)
+```
+
+++++
+
+## <span class=blue>final</span> encoding
+<small style="color: grey">Operations as functions</small>
+
+++++
+
+<div>
+    <h4 style="margin-bottom:0"><small><span class=blue>final</span> encoding</small></h4>
+    <h3>Algebra</h3>
+</div>
+<small style="color: grey">Interface</small>
+
+```scala
+trait DBOps[T] {
+    def saveUser(user: User): T
+    def findUserById(id: Int): T
+    def transaction(ops: Seq[T]): T
+}
+```
+
+++++
+
+<div>
+    <h4 style="margin-bottom:0"><small><span class=blue>final</span> encoding</small></h4>
+    <h3>Expressions</h3>
+</div>
+<small style="color: grey">Functions</small>
+
+```scala
+def findId1[T](db: DBOps[T]): T = db.findUserById(1)
+
+def transaction1[T](db: DBOps[T]): T =
+    db.transaction(Seq(
+        db.saveUser(user1),
+        db.findUserById(user1.id)
+    ))
+```
+
+++++
+
+<div>
+    <h4 style="margin-bottom:0"><small><span class=blue>final</span> encoding</small></h4>
+    <h3>Interpreters</h3>
+</div>
+<small style="color: grey">Interface instances</small>
+
+```scala
+val show: DBOps[String]
+
+val usedUserIds: DBOps[Seq[Int]]
+```
+
+<small>potentially <span class="blue">implicit</span></small>
+
+++++
+
+<div>
+    <h4 style="margin-bottom:0"><small><span class=blue>final</span> encoding</small></h4>
+    <h3>Interpreter example</h3>
+</div>
+
+```scala
+val show: DBOps[String] = new DBOps[String] {
+    def saveUser(user: User): String =
+        s"Saving $user"
+    def findUserById(id: Int): String =
+        s"Looking for user with id $id"
+    def transaction(ops: Seq[String]): String =
+        "Executing:\n" + ops.mkString("\n")
+}
+```
+
+++++
+
+<div>
+    <h4 style="margin-bottom:0"><small><span class=blue>final</span> encoding</small></h4>
+    <h3>Interpretations</h3>
+</div>
+<small style="color: grey">Function application</small>
+
+```scala
+val desc: String  = findId1(show)
+
+val ids: Seq[Int] = transaction1(usedUserIds)
+```
+
+++++
+
+<table>
+    <tr>
+        <td></td>
+        <th class="blue">Initial</th>
+        <th class="blue">Final</th>
+    </tr>
+    <tr>
+        <th>Algebra</th>
+        <td>ADT</td>
+        <td>interface</td>
+    </tr>
+    <tr>
+        <th>Expresions</th>
+        <td>values</td>
+        <td>functions</td>
+    </tr>
+    <tr>
+        <th>Interpreters</th>
+        <td>functions</td>
+        <td>values</td>
+    </tr>
+    <tr>
+        <th>Interpretations</th>
+        <td>interpreter applied on expression</td>
+        <td>expression executed with interpreter</td>
+    </tr>
+</table>
+
+++++
+
+<span class="blue">Initial</span> encodes operations as data.
+<br>
+<span class="blue">Final</span> encodes operations as functions.
+
+
+----
+
+## <span class=blue>tagged</span> vs <span class=blue>tagless</span> encoding
+
+++++
+
+## <span class=blue>tagged</span> encoding
+
+Result encoded as an ADT
+
+```scala
+// Result ADT
+sealed trait Result
+case class FindByIdResult(user: Option[User])   extends Result
+case class SaveResult(id: Int)                  extends Result
+case class TransResult(subResults: Seq[Result]) extends Result
+```
+
+++++
+
+## tagged <span class=blue>initial</span> encoding
+
+<pre class="fragment"><code class="hljs lang-scala" data-noescape>// Initial interpreter
+def executeDBQuery(exp: DBOps): <mark>Result</mark>
+
+// Initial interpretation
+val r: <mark>Result</mark> = executeDBQuery(findById1)
+</code></pre>
+
+++++
+
+## tagged <span class=blue>final</span> encoding
+
+<pre class="fragment"><code class="hljs lang-scala" data-noescape>// Final interpreter
+val executeDBQuery: DBOps[<mark>Result</mark>]
+
+// Final interpretations
+val r: <mark>Result</mark> = findById1(executeDBQuery)
+</code></pre>
+
+
+
+++++
+
+### Working with <span class=blue>tagged</span> encoding
+
+Pattern matching of result
+
+```scala
+val result: Result = findById1(executeDBQuery)
+result match {
+  case FindByIdResult(userOpt) => ???
+  case _                       => ???
+}
+
+```
+
+++++
+
+## <span class=blue>tagless</span> encoding
+
+Algebra parametrized with result type
+
+++++
+
+## <span class=blue>tagless initial</span> encoding
+
+Operations as generic data (GADT)
+<div class="fragment">
+<pre><code class="hljs lang-scala" data-noescape>// Algebra
+sealed trait DBOps[<mark>Result</mark>]
+case class SaveUser(user: User)     extends DBOps[<mark>Int</mark>]
+case class FindUserById(id: Int)    extends DBOps[<mark>Option[User]</mark>]
+case class Transaction[HL](ops: HL) extends DBOps[<mark>HL</mark>]
+</code></pre>
+
+<pre><code class="hljs lang-scala" data-noescape>// Expressions
+val findId1: DBOps[<mark>Option[User]</mark>] = FindUserById(1)
+
+val saveMyUser: DBOps[<mark>Int</mark>] = SaveUser(myUser)
+</code></pre>
+</div>
+
+++++
+
+## <span class=blue>tagless initial</span> encoding
+
+Interpreters are also parametrized
+
+<pre><code class="hljs lang-scala" data-noescape>// Interpreters
+def show[<mark>T</mark>](exp: DBOps[<mark>T</mark>]): String
+def usedUserIds[<mark>T</mark>](exp: DBOps[<mark>T</mark>]): Seq[Int]<br>
+def executeDBQuery[<mark>T</mark>](exp: DBOps[<mark>T</mark>]): <mark>T</mark>
+def executeDBQueryAsync[<mark>T</mark>](exp: DBOps[<mark>T</mark>]): Task[<mark>T</mark>]
+</code></pre>
+<pre><code class="hljs lang-scala" data-noescape>// Interpretations
+val userOpt: Task[<mark>Option[User]</mark>] = executeDBQueryAsync(findId1)
+</code></pre>
+
+++++
+
+## <span class=blue>tagless final</span> encoding
+
+Operations as higher-kind interface
+
+<div class="fragment">
+    <pre><code class="hljs lang-scala" data-noescape>// Algebra
+trait DBOps[<mark>F[\_]</mark>] {
+    def saveUser(user: User): <mark>F[Int]</mark>
+    def findUserById(id: Int): <mark>F[Option[Int]]</mark>
+}
+</code></pre>
+
+    <pre><code class="hljs lang-scala" data-noescape>// Expressions
+def saveMyUser[<mark>F[_]</mark>](db: DBOps[<mark>F</mark>]): <mark>F[Int]</mark> =
+    db.saveUser(myUser)
+
+def findId1[<mark>F[_]</mark>](db: DBOps[<mark>F</mark>]): <mark>F[Option[User]]</mark> =
+    db.findUserById(1)
+</code></pre>
+</div>
+
+++++
+
+## <span class=blue>tagless final</span> encoding
+<small>Interpreters & Interpretations</small>
+
+<pre><code class="hljs lang-scala" data-noescape>// Interpreters
+// type Const[T, U] = T
+val show: DBOps[<mark>Const[String, ?]</mark>]
+val usedUserIds: DBOps[<mark>Const[Seq[Int], ?]</mark>]
+
+val executeDBQuery: DBOps[<mark>Id</mark>]
+val executeDBQueryAsync: DBOps[<mark>Task</mark>]
+</code></pre>
+
+<pre><code class="hljs lang-scala" data-noescape>// Interpretations
+val userOpt: Task[<mark>Option[User]</mark>] = findId1(executeDBQueryAsync)
+</code></pre>
+
+++++
+
+<table>
+    <tr>
+        <td></td>
+        <th class="blue">Tagged</th>
+        <th class="blue">Tagless</th>
+    </tr>
+    <tr>
+        <th>Algebra</th>
+        <td>plain</td>
+        <td>generic</td>
+    </tr>
+    <tr>
+        <th>Expresions</th>
+        <td>plain</td>
+        <td>generic</td>
+    </tr>
+    <tr>
+        <th>Interpreters</th>
+        <td>plain</td>
+        <td>generic</td>
+    </tr>
+    <tr>
+        <th>Interpretations</th>
+        <td>needs to be pattern-matched</td>
+        <td>properly typed</td>
+    </tr>
+</table>
+
+++++
+
+<span class="blue">Tagged</span> hides result type info inside result value.
+<br>
+<span class="blue">Tagless</span> encodes result type info in algebra signatures.
+
+----
+
+<h1 class="blue">Practice</h1>
+
+<small style="color: grey">a.k.a stuff I made out of experience (thin air)</small>
+
+----
+
+## <span class="blue">Why</span> would you want to use <span class="blue">Tagless final</span>?
+
+++++
+
+#### <span class="blue">Why</span> would you want to use <span class="blue">Tagless final</span>?
+
+<h3 class="fragment">testability</h3>
+<h3 class="fragment">effects tracking</h3>
+<h3 class="fragment">context polymorphism</h3>
+<h3 class="fragment">superpowers</h3>
+
+++++
+
+<h3 class="blue">testability</h3>
+
+Ability to test piece of logic in separation.
+
+```scala
+def communicateWithTheUser[F[_]: Console](): F[Unit] =
+    Console[F].println("Hello")
+```
+
+++++
+
+<h3 class="blue"><small>testability</small></h3>
+
+### OOP already have that!
+
+<pre style="width: 50%; text-align: center"><code class="hljs lang-scala">class MyService(dao: MyDao) {}
+</code></pre>
+
+
+++++
+
+<h3 class="blue">Effects tracking</h3>
+
+Ability to know what is being invoked based on types.
+
+```
+def communicateWithTheUser[F[_]: Console](): F[Unit]
+```
+
+++++
+
+<h3 class="blue"><small>Effects tracking</small></h3>
+
+### It can lie!
+
+<pre style="width: 60%"><code class="hljs lang-scala">def foo[F[_]]: F[Int] = {
+    println("BAR")
+    throw new RuntimeException("X")
+}
+</code></pre>
+
+++++
+
+<h3 class="blue">Context polymorphism</h3>
+
+Ability to reuse code for different wrapper types
+
+<small style="color: grey">E.g. Future, IO, Id, Try</small>
+
+<pre style="width: 70%; text-align: center"><code class="hljs lang-scala">def doStuff[F[_]: MyTypeclass]: F[Int]
+</code></pre>
+
+<small class="fragment" style="color: grey">But why would you even want that?</small>
+
+----
+
+<h3>Why do we need <br><span class="blue">Context polymorphism</span>?</h3>
+
+<pre style="width: 50%; text-align: center"><code class="hljs lang-scala">def doStuff[F[_]]: F[Int]
+</code></pre>
+
+++++
+
+<h3><span class="blue">Libraries</span> vs <span class="blue">Applications</span></h3>
+
+++++
+
+<h3><span class="blue">Libraries</span></h3>
+
+<div id="left" style="margin-left: 15%; width: 35%">
+    Properties:
+    <br>
+    <ul>
+        <li>highly generic</li>
+        <li>highly reusable</li>
+        <li>low level</li>
+    </ul>
+</div>
+<div id="right" style="text-align:left; margin-right: 15%; max-width: 35%; width: auto">
+    Examples:
+    <br>
+    <ul>
+        <li><a href="https://github.com/getquill/quill">Quill</a></li>
+        <li><a href="https://github.com/tpolecat/doobie">Doobie</a></li>
+        <li><a href="https://github.com/julienrf/endpoints">Endpoints</a></li>
+        <li><a href="https://github.com/softwaremill/sttp">sttp</a></li>
+        <li><a href="https://github.com/functional-streams-for-scala/fs2">fs2</a></li>
+        <li><a href="https://github.com/http4s/http4s">http4s</a></li>
+    </ul>
+</div>
+
+++++
+
+<h3><span class="blue">Applications</span></h3>
+
+<div id="left" style="margin-left: 0%; width: 50%">
+    Properties:
+    <br>
+    <ul>
+        <li>mostly business logic</li>
+        <li>very specific</li>
+        <li>not reusable</li>
+    </ul>
+</div>
+<div id="right" style="text-align:left; margin-right: 0%; max-width: 50%; width: auto">
+    Examples:
+    <br>
+    <ul>
+        <li>calculate taxes</li>
+        <li>persist user preferences</li>
+        <li>personalize ads</li>
+    </ul>
+</div>
+
+++++
+
+<h4><small><span class="blue">Context polymorphism</span> in <span class="blue">applications</span></small></h4>
+
+Many speakers are library authors with libraries in mind. Don't get biased.
+
+++++
+
+<h4><span class="blue">Context polymorphism</span> in <span class="blue">applications</span></h4>
+
+2 most important contextes:
+
+* <code class="blue">IO</code>/<code class="blue">Task</code>/<code class="blue">ZIO</code> - runtime
+* <code class="blue">Id</code>/<code class="blue">Try</code> - tests
+
+++++
+
+<h4><span class="blue">Context polymorphism</span> in <span class="blue">applications</span></h4>
+
+Synchronous tests are valuable
+
+Business logic rarely ever needs <code class="blue">IO</code>
+
+There are other use cases if you're <code class="blue">brave enough</code>
+
+----
+
+### <span class="blue">Why</span> would you want to use
+### <span class="blue">Tagless final</span> in <span class="blue">Application</span>?
+
+* <span class="fragment">better code <span class="blue">understandability</span> via effects tracking</span>
+* <span class="fragment">simple and synchronous <span class="blue">tests</span></span>
+* <span class="fragment">possibility to <span class="blue">change <code>IO</code></span></span>
+
+----
+
+#### Tip 1:
+## It's <span class="blue">not</span> for free
+
+<blockquote style="font-size:0.8em; color: grey; width: 100%">
+    <span class="blue">FP</span> in general and <span class="blue">Tagless Final</span> in particular are about <span class="blue">security</span> .
+    <br>
+    Code security and job security, both achieved via <span class="blue">code obfuscation</span> .
+    <footer style="text-align:left; font-size:0.6em">— Friend of mine</footer>
+</blockquote>
+
+++++
+
+<pre><code class="lang-scala hljs" style="font-size: 0.8em">trait UnsafeApi {
+    def jdbcCall(): Int
+}
+val u: UnsafeApi = ???
+</code></pre>
+
+<pre class="fragment"><code class="lang-scala hljs" style="font-size: 0.8em">import monix.eval.Task
+object SimpleSafeApi {
+    def safeJdbcCall(): Task[Int] = Task(u.jdbcCall())
+}
+</code></pre>
+
+<pre class="fragment"><code class="lang-scala hljs" style="font-size: 0.8em">import cats.{Defer, MonadError}
+
+object TFSafeApi {
+    def safeJdbcCall[F[_]]()(implicit
+        me: MonadError[F, Throwable],
+        d: Defer[F]): Task[Int] = {
+        d.defer(me.catchNonFatal(u.jdbcCall))
+    }
+}
+</code></pre>
+
+----
+
+#### Tip 2:
+### Use <span class="blue">modules</span> and <span class="blue">interfaces</span>
+
+## <small style="color:grey">So you can hide the implementation details</small>
+
+++++
+
+
+<h2><span class="blue">2.5</span> ways to encode <span class="blue">TF</span> in <span class="blue">Scala</span></h2>
+
+++++
+
+### Encoding 1: <span class="blue">Functions</span>
+
+```scala
+object Foo {
+    def findUser[F[_]: Monad: DBOps](id: String): F[User]
+}
+```
+
+++++
+
+### Encoding 2: <span class="blue">Modules</span>
+
+```scala
+class Foo[F[_]: Monad](db: DBOps[F]) {
+    def findUser(id: String): F[User]
+}
+```
+
+++++
+
+### Encoding 3: <span class="blue">Object algebras</span>
+
+```scala
+trait Foo {
+    type F[T]
+    implicit def monad: Monad[F]
+    def dbOps: DBOps[F]
+    def findUser(id: String): F[User]
+}
+```
+
+++++
+
+#### <small> Tip 2: Use <span class="blue">modules</span> and <span class="blue">interfaces</span></small>
+#### Start with the <span class="blue">interface</span>
+
+
+<pre style="font-size: 0.5em"><code class="hljs lang-scala">trait UsersService[F[_]] {
+    def authenticate(login: String, pass: String): F[Option[User]]
+}
+</code></pre>
+
+++++
+
+#### <small> Tip 2: Use <span class="blue">modules</span> and <span class="blue">interfaces</span></small>
+#### Implement it with a <span class="blue">class</span>
+
+<small>Use implicits for typeclasses and normal parameters for dependencies</small>
+
+<pre style="font-size: 0.5em"><code class="hljs lang-scala">class RealUsersService[F[_]: Monad](repo: UsersRepo[F])
+    extends UserService[F]
+{
+    def authenticate(login: String, pass: String): F[Option[User]]
+}
+</code></pre>
+
+++++
+
+#### <small> Tip 2: Use <span class="blue">modules</span> and <span class="blue">interfaces</span></small>
+#### Put it in a <span class="blue">companion object</span>
+
+<small>If there is only one implementation</small>
+
+<pre style="font-size: 0.5em"><code class="hljs lang-scala">trait UserService[F[_]] { ... }
+
+object UserService {
+    class Default[F[_]](dao: UserDao[F]) extends UserService[F] {
+        ...
+    }
+}
+</code></pre>
+
+----
+
+#### Tip 3:
+### <span class="blue">Don't</span> go beyond <span class="blue">Monad Error</span>
+
+### <small style="color:grey">Unless your whole team knows what you're doing</small>
+
+++++
+
+#### <small>Tip 3: <span class="blue">Don't</span> go beyond <span class="blue">Monad Error</span></small>
+
+<pre style="font-size: 0.5em"><code class="hljs lang-scala" data-trim data-noescape>trait UserService[F[_]] { ... }
+
+object UserService {
+    class Default[F[_]: <mark>Monad</mark>](dao: UserDao[F]) extends UserService[F] {
+        ...
+    }
+}
+</code></pre>
+
+++++
+
+<img src="img/cats.png" style="position: fixed; top:0; left:0; min-width: 100%; min-height: 100%; max-height: 100%; margin: 0; border: none; "/>
+
+++++
+
+<img src="img/movie-monster-size-comparison1.jpg">
+
+++++
+
+#### <small>Tip 3: <span class="blue">Don't</span> go beyond <span class="blue">Monad Error</span></small>
+#### Use exact type directly when things get complicated
+
+<pre style="font-size: 0.5em"><code class="hljs lang-scala" data-trim data-noescape>trait UserService[F[_]] { ... }
+
+object UserService {
+    class Default(dao: UserDao[Task]) extends UserService[Task] {
+        ...
+    }
+}
+</code></pre>
+
+----
+
+#### Tip 4:
+### <span class="blue">Don't</span> use <span class="blue">monad transformers</span>
+
+### <small style="color:grey">In public interfaces and global context</small>
+
+++++
+
+#### <small>Tip 4: <span class="blue">Don't</span> use <span class="blue">monad transformers</span> </small>
+
+<ul>
+    <li class="fragment">
+        <span class="blue" style="font-weight: bold">EitherT</span> in context = global error type
+    </li>
+    <li class="fragment">
+        <span class="blue" style="font-weight: bold">StateT</span>  in context = global state
+    </li>
+    <li class="fragment">
+        <span class="blue" style="font-weight: bold">ReaderT</span> in context = global dependencies
+    </li>
+</ul>
+
+++++
+
+#### <small>Tip 4: <span class="blue">Don't</span> use <span class="blue">monad transformers</span> </small>
+
+## Use them locally!
+
+E.g. <span class="blue">`OptionT`</span> and <span class="blue">`EitherT`</span> are perfect for short-circuiting the computation
+
+++++
+
+#### <small>Tip 4: <span class="blue">Don't</span> use <span class="blue">monad transformers</span> </small>
+
+#### Use them locally! - example
+
+```
+def getUser(id: UserId): Task[Option[User]]
+def getAddress(usr: User): Task[Option[Address]]
+def getWeatherForecast(usr: Address): Task[Option[Forecast]]
+
+def getWeatherForUser(id: UserId) = {
+    (for {
+        usr      <- OptionT(getUser(id))
+        address  <- OptionT(getAddress(usr))
+        forecast <- OptionT(getWeatherForecast(address))
+    } yield forecast).value
+}
+```
+
+Monad transformers play well with concrete IO types
+
+----
+
+#### Tip 5:
+### Use (<span class="blue">co</span>)<span class="blue">variance</span>
+
+## <small style="color:grey">Unless you have good reason not to</small>
+
+++++
+
+#### <small>Tip 5: Use (<span class="blue">co</span>)<span class="blue">variance</span></small>
+<span class="blue">`F[_]`</span> will be an <span class="blue">`IO`</span> and every `IO` is <span class="blue">covaraint</span>.
+
+<pre style="font-size: 0.5em"><code class="hljs lang-scala" data-trim data-noescape>
+class Default[F[<mark>+</mark>_]:Monad] {
+    ...
+}
+</code></pre>
+
+----
+
+#### Tip 6:
+### <span class="blue">Explore</span> the possibilities
+
+## <small style="color:grey">There is always more</small>
+
+++++
+
+#### <small>Tip 5: <span class="blue">Explore</span> the possibilities</small>
+
+### Example: <span class="blue">cats-tagless</span> & <span class="blue">slick</span>
+
+++++
+
+#### <small>Exploring example: <span class="blue">cats-tagless</span> & <span class="blue">slick</span></small>
+
+```scala
+trait Repo[F[_]]{
+    def getUser(id: Int): F[Option[User]]
+}
+```
+
+```scala
+object SlickRepo extends Repo[DBIO]{
+    def getUser(id: Int): DBIO[Option[Int]] =
+        users.filter(_.id === id).result
+}
+```
+
+++++
+
+#### <small>Exploring example: <span class="blue">cats-tagless</span> & <span class="blue">slick</span></small>
+
+
+```scala
+import cats.tagless.autoFunctorK
+@autoFunctorK
+trait Repo[F[_]]{ ... }
+```
+
+```scala
+def dbioToTask[Profile <: BasicProfile](
+    dbCfg: DatabaseConfig[Profile],
+    scheduler: Scheduler = Scheduler.io("db-scheduler")
+): DBIO ~> Task = {
+  λ[DBIO ~> Task](dbio => Task.deferFuture(dbCfg.db.run(dbio))
+    .executeOn(scheduler))
+}
+```
+
+notes:
+</:> intellij fix;/
+
+```scala
+def convert(
+    dbCfg: DatabaseConfig[MyProfile],
+    dbioRepo: Repo[DBIO]): Repo[Task] = {
+  import cats.tagless.syntax.all._
+  dbioRepo.mapK(dbioToTask(dbCfg))
+}
+```
+
+++++
+
+#### <small>Exploring example: <span class="blue">cats-tagless</span> & <span class="blue">slick</span></small>
+
+#### The same pattern can be used to enforce access control for the whole service
+
+```
+val ensureAccess =
+    λ[zio.Task ~> zio.RIO[AuthCtx, *]](
+        x => ZIO.accessM[AuthCtx](_.ensureAccess) *> x
+    )
+
+def secure(s: Service[zio.Task]): Service[zio.RIO[AuthCtx, *]] = {
+  s.mapK(dbioToTask))
+}
+
+```
+
+----
+
+<!-- -- data-background-color="#0074D9" -->
+
+<ul>
+    <li class="fragment"><h2>Dont follow Haskell blindly</h2></li>
+    <li class="fragment"><h2>Use TF in libraries!*</h2></li>
+    <li class="fragment"><h2>Use TF in apps... maybe</h2></li>
+    <li class="fragment"><h2>Try things out</h2></li>
+</ul>
+
+++++
+
+## Few more words about <span class="blue">TF in libraries</span>
+
+<span class="blue">TL;DL</span>: TF gives you wider userbase, concrete effect type gives bettter UX/ergonomy
+
+++++
+
+## Few more words about <span class="blue">TF in applications</span>
+
+<span class="blue">TL;DL:</span> TF enables you to do some interesting things, so its good to know it even if you dont use it
+
+----
+
+## Thanks!
+
+Wojtek Pituła - [@Krever01](https://twitter.com/Krever01)
+
+<div>
+    [w.pitula.me/presentations](http://w.pitula.me/presentations/2019-09-scalaitaly/index.html)
+</div>
+
+
+
