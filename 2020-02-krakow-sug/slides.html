@@ -19,6 +19,35 @@
     <small><a href="http://w.pitula.me/presentations">w.pitula.me/presentations</small>
 </div>
 
+++++
+
+#### Questions?
+## <a href="https://sli.do/ksug">sli.do/ksug</a>
+
+++++
+
+#### Me?
+
+<small>
+    <ul>
+        <li>working hard on <span class="blue">NOT doing things</span></li>
+        <li>with Scala for <span class="blue">5+</span> years now</li>
+        <li>translated <span class="blue">FP book once</span>, lets not talk about it</li>
+        <li>Paid time:
+            <ul>
+                <li>writing <span class="blue">Scala</span> &  <span class="blue">TS</span> for Sony Electronics</li>
+            </ul>
+        </li>
+        <li>Free time:
+            <ul>
+                <li>writing <span class="blue">Scala</span> &  <span class="blue">TS</span> for myself & OSS</li>
+                <li><span class="blue">talking</span> about it</li>
+                <li><span class="blue">ranting</span> with other sick people on <span class="blue">scala-poland.slack.com</span></li>
+            </ul>
+        </li>
+    </ul>
+</small>
+
 ----
 
 <img src="img/fp-cry.jpeg"/>
@@ -383,7 +412,6 @@ val r: <mark>Result</mark> = findById1(executeDBQuery)
 </code></pre>
 
 
-
 ++++
 
 ### Working with <span class=blue>tagged</span> encoding
@@ -545,7 +573,7 @@ Ability to test piece of logic in separation.
 
 ```scala
 def communicateWithTheUser[F[_]: Console](): F[Unit] =
-    Console[F].println("Hello")
+Console[F].println("Hello")
 ```
 
 ++++
@@ -702,7 +730,8 @@ There are other use cases if you're <code class="blue">brave enough</code>
 ## It's <span class="blue">not</span> for free
 
 <blockquote style="font-size:0.8em; color: grey; width: 100%">
-    <span class="blue">FP</span> in general and <span class="blue">Tagless Final</span> in particular are about <span class="blue">security</span> .
+    <span class="blue">FP</span> in general and <span class="blue">Tagless Final</span> in particular are about <span
+        class="blue">security</span> .
     <br>
     Code security and job security, both achieved via <span class="blue">code obfuscation</span> .
     <footer style="text-align:left; font-size:0.6em">— Friend of mine</footer>
@@ -751,7 +780,7 @@ object TFSafeApi {
 
 ```scala
 object Foo {
-    def findUser[F[_]: Monad: DBOps](id: String): F[User]
+def findUser[F[_]: Monad: DBOps](id: String): F[User]
 }
 ```
 
@@ -761,7 +790,7 @@ object Foo {
 
 ```scala
 class Foo[F[_]: Monad](db: DBOps[F]) {
-    def findUser(id: String): F[User]
+def findUser(id: String): F[User]
 }
 ```
 
@@ -771,10 +800,10 @@ class Foo[F[_]: Monad](db: DBOps[F]) {
 
 ```scala
 trait Foo {
-    type F[T]
-    implicit def monad: Monad[F]
-    def dbOps: DBOps[F]
-    def findUser(id: String): F[User]
+type F[T]
+implicit def monad: Monad[F]
+def dbOps: DBOps[F]
+def findUser(id: String): F[User]
 }
 ```
 
@@ -841,7 +870,8 @@ object UserService {
 
 ++++
 
-<img src="img/cats.png" style="position: fixed; top:0; left:0; min-width: 100%; min-height: 100%; max-height: 100%; margin: 0; border: none; "/>
+<img src="img/cats.png"
+     style="position: fixed; top:0; left:0; min-width: 100%; min-height: 100%; max-height: 100%; margin: 0; border: none; "/>
 
 ++++
 
@@ -884,7 +914,7 @@ object UserService {
         <span class="blue" style="font-weight: bold">EitherT</span> in context = global error type
     </li>
     <li class="fragment">
-        <span class="blue" style="font-weight: bold">StateT</span>  in context = global state
+        <span class="blue" style="font-weight: bold">StateT</span> in context = global state
     </li>
     <li class="fragment">
         <span class="blue" style="font-weight: bold">ReaderT</span> in context = global dependencies
@@ -897,7 +927,8 @@ object UserService {
 
 ## Use them locally!
 
-E.g. <span class="blue">`OptionT`</span> and <span class="blue">`EitherT`</span> are perfect for short-circuiting the computation
+E.g. <span class="blue">`OptionT`</span> and <span
+        class="blue">`EitherT`</span> are perfect for short-circuiting the computation
 
 ++++
 
@@ -911,11 +942,11 @@ def getAddress(usr: User): Task[Option[Address]]
 def getWeatherForecast(usr: Address): Task[Option[Forecast]]
 
 def getWeatherForUser(id: UserId): Task[Option[Forecast]] = {
-    (for {
-        usr      <- OptionT(getUser(id))
-        address  <- OptionT(getAddress(usr))
-        forecast <- OptionT(getWeatherForecast(address))
-    } yield forecast).value
+(for {
+usr      <- OptionT(getUser(id))
+address  <- OptionT(getAddress(usr))
+forecast <- OptionT(getWeatherForecast(address))
+} yield forecast).value
 }
 ```
 
@@ -961,14 +992,14 @@ class Default[F[<mark>+</mark>_]:Monad] {
 
 ```scala
 trait Repo[F[_]]{
-    def getUser(id: Int): F[Option[User]]
+def getUser(id: Int): F[Option[User]]
 }
 ```
 
 ```scala
 object SlickRepo extends Repo[DBIO]{
-    def getUser(id: Int): DBIO[Option[Int]] =
-        users.filter(_.id === id).result
+def getUser(id: Int): DBIO[Option[Int]] =
+users.filter(_.id === id).result
 }
 ```
 
@@ -984,24 +1015,25 @@ trait Repo[F[_]]{ ... }
 ```
 
 ```scala
-def dbioToTask[Profile <: BasicProfile](
-    dbCfg: DatabaseConfig[Profile],
-    scheduler: Scheduler = Scheduler.io("db-scheduler")
-): DBIO ~> Task = {
-  λ[DBIO ~> Task](dbio => Task.deferFuture(dbCfg.db.run(dbio))
+def dbioToTask[Profile
+<: BasicProfile](
+   dbCfg: DatabaseConfig[Profile],
+   scheduler: Scheduler=Scheduler.io("db-scheduler")
+   ): DBIO ~> Task = {
+    λ[DBIO ~> Task](dbio => Task.deferFuture(dbCfg.db.run(dbio))
     .executeOn(scheduler))
-}
-```
+    }
+    ```
 
-notes:
+    notes:
 </:> intellij fix;/
 
 ```scala
 def convert(
-    dbCfg: DatabaseConfig[MyProfile],
-    dbioRepo: Repo[DBIO]): Repo[Task] = {
-  import cats.tagless.syntax.all._
-  dbioRepo.mapK(dbioToTask(dbCfg))
+dbCfg: DatabaseConfig[MyProfile],
+dbioRepo: Repo[DBIO]): Repo[Task] = {
+import cats.tagless.syntax.all._
+dbioRepo.mapK(dbioToTask(dbCfg))
 }
 ```
 
@@ -1013,12 +1045,12 @@ def convert(
 
 ```
 val ensureAccess =
-    λ[zio.Task ~> zio.RIO[AuthCtx, *]](
-        x => ZIO.accessM[AuthCtx](_.ensureAccess) *> x
-    )
+λ[zio.Task ~> zio.RIO[AuthCtx, *]](
+x => ZIO.accessM[AuthCtx](_.ensureAccess) *> x
+)
 
 def secure(s: Service[zio.Task]): Service[zio.RIO[AuthCtx, *]] = {
-  s.mapK(dbioToTask))
+s.mapK(dbioToTask))
 }
 
 ```
