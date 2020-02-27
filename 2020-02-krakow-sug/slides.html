@@ -21,6 +21,22 @@
 
 ----
 
+<img src="img/fp-cry.jpeg"/>
+
+++++
+
+#### <span class="blue">TL;DL</span>
+### Should you use tagless final?
+
+++++
+
+#### How would I know?
+
+<img src="img/dont-know.jpg"/>
+
+
+----
+
 ## <span class=blue>Agenda</span>?
 
 <br/>
@@ -39,8 +55,8 @@
     <small>Part 2:</small>
     <h2>Practice</h2>
     <ul>
-        <li>possibly incorrect</li>
-        <li>possibly useful</li>
+        <li>probably incorrect</li>
+        <li>possibly slightly less useless</li>
     </ul>
 </div>
 
@@ -180,7 +196,7 @@ def usedUserIds(exp: DBOps): Seq[Int]
 def show(exp: DBOps): String = exp match {
     case SaveUser(user)   => s"Saving $user"
     case FindUserById(id) => s"Looking for user with id $id"
-    case Transaction(ops) => "Executing:\n" + ops.mkString("\n")
+    case Transaction(ops) => "Executing:" + ops.mkString(",")
 }
 ```
 
@@ -198,7 +214,7 @@ val desc: String  = show(findId1)
 val ids: Seq[Int] = usedUserIds(transaction1)
 ```
 
-++++
+----
 
 ## <span class=blue>final</span> encoding
 <small style="color: grey">Operations as functions</small>
@@ -262,12 +278,16 @@ val usedUserIds: DBOps[Seq[Int]]
 
 ```scala
 val show: DBOps[String] = new DBOps[String] {
+
     def saveUser(user: User): String =
         s"Saving $user"
+
     def findUserById(id: Int): String =
         s"Looking for user with id $id"
+
     def transaction(ops: Seq[String]): String =
         "Executing:\n" + ops.mkString("\n")
+
 }
 ```
 
@@ -379,7 +399,7 @@ result match {
 
 ```
 
-++++
+----
 
 ## <span class=blue>tagless</span> encoding
 
@@ -564,7 +584,7 @@ def communicateWithTheUser[F[_]: Console](): F[Unit]
 
 <h3 class="blue">Context polymorphism</h3>
 
-Ability to reuse code for different wrapper types
+Ability to reuse code for different context types
 
 <small style="color: grey">E.g. Future, IO, Id, Try</small>
 
@@ -666,6 +686,15 @@ There are other use cases if you're <code class="blue">brave enough</code>
 * <span class="fragment">better code <span class="blue">understandability</span> via effects tracking</span>
 * <span class="fragment">simple and synchronous <span class="blue">tests</span></span>
 * <span class="fragment">possibility to <span class="blue">change <code>IO</code></span></span>
+
+++++
+
+## <span class="blue">Or...</span>
+
+### If your code relies on
+
+`Kleisli[StateT[EitherT[IO, MyErr, *], MyState, *], MyReqs, *]`
+
 
 ----
 
@@ -842,6 +871,13 @@ object UserService {
 ++++
 
 #### <small>Tip 4: <span class="blue">Don't</span> use <span class="blue">monad transformers</span> </small>
+#### You remember this guy, right?
+
+`Kleisli[StateT[EitherT[IO, MyErr, *], MyState, *], MyReqs, *]`
+
+
+++++
+
 
 <ul>
     <li class="fragment">
@@ -874,7 +910,7 @@ def getUser(id: UserId): Task[Option[User]]
 def getAddress(usr: User): Task[Option[Address]]
 def getWeatherForecast(usr: Address): Task[Option[Forecast]]
 
-def getWeatherForUser(id: UserId) = {
+def getWeatherForUser(id: UserId): Task[Option[Forecast]] = {
     (for {
         usr      <- OptionT(getUser(id))
         address  <- OptionT(getAddress(usr))
@@ -903,6 +939,9 @@ class Default[F[<mark>+</mark>_]:Monad] {
 }
 </code></pre>
 
+<small style="color:grey">Unless you use monad transformers, which are not</small>
+
+
 ----
 
 #### Tip 6:
@@ -918,7 +957,7 @@ class Default[F[<mark>+</mark>_]:Monad] {
 
 ++++
 
-#### <small>Exploring example: <span class="blue">cats-tagless</span> & <span class="blue">slick</span></small>
+#### <small>Exploring examples: <span class="blue">cats-tagless</span> & <span class="blue">slick</span></small>
 
 ```scala
 trait Repo[F[_]]{
@@ -935,7 +974,7 @@ object SlickRepo extends Repo[DBIO]{
 
 ++++
 
-#### <small>Exploring example: <span class="blue">cats-tagless</span> & <span class="blue">slick</span></small>
+#### <small>Exploring examples: <span class="blue">cats-tagless</span> & <span class="blue">slick</span></small>
 
 
 ```scala
@@ -968,9 +1007,9 @@ def convert(
 
 ++++
 
-#### <small>Exploring example: <span class="blue">cats-tagless</span> & <span class="blue">slick</span></small>
+#### Exploring examples
 
-#### The same pattern can be used to enforce access control for the whole service
+#### Another one: <span class="blue">access control</span>
 
 ```
 val ensureAccess =
@@ -991,7 +1030,7 @@ def secure(s: Service[zio.Task]): Service[zio.RIO[AuthCtx, *]] = {
 <ul>
     <li class="fragment"><h2>Dont follow Haskell blindly</h2></li>
     <li class="fragment"><h2>Use TF in libraries!*</h2></li>
-    <li class="fragment"><h2>Use TF in apps... maybe</h2></li>
+    <li class="fragment"><h2>Use TF in apps... maybe*</h2></li>
     <li class="fragment"><h2>Try things out</h2></li>
 </ul>
 
