@@ -1,0 +1,716 @@
+<div id=left-6 style="font-family: ldr-ofer-michael">
+    <h2 style="font-size:1.4em">Love | <span style="color: #980000">Hate</span></h2>
+    <hr style="width:50%;height:0.15em;background-color: #eee;">
+    <h2 style="font-size:2.3em">Workflows</h2>
+</div>
+
+----
+
+### What this presentation <span style="color: #980000">is</span> and <span style="color: #980000">isn't</span>
+
+<span style="font-size: 0.7em;color: gray">Expectations management</span>
+
+++++
+
+### What this presentation <span style="color: #980000">isn't</span>
+
+* tutorial
+* deep dive
+* scala heavy
+
+++++
+
+### What this presentation <span style="color: #980000">is</span>
+
+* problem introduction
+* (shallow) solutions comparison
+* battle report
+
+++++
+
+### Agenda?
+
+* What is a workflow
+* Why I am talking about this
+* What are the main challenges
+* How different solutions help with them
+* Why everything is broken
+* Summary
+
+
+----
+
+## What is a workflow?
+
+++++
+
+<h2 style="font-size: 0.5em; margin: 0.2em">What is a workflow?</h2>
+
+### Let's start with synonyms
+
+
+* long-running process
+* workflow
+* persistent state machine
+* business process
+* service orchestration
+* process orchestration
+
+++++
+
+<h2 style="font-size: 0.5em; margin: 0.2em">What is a workflow?</h2>
+
+### Short Definition
+
+> Series of steps with internal state that has to survive a system restart
+
+<span style="font-size: 0.7em;color: gray">Intuitive and imprecise</span>
+
+++++
+
+<h2 style="font-size: 0.5em; margin: 0.2em">What is a workflow?</h2>
+
+### Longer definition
+
+It's a process that
+
+* spans from few seconds to few weeks
+* involves waiting, e.g. for human action or async response
+* has internal state passed between steps
+
+<span style="font-size: 0.7em;color: gray">Still not perfect but 🤷</span>
+
+++++
+
+<h2 style="font-size: 0.5em; margin: 0.2em">What is a workflow?</h2>
+
+### Examples
+
+++++
+
+<h2 style="font-size: 0.5em; margin: 0.2em">What is a workflow: Examples</h2>
+
+### Shopping cart
+
+* Select product
+* Accept payment
+* Prepare
+* Ship
+
+++++
+
+<h2 style="font-size: 0.5em; margin: 0.2em">What is a workflow: Examples</h2>
+
+### Money payout
+
+* Initiate
+* Put funds on hold
+* Check
+* Review by human
+* Release
+
+++++
+
+<h2 style="font-size: 0.5em; margin: 0.2em">What is a workflow: Examples</h2>
+
+### Install software
+
+* Connect to remote machine
+* Trigger installation
+* Provision license
+* Check
+* Notify IT support if something went wrong
+* Wait for confirmation
+
+----
+
+## Why am I talking about this?
+
+++++
+
+### 4+ years
+### 2 companies
+### <span style="color: #980000">3 products</span>
+### dozens of processes
+
+++++
+
+#### Beginning
+
+### Security automation at
+
+![sony](resources/sony-logo-200.png)
+
+++++
+
+#### Next step
+
+### Lean process automation
+
+\+ Self-service
+
+<span style="font-size: 0.7em;color: gray">Spoiler: not the greatest idea</span>
+
+++++
+
+### Now
+
+#### Transactions processing at
+
+<img src="resources/Logo-Light-Flat copy.png" alt="">
+
+----
+
+## Biggest "Challenges"
+
+#### of working with workflows
+
+++++
+
+### Biggest Challenges
+
+* Versioning
+* Overview
+* Introspection
+* Recovery
+
+++++
+
+<h2 style="font-size: 0.5em; margin: 0.2em">Biggest challenges</h2>
+
+### Versioning
+
+What happens to the processes in progress when process definition changes?
+
+++++
+
+<h2 style="font-size: 0.5em; margin: 0.2em">Biggest challenges</h2>
+
+### Overview
+
+How the process looks like?
+
+> Every sufficiently complicated workflow is not understandable without graphical representation
+
+++++
+
+<h2 style="font-size: 0.5em; margin: 0.2em">Biggest challenges</h2>
+
+### Introspection
+
+What is the state of the process? Why did it went given path?
+
+++++
+
+<h2 style="font-size: 0.5em; margin: 0.2em">Biggest challenges</h2>
+
+### Recovery
+
+How to get back to the last state after system restart?
+
+----
+
+## Solutions
+
+++++
+
+
+##### Before we begin
+
+++++
+
+<!-- -- .section: data-background="#980000" -->
+### Don't do it to yourself
+
+++++
+
+##### But if you really have to
+
+++++
+
+#### Solutions
+
+### <span style="color: #980000">Camunda</span> vs <span style="color: #980000">Temporal</span>
+### vs <span style="color: #980000">Raw Event sourcing</span>
+
+++++
+
+<h2 style="font-size: 0.5em; margin: 0.2em">Solutions</h2>
+
+#### What to expect?
+
+* How <span style="color: #980000">X</span> works
+* Why it doesn't
+* How it tries to solve main challenges
+
+----
+
+<h2 style="font-size: 0.5em; margin: 0.2em">Solution 1</h2>
+
+## <span style="color: #980000">Camunda</span>
+
+++++
+
+
+<h2 style="font-size: 0.5em; margin: 0.2em">Camunda: how it works</h2>
+
+##### Step 0
+### Choose between versions
+### 7 & 8
+
+They recently switched the distribution model
+
+
+++++
+
+
+<h2 style="font-size: 0.5em; margin: 0.2em">Camunda: how it works</h2>
+
+##### Step 1
+### Define the workflow
+
+As XML, through:
+
+* Graphical Editor
+* Java API
+* Write by hand?
+
+++++
+
+<img src="resources/camunda-modeler.png">
+
+++++
+
+
+```java
+Bpmn.createProcess()
+  .startEvent()
+  .userTask()
+  .exclusiveGateway()
+    .condition("approved", "${approved}")
+    .serviceTask()
+    .endEvent()
+  .moveToLastGateway()
+    .condition("not approved", "${!approved}")
+    .scriptTask()
+    .endEvent()
+  .done();
+```
+
+++++
+
+<h2 style="font-size: 0.5em; margin: 0.2em">Camunda: how it works</h2>
+
+##### Step 2
+### Integrate with the backend
+
+1. Your service polls the tasks
+2. Does the work
+3. Updates the workflow state
+
+<span style="font-size: 0.7em;color: gray">All through REST API</span>
+
+++++
+
+<img src="resources/camunda-service-task.png">
+
+++++
+
+<h2 style="font-size: 0.5em; margin: 0.2em">Camunda: how it works</h2>
+
+##### Step 3
+### Deploy to camunda server
+
+XML has to be deployed to camunda instance
+
+This server handles workflow state and lifecycle
+
+++++
+
+<img src="resources/camunda-arch-7-8.png">
+
+----
+
+<h2 style="font-size: 1em; margin: 0.2em; color: #980000">Camunda</h2>
+
+### main challenges
+
+++++
+
+<h2 style="font-size: 0.5em; margin: 0.2em">Camunda: main challenges</h2>
+
+### Versioning
+
+* Camunda keeps all workflow versions by default
+* Old workflow instances stay on their version
+* Can be migrated through dedicated api
+
+++++
+
+<h2 style="font-size: 0.5em; margin: 0.2em">Camunda: main challenges</h2>
+
+### Overview
+
+* Camunda workflow XMLs are renderable
+* Rendered version is the main way to look at them
+* Camunda server comes with the GUI and shows the workflows
+
+++++
+
+<h2 style="font-size: 0.5em; margin: 0.2em">Camunda: main challenges</h2>
+
+### Introspection
+
+* Camunda server allows you to browse all instances
+* You can access all variables as well as all changes and state transitions
+* You can even modify the workflow (🤡)
+
+++++
+
+<img src="resources/camunda-instance.png">
+
+++++
+
+<h2 style="font-size: 0.5em; margin: 0.2em">Camunda: main challenges</h2>
+
+### Recovery
+
+* Camunda server restores all state upon its restart
+
+----
+
+<h2 style="font-size: 0.5em; margin: 0.2em">Camunda</h2>
+
+### Problems
+
+++++
+
+<h2 style="font-size: 0.5em; margin: 0.2em">Camunda: problems</h2>
+
+#### Its easy to create an invalid workflow
+
+So you have to create a linter
+
+++++
+
+<h2 style="font-size: 0.5em; margin: 0.2em">Camunda: problems</h2>
+
+#### Graphical editor will make your devs <span style="color: #980000">very</span> angry
+
+So you have to create a dsl
+
+++++
+
+<h2 style="font-size: 0.5em; margin: 0.2em">Camunda: problems</h2>
+
+#### Workflows are fragile
+
+So you have to create a testing infrastructure
+
+<span style="font-size: 0.7em;color: gray">A lot is covered by camunda sdk, but not everything</span>
+
+++++
+
+<h2 style="font-size: 0.5em; margin: 0.2em">Camunda: problems</h2>
+
+#### Workflows have global mutable & dynamiac state
+
+So your DSL have to be crazy complicated
+
+++++
+
+#### I can go like that till tomorrow
+
+++++
+
+<h2 style="font-size: 0.5em; margin: 0.2em">Camunda: problems</h2>
+
+### Bottom line
+
+##### Its great if you have <span style="color: #980000">enough load and resources</span>
+##### To pay for the <span style="color: #980000">tooling and complexity</span>
+
+----
+
+<h2 style="font-size: 0.5em; margin: 0.2em">Solution 2</h2>
+
+## <span style="color: #980000">Temporal</span>
+
+++++
+
+<h2 style="font-size: 0.5em; margin: 0.2em">Temporal: how it works</h2>
+
+##### Step 1
+### You define your activities
+
+Interface + implementation
+
+++++
+
+```java
+@ActivityInterface
+public interface GreetingActivities {
+    String composeGreeting(String greeting, String language);
+}
+```
+
+```java
+// Implementation for the GreetingActivities interface example from in the previous section
+static class GreetingActivitiesImpl implements GreetingActivities {
+   @Override
+   public String composeGreeting(String greeting, String name) {
+     return greeting + " " + name + "!";
+   }
+}
+```
+
+++++
+
+<h2 style="font-size: 0.5em; margin: 0.2em">Temporal: how it works</h2>
+
+##### Step 2
+### You define your workflow
+
+Series of:
+* in-process, deterministic computations
+* calls to activities interface
+
+\+ interface to invoke it
+
+++++
+
+```java
+public class FileProcessingWorkflowImpl implements FileProcessingWorkflow {
+
+    private final FileProcessingActivities activities;
+
+    public FileProcessingWorkflowImpl() {
+        this.activities = Workflow.newActivityStub(
+                FileProcessingActivities.class,
+                ActivityOptions.newBuilder()
+                        .setStartToCloseTimeout(Duration.ofHours(1))
+                        .build());
+    }
+
+    @Override
+    public void processFile(Arguments args) {
+        String localName = null;
+        String processedName = null;
+        try {
+            localName = activities.download(args.getSourceBucketName(), args.getSourceFilename());
+            processedName = activities.processFile(localName);
+            activities.upload(args.getTargetBucketName(), args.getTargetFilename(), processedName);
+        } finally {
+            if (localName != null) {
+                activities.deleteLocalFile(localName);
+            }
+            if (processedName != null) {
+                activities.deleteLocalFile(processedName);
+            }
+        }
+    }
+    // ...
+}
+```
+
+++++
+
+<h2 style="font-size: 0.5em; margin: 0.2em">Temporal: how it works</h2>
+
+##### Step 3
+### Run your servers
+
+* activities server (worker)
+* workflow server (worker)
+* temporal server
+
+----
+
+<h2 style="font-size: 1em; margin: 0.2em">Temporal</h2>
+
+### main challenges
+
+++++
+
+<h2 style="font-size: 0.5em; margin: 0.2em">Temporal: main challenges</h2>
+
+### Versioning
+
+* new version must behave exactly the same for old workflow instances
+* you need to put version-based conditionals to alter the behaviour
+* you can remove old code when you don't have any running workflow instances
+
+++++
+
+```java
+int version = Workflow.getVersion("checksumAdded", Workflow.DEFAULT_VERSION, 1);
+if (version == Workflow.DEFAULT_VERSION) {
+    activities.upload(args.getTargetBucketName(), args.getTargetFilename(), processedName);
+} else {
+    long checksum = activities.calculateChecksum(processedName);
+    activities.uploadWithChecksum(
+        args.getTargetBucketName(), args.getTargetFilename(), processedName, checksum);
+}
+```
+
+++++
+
+<h2 style="font-size: 0.5em; margin: 0.2em">Temporal: main challenges</h2>
+
+### Overview
+
+Nope
+
+<span style="font-size: 0.7em;color: gray">Only through code</span>
+<br>
+<span style="font-size: 0.7em;color: gray">Unless you build a DSL on top</span>
+
+++++
+
+<h2 style="font-size: 0.5em; margin: 0.2em">Temporal: main challenges</h2>
+
+### Introspection
+
+Temporal provides UI showing all events registered during instance execution
+
+++++
+
+<img src="resources/temporal-ui-workflow.png">
+
+++++
+
+<h2 style="font-size: 0.5em; margin: 0.2em">Temporal: main challenges</h2>
+
+### Recovery
+
+* event-sourced in nature
+* workflow code runs as usual
+* during recovery all already executed activities are replaced with previous output
+
+----
+
+<h2 style="font-size: 0.5em; margin: 0.2em">Temporal</h2>
+
+### Problems
+
+++++
+
+<h2 style="font-size: 0.5em; margin: 0.2em">Temporal: problems</h2>
+
+#### Java SDK is Java-ish (🪄🪄🪄)
+
+And it's hard to cover with abstraction layer
+
+++++
+
+<h2 style="font-size: 0.5em; margin: 0.2em">Temporal: problems</h2>
+
+#### No migrations
+
+++++
+
+<h2 style="font-size: 0.5em; margin: 0.2em">Temporal: problems</h2>
+
+#### No overview
+
+++++
+
+<h2 style="font-size: 0.5em; margin: 0.2em">Temporal: problems</h2>
+
+### Bottom line
+
+##### It's much better for <span style="color: #980000">creating workflows</span>
+##### It's much worse for <span style="color: #980000">maintenance and operations</span>
+
+----
+
+<h2 style="font-size: 0.5em; margin: 0.2em">Solution 3</h2>
+
+## <span style="color: #980000">Custom Event Sourcing</span>
+
+++++
+
+<h2 style="font-size: 0.5em; margin: 0.2em">Custom Event Sourcing: How</h2>
+
+##### Step 1
+### Take an event-sourcing library
+
+* akka <span style="color: gray">(under expensive license right now)</span>
+* aecor <span style="color: gray">(dead?)</span>
+* endless4s <span style="color: gray">(fresh, only akka runtime at the moment)</span>
+* build your own <span style="color: gray">(hard-ish and expensive)</span>
+
+++++
+
+<h2 style="font-size: 0.5em; margin: 0.2em">Custom Event Sourcing: How</h2>
+
+##### Step 2
+### Express workflow as set of commands and events
+
+* external world sends commands
+* commands execute side effects and produce events
+* events modify the state and can produce more commands
+* events are persisted
+
+----
+
+<h2 style="font-size: 1em; margin: 0.2em">Custom Event Sourcing</h2>
+
+### main challenges
+
+++++
+
+<h2 style="font-size: 0.5em; margin: 0.2em">Custom Event Sourcing: main challenges</h2>
+
+### Versioning
+
+* old events have to work, or you migrate the journal
+* similar to Temporal but with more freedom
+
+++++
+
+<h2 style="font-size: 0.5em; margin: 0.2em">Custom Event Sourcing: main challenges</h2>
+
+### Overview
+
+Nope, unless you build some
+
+++++
+
+<h2 style="font-size: 0.5em; margin: 0.2em">Custom Event Sourcing: main challenges</h2>
+
+### Introspection
+
+Nope, unless you build some
+
+++++
+
+<h2 style="font-size: 0.5em; margin: 0.2em">Custom Event Sourcing: main challenges</h2>
+
+### Recovery
+
+* state is rebuilt from events
+* processing continues from last recorded event
+
+----
+
+## Is there another way?
+
+<span style="color: gray">Maybe</span>
+
+++++
+
+#### Try to make it as simple as possible
+
+Just put your state in the database
+
+Make all operations idempotent
+
+----
+
+## Summary
+
+* Camunda requires a lot of tooling around, mostly due its dynamicity
+* Temporal is closer to devs but at the cost
+* Raw event sourcing is the most flexible but requires the most work to reach feature parity
+* Both Temporal and Camunda developed A LOT in last years
