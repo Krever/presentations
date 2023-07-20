@@ -1,0 +1,104 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+
+    <title>Communication for Developers: estimates, code reviews, and other hard problems</title>
+
+    <link rel="stylesheet" href="../reveal/reveal.js-4.3.1/dist/reveal.css">
+    <link rel="stylesheet" href="../reveal/reveal.js-4.3.1/dist/theme/serif.css" id="theme">
+
+    <link rel="stylesheet" href="../reveal/reveal.js-4.3.1/plugin/highlight/monokai.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css"
+          integrity="sha512-iBBXm8fW90+nuLcSKlbmrPcLa0OT92xO1BIsZ+ywDWZCvqsWgccV3gFoRBv0z+8dLJgyAHIhR35VZc2oM/gI1w=="
+          crossorigin="anonymous" referrerpolicy="no-referrer"/>
+
+    <script src="../reveal/reveal.js-4.3.1/plugin/mermaid/lib/mermaid-10.2.3.min.js"></script>
+
+
+    <style>
+        .container {
+            display: flex;
+        }
+
+        .col {
+            flex: 1;
+        }
+
+        p:has(> span.why-i-subtext) {
+            font-size: 0.5em;
+            line-height: 0.5em;
+            padding: 0;
+            margin: 0;
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="reveal">
+    <div id="twitterhandle" style="
+                        position: absolute;
+                        bottom: 50px;
+                        left: 30px;
+                        width: 200px;
+                        font-size: 0.8em;
+                        z-index: 1;
+                        height: 100px;">
+
+        <a href="https://twitter.com/Krever01" target="_blank">
+            <i class="fab fa-twitter" style="color: #1DA1F2"></i> @Krever01
+        </a>
+        <a href="https://swissborg.com/" target="_blank"><img src="resources/Logo-Dark-Gradient%20(3).png" alt=""></a>
+    </div>
+    <!--    <div id="sblogo" style="-->
+    <!--                        position: absolute;-->
+    <!--                        bottom: 100px;-->
+    <!--                        right: 30px;-->
+    <!--                        width: 300px;-->
+    <!--                        font-size: 0.8em;-->
+    <!--                        z-index: 1;-->
+    <!--                        height: 100px;">-->
+    <!--        <img src="resources/Logo-Light-Flat copy.png" alt="">-->
+    <!--    </div>-->
+
+    <div class="slides">
+
+        <section data-markdown="slides.html"
+                 data-separator="^\r?\n----\r?\n$"
+                 data-separator-vertical="^\r?\n\+\+\+\+\r?\n$"
+                 data-separator-notes="^notes:"
+                 data-attributes="--\s(.*?)$"
+                 data-charset="utf-8">
+        </section>
+
+    </div>
+</div>
+
+<script src="../reveal/reveal.js-4.3.1/dist/reveal.js"></script>
+<script src="../reveal/reveal.js-4.3.1/plugin/markdown/markdown.js"></script>
+<script src="../reveal/reveal.js-4.3.1/plugin/highlight/highlight.js"></script>
+<script src="../reveal/reveal.js-4.3.1/plugin/notes/notes.js"></script>
+<script src="../reveal/reveal.js-4.3.1/plugin/math/math.js"></script>
+<script src="../reveal/reveal.js-4.3.1/plugin/mermaid/mermaid.js"></script>
+
+<script>
+
+    Reveal.initialize({
+        controls: true,
+        progress: true,
+        history: true,
+        center: true,
+        slideNumber: 'c/t',
+
+        plugins: [RevealMarkdown, RevealHighlight, RevealNotes, RevealMath.KaTeX],
+        dependencies: [
+            {src: '../reveal/reveal.js-4.3.1/plugin/mermaid/mermaid.js'}
+        ]
+    });
+
+</script>
+
+</body>
+</html>

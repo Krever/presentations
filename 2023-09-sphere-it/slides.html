@@ -1,0 +1,339 @@
+<div id=left-6 style="font-family: ldr-ofer-michael">
+    <h2 style="font-size:2em">Communication for Developers</h2>
+    <hr style="width:100%;height:0.15em;background-color: #eee;">
+    <h2 style="font-size:1em">Estimates, code reviews, and other hard problems</h2>
+</div>
+
+
+<span style="font-size: 0.7em;color: gray">Voytek Pituła</span>
+
+----
+
+### Who am I?
+
+----
+
+### Shannon Communication Model
+
+<img src="resources/comm-model.mermaid.png">
+<img src="resources/comm-model-2.mermaid.png">
+
+++++
+
+### Communication goal
+
+<img src="resources/comm-model-3.mermaid.png">
+
+_What you say_ and _What they hear_ don't matter in the end
+
+++++
+
+### Why this talk?
+
+* Share a few tricks for everyday problems <!-- .element: class="fragment fade-in-then-semi-out	" -->
+* Increase awareness about communication <!-- .element: class="fragment fade-in-then-semi-out	" -->
+* Talk about effective communication principles <!-- .element: class="fragment fade-in-then-semi-out	" -->
+
+++++
+
+### Practical part first
+
+Principles later
+
+----
+
+##### Problem 1
+## Estimates
+
+++++
+
+<h2 style="font-size: 0.5em; margin: 0.2em">Estimates</h2>
+
+### Is this a communication concern?
+
+<pre style="width: 50%">
+Q: When will this be done?
+A: In around a week
+</pre>
+
+<div class="fragment">
+    <small>What they think you wanted to say: <i>It will be in prod for all the users in 1 week</i></small>
+    <small>What you wanted to say: <i>I will open a PR in 1 week</i></small>
+</div>
+
+++++
+
+<h2 style="font-size: 0.5em; margin: 0.2em">Estimates</h2>
+
+#### The most important question
+
+> Why do you need it?
+
+++++
+
+<h2 style="font-size: 0.5em; margin: 0.2em">Estimates</h2>
+
+#### Reasons for providing estimates
+
+* Promise to regulator
+* Promise to users
+* Internal planning
+* Prioritization
+* ...
+* **None**
+
+++++
+
+<h2 style="font-size: 0.5em; margin: 0.2em">Estimates</h2>
+
+### The goal
+
+Provide a number with the same meaning for both sides
+
+++++
+
+<h2 style="font-size: 0.5em; margin: 0.2em">Estimates</h2>
+
+### Size vs time
+
+<span style="font-size: 0.7em">
+Story points vs days
+
+It's a separate topic.
+
+Size is better but has limited uses.
+</span>
+
+++++
+
+<h2 style="font-size: 0.5em; margin: 0.2em">Estimates</h2>
+
+### What to explicitly mention
+
+<small>
+
+    * Scope - what will be done <!-- .element: class="fragment fade-in-then-semi-out	" -->
+    * Num of man-days - how much work-time it will take <!-- .element: class="fragment fade-in-then-semi-out	" -->
+    * Uncertainty factor - how confident we are about the work
+    <!-- .element: class="fragment fade-in-then-semi-out	" -->
+    * Assumed dev availability - how much time a single dev can devote
+    <!-- .element: class="fragment fade-in-then-semi-out	" -->
+    * Assumed dev assignment - how many devs will work on this
+    <!-- .element: class="fragment fade-in-then-semi-out	" -->
+    * Final date - by what date we exepct the result <!-- .element: class="fragment fade-in-then-semi-out	" -->
+    * End result - what will be delivered <!-- .element: class="fragment fade-in-then-semi-out	" -->
+    * Word "estimate" - in opposition to commitment <!-- .element: class="fragment fade-in-then-semi-out	" -->
+
+</small>
+
+++++
+
+<h2 style="font-size: 0.5em; margin: 0.2em">Estimates</h2>
+
+### Example
+
+<img src="resources/estimate-example.png">
+
+<small>Real estimate of mine with small edits</small>
+
+----
+
+##### Problem 2
+## Pull requests: Author
+
+Get your PRs reviewed
+
+++++
+
+<h2 style="font-size: 0.5em; margin: 0.2em">Pull requests: Author</h2>
+
+### How not to ask for review
+
+<img src="resources/bad-review-request.png">
+
+++++
+
+<h2 style="font-size: 0.5em; margin: 0.2em">Pull requests: Author</h2>
+
+### Find reviewers
+
+Concrete people, groups work until they don't
+
+As many as you need, but **not more**
+
+++++
+
+<h2 style="font-size: 0.5em; margin: 0.2em">Pull requests: Author</h2>
+
+### Put a deadline
+
+Explicit date by which you want to merge
+
+++++
+
+<h2 style="font-size: 0.5em; margin: 0.2em">Pull requests: Author</h2>
+
+### Make it reviewer-friendly
+
+
+++++
+
+
+<h2 style="font-size: 0.5em; margin: 0.2em">Pull requests: Author | Make it reviewer-friendly</h2>
+
+## Make it small
+
+<img src="resources/pr-size-1.png">
+<img src="resources/pr-size-2.png">
+<img src="resources/pr-size-3.png">
+
+<span style="font-size: 0.7em;color: gray">Hehe</span>
+
+++++
+
+
+<h2 style="font-size: 0.5em; margin: 0.2em">Pull requests: Author | Make it reviewer-friendly</h2>
+
+### When small is not an option
+
+* description <!-- .element: class="fragment fade-in-then-semi-out	" -->
+* highlights <!-- .element: class="fragment fade-in-then-semi-out	" -->
+* remaining TODOs <!-- .element: class="fragment fade-in-then-semi-out	" -->
+
+++++
+
+<h2 style="font-size: 0.5em; margin: 0.2em">Pull requests: Author | Make it reviewer-friendly</h2>
+
+### No force-push
+
+<small>⚔️ rebase vs merge ⚔️</small>
+
+Is this a communication concern? <!-- .element: class="fragment" -->
+
+<img src="resources/git-ammend.png" class="fragment">
+
+
+----
+
+##### Problem 3
+## Pull requests: Reviewer
+
+Give a good review
+
+Don't make enemies
+
+++++
+
+<h2 style="font-size: 0.5em; margin: 0.2em">Pull requests: Reviewer</h2>
+
+### The LOGAF Scale
+
+Level Of Give A Fuck
+
+<img src="resources/logaf.png">
+
+<span style="font-size: 0.7em;color: gray">There is no standard</span>
+
+++++
+
+<h2 style="font-size: 0.5em; margin: 0.2em">Pull requests: Reviewer</h2>
+
+### Don't be a jerk
+
+<small>
+
+    * propose solutions (e.g. new names)
+    * offer help (e.g. pair programming)
+    * show empathy (e.g. no one wants to fix stuff ad infinitum)
+    * pick your battles (not every issue is important, perfect doesn't exist)
+
+</small>
+
+----
+
+##### Problem 4
+
+## During implementation
+
+<small>Code & work coordination</small>
+
+++++
+
+<h2 style="font-size: 0.5em; margin: 0.2em">During implementation</h2>
+
+### Code comments
+
+* Classic: why not what <!-- .element: class="fragment fade-in-then-semi-out	" -->
+* Humor is valuable <!-- .element: class="fragment fade-in-then-semi-out	" -->
+* It's a message into the future <!-- .element: class="fragment fade-in-then-semi-out	" -->
+
+++++
+
+<h2 style="font-size: 0.5em; margin: 0.2em">During implementation</h2>
+
+### Leave breadcrumbs behind
+
+<small>Pieces of context that will help in future investigations</small>
+
+<div class="container">
+    <div class="col" style="font-size: 0.7em">
+        What? <br>
+        <ul>
+            <li>Slack links</li>
+            <li>Jira links</li>
+            <li>Stackoverflow links</li>
+        </ul>
+    </div>
+    <div class="col" style="font-size: 0.7em">
+        Where? <br>
+        <ul>
+            <li>in Slack conversations</li>
+            <li>in Jira issues</li>
+            <li>in Gitlab PRs</li>
+            <li>in comments</li>
+        </ul>
+    </div>
+
+</div>
+
+++++
+
+<h2 style="font-size: 0.5em; margin: 0.2em">During implementation</h2>
+
+### Build in the open
+
+You can never know who might be interested, who might be affected, and if it's not you who misses some context
+
+<span style="font-size: 0.7em;color: gray">We will talk about this more later</span>
+
+++++
+
+<h2 style="font-size: 0.5em; margin: 0.2em">During implementation: build in the open</h2>
+
+### Keep people in the loop
+
+If you're irreplaceable, you've failed at your job.
+
+++++
+
+<h2 style="font-size: 0.5em; margin: 0.2em">During implementation</h2>
+
+### Coordinating releases
+
+<div class="container">
+    <div class="col" style="font-size: 0.7em">
+        It can be really complicated when multiple parties are involved.
+        <small>Mobile, backend, marketing, legal, operations, etc.</small>
+    </div>
+</div>
+<span style="font-size: 0.4em;color: gray">release ≠ deployment</span>
+
+++++
+
+<h2 style="font-size: 0.5em; margin: 0.2em">During implementation: Coordinating releases</h2>
+
+#### Thread & emojis can be enough
+
+<img src="resources/release-thread.png">
+
+----
