@@ -10,6 +10,7 @@
     <link rel="stylesheet" href="../reveal/reveal.js-4.3.1/dist/theme/serif.css" id="theme">
 
     <link rel="stylesheet" href="../reveal/reveal.js-4.3.1/plugin/highlight/monokai.css">
+    <link rel="stylesheet" href="../reveal/reveal.js-4.3.1/plugin/breadcrumb/breadcrumb.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css"
           integrity="sha512-iBBXm8fW90+nuLcSKlbmrPcLa0OT92xO1BIsZ+ywDWZCvqsWgccV3gFoRBv0z+8dLJgyAHIhR35VZc2oM/gI1w=="
           crossorigin="anonymous" referrerpolicy="no-referrer"/>
@@ -32,6 +33,18 @@
             padding: 0;
             margin: 0;
         }
+
+        .blink {
+            animation: blink 0.5s step-end infinite;
+            color: darkred;
+        }
+
+        @keyframes blink {
+            67% {
+                opacity: 0
+            }
+        }
+
     </style>
 </head>
 
@@ -94,7 +107,8 @@
 
         plugins: [RevealMarkdown, RevealHighlight, RevealNotes, RevealMath.KaTeX],
         dependencies: [
-            {src: '../reveal/reveal.js-4.3.1/plugin/mermaid/mermaid.js'}
+            {src: '../reveal/reveal.js-4.3.1/plugin/mermaid/mermaid.js'},
+            {src: '../reveal/reveal.js-4.3.1/plugin/breadcrumb/breadcrumb.js', async: true}
         ]
     });
 
