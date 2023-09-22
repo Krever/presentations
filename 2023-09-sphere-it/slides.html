@@ -13,6 +13,7 @@
 
 ----
 
+<span class="breadcrumb-data">Communication for Developers</span>
 
 ### Why this talk?
 
@@ -31,22 +32,26 @@
 
 ++++
 
+<span class="breadcrumb-data">Communication for Developers</span>
+
 ## Who am I?
 
 <div class="container">
     <div class="col crossed fragment" style="font-size: 0.7em">
         <ul>
             <li>Staff Engineer at SwissBorg</li>
-            <li>10+ years of professional experience</li>
+            <li>10 years of professional experience</li>
+            <li>AdTech > BigData > Security > FinTech</li>
             <li>Scala background</li>
-            <li>I read way too many books</li>
         </ul>
     </div>
     <div class="col fragment" style="font-size: 0.7em">
         <ul>
-            <li>I read way too many books</li>
-            <li>I talk too much</li>
-            <li>I don't know when to shut up</li>
+            <li class="fragment">I read way too many books</li>
+            <li class="fragment">I talk too much</li>
+            <li class="fragment">I don't know when to shut up</li>
+            <li class="fragment">I'm an average communicator</li>
+            <li class="fragment">I'm a decently communicating software developer</li>
         </ul>
     </div>
 </div>
@@ -77,6 +82,8 @@
 _What you say_ and _What they hear_ don't matter in the end
 
 ----
+
+<span class="breadcrumb-data">Communication for Developers</span>
 
 ##### Problem 1
 ## Estimates
@@ -143,7 +150,6 @@ Provide a number with the same meaning for both sides
 * Assumed dev availability - how much time a single dev can devote <!-- .element: class="fragment fade-in-then-semi-out"  data-fragment-index="4" -->
 * End result - what will be delivered <!-- .element: class="fragment fade-in-then-semi-out"  data-fragment-index="5" -->
 * Final date - by what date we expect the release <!-- .element: class="fragment fade-in-then-semi-out"  data-fragment-index="5" -->
-* Word "estimate" - in opposition to "commitment" <!-- .element: class="fragment fade-in-then-semi-out	" -->
 
 </small>
 
@@ -157,7 +163,17 @@ Provide a number with the same meaning for both sides
 
 <span style="font-size: 0.5em;color: gray">Real estimate of mine with small edits</span>
 
+++++
+
+<span class="breadcrumb-data">Communication for Developers » Estimates</span>
+
+### Estimate vs commitment
+
+Be clear
+
 ----
+
+<span class="breadcrumb-data">Communication for Developers</span>
 
 ##### Problem 2
 
@@ -192,7 +208,8 @@ Forbidden words: PR, commit, branch.
 ### Code comments
 
 * It's a message into the future <!-- .element: class="fragment fade-in-then-semi-out	" -->
-* Classic: why not what <!-- .element: class="fragment fade-in-then-semi-out	" -->
+* Imagine what information might be needed  <!-- .element: class="fragment fade-in-then-semi-out	" -->
+* Provide historical context - "why not what" <!-- .element: class="fragment fade-in-then-semi-out	" -->
 * Humor is valuable <!-- .element: class="fragment fade-in-then-semi-out	" -->
 
 
@@ -206,6 +223,11 @@ Another message into the future.
 
 Imagine receiving it and what might be useful then.
 
+<br/>
+<pre style="margin-bottom: 0"><code style="text-align: center" class="language-text">Operation unsupported</code></pre>
+<p style="margin: 0">vs.</p>
+<pre style="margin-top: 0"><code style="text-align: center" class="language-text">Can't update address of an inactive user</code></pre>
+
 ++++
 
 <span class="breadcrumb-data">Communication for Developers » During implementation</span>
@@ -214,28 +236,30 @@ Imagine receiving it and what might be useful then.
 
 <small>Pieces of context that will help in future investigations</small>
 
-<div class="container">
-    <div class="col" style="font-size: 0.7em">
-        What? <br>
-        <ul>
-            <li>Slack links</li>
-            <li>Jira links</li>
-            <li>Stackoverflow links</li>
-            <li>Github links</li>
-        </ul>
-    </div>
-    <div class="col" style="font-size: 0.7em">
-        Where? <br>
-        <ul>
-            <li>in Slack conversations</li>
-            <li>in Jira issues</li>
-            <li>in commit messages</li>
-            <li>in PRs</li>
-            <li>in comments</li>
-        </ul>
-    </div>
+<img src="resources/breadcrumbs.mermaid.png">
 
-</div>
+<!--<div class="container">-->
+<!--    <div class="col" style="font-size: 0.7em">-->
+<!--        What? <br>-->
+<!--        <ul>-->
+<!--            <li>Slack links</li>-->
+<!--            <li>Jira links</li>-->
+<!--            <li>Stackoverflow links</li>-->
+<!--            <li>Github links</li>-->
+<!--        </ul>-->
+<!--    </div>-->
+<!--    <div class="col" style="font-size: 0.7em">-->
+<!--        Where? <br>-->
+<!--        <ul>-->
+<!--            <li>in Slack conversations</li>-->
+<!--            <li>in Jira issues</li>-->
+<!--            <li>in commit messages</li>-->
+<!--            <li>in PRs</li>-->
+<!--            <li>in comments</li>-->
+<!--        </ul>-->
+<!--    </div>-->
+
+<!--</div>-->
 
 ++++
 
@@ -279,6 +303,7 @@ If you're irreplaceable, you've failed at your job.
 ----
 
 <span class="breadcrumb-data">Communication for Developers</span>
+
 ##### Problem 3
 ## Pull requests: Author
 
@@ -412,8 +437,9 @@ Level Of Give A Fuck
 
 ----
 
-##### Problem 5
+<span class="breadcrumb-data">Communication for Developers</span>
 
+##### Problem 5
 ## Everyday communication
 
 ++++
@@ -424,7 +450,7 @@ Level Of Give A Fuck
 
 Or rather [nohello.net](https://nohello.net)
 
-<img src="resources/nohello.png"/>
+<img src="resources/no-hello-example.png"/>
 
 ++++
 
@@ -499,10 +525,10 @@ We are releasing a CPU heavy feature on Wednesday and I need to prepare the setu
 
 <small>
 
-* if you don't know the answer but you know someone who might - ping them
-* if you don't have time - say this
-* if you plan to look at it later on - say this
-* if you started looking at the problem at it might take time - say this
+* if you don't know the answer but you know someone who might - ping them <!-- .element: class="fragment fade-in-then-semi-out	" -->
+* if you don't have time - say this <!-- .element: class="fragment fade-in-then-semi-out	" -->
+* if you plan to look at it later on - say this <!-- .element: class="fragment fade-in-then-semi-out	" -->
+* if you started looking at the problem at it might take time - say this <!-- .element: class="fragment fade-in-then-semi-out	" -->
 
 </small>
 
@@ -514,7 +540,7 @@ We are releasing a CPU heavy feature on Wednesday and I need to prepare the setu
 
 😊 Humans like smiles 😊
 
-(Faked) over-enthusiasm can be worse than grumpiness.
+But (faked) over-enthusiasm can be worse than grumpiness.
 
 ++++
 
@@ -579,7 +605,16 @@ When pinging from long thread - summarize.
 
 <span class="breadcrumb-data">Communication for Developers » Principles</span>
 
-## Ensure the message was received
+## Understand
+
+Don't take the message at face value.<br>
+Try to think why the question is being asked.
+
+++++
+
+<span class="breadcrumb-data">Communication for Developers » Principles</span>
+
+## Ensure the message was understood
 
 Don't stop at saying what you want, make sure the audience got it.
 
