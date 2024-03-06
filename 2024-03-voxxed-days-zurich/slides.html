@@ -1,0 +1,733 @@
+
+<div id=left-6 style="font-family: ldr-ofer-michael">
+    <h2 style="font-size:2em">Communication for Developers</h2>
+    <hr style="width:100%;height:0.15em;background-color: #eee;">
+    <h2 style="font-size:1em">Estimates, code reviews, and other hard problems</h2>
+</div>
+
+
+<span style="font-size: 0.7em;color: gray">Voytek Pituła</span>
+
+----
+
+<span class="breadcrumb-data">Communication for Developers</span>
+
+### Why this talk?
+
+<div class="container">
+    <div class="col crossed fragment" style="font-size: 0.7em">
+        <ul>
+            <li>Share a few tricks</li>
+            <li>Talk about principles</li>
+            <li>Increase awareness</li>
+        </ul>
+    </div>
+    <div class="col fragment" style="font-size: 0.7em; margin-top: 4%">
+        Increase awarness
+    </div>
+</div>
+
+++++
+
+<span class="breadcrumb-data">Communication for Developers</span>
+
+## Who am I?
+
+<div class="container">
+    <div class="col crossed fragment" style="font-size: 0.7em">
+        <ul>
+            <li>Staff Engineer at SwissBorg</li>
+            <li>10 years of professional experience</li>
+            <li>AdTech > BigData > Security > FinTech</li>
+            <li>Scala background</li>
+        </ul>
+    </div>
+    <div class="col fragment" style="font-size: 0.7em">
+        <ul>
+            <li class="fragment">I read way too many books</li>
+            <li class="fragment">I talk too much</li>
+            <li class="fragment">I don't know when to shut up</li>
+            <li class="fragment">I'm an average communicator</li>
+            <li class="fragment">I'm a decently communicating software developer</li>
+        </ul>
+    </div>
+</div>
+
+----
+
+<span class="breadcrumb-data">Communication for Developers</span>
+
+## What is communication?
+
+++++
+
+<span class="breadcrumb-data">Communication for Developers » What is communication?</span>
+
+### Shannon Communication Model
+
+<img class="fragment" src="resources/comm-model.mermaid.png">
+<img class="fragment" src="resources/comm-model-2.mermaid.png">
+
+++++
+
+<span class="breadcrumb-data">Communication for Developers » What is communication?</span>
+
+### Communication goal
+
+<img src="resources/comm-model-3.mermaid.png">
+
+_What you say_ and _What they hear_ don't matter in the end
+
+----
+
+<span class="breadcrumb-data">Communication for Developers</span>
+
+##### Problem 1
+## Estimates
+
+++++
+
+<span class="breadcrumb-data">Communication for Developers » Estimates</span>
+
+### Is this a communication concern?
+
+<pre style="width: 50%">
+Q: When will this be done?
+A: In around a week
+</pre>
+
+<div class="fragment">
+    <small>What they understood: <i>It will be in prod for all the users in 1 week</i></small>
+    <small>What you wanted to say: <i>I will open a PR in 1 week</i></small>
+</div>
+
+++++
+
+<span class="breadcrumb-data">Communication for Developers » Estimates</span>
+
+### The goal
+
+Provide a number with **the same meaning** for both sides
+
+++++
+
+<span class="breadcrumb-data">Communication for Developers » Estimates</span>
+
+#### The most important question
+
+> Why do you need it?
+
+++++
+
+<span class="breadcrumb-data">Communication for Developers » Estimates</span>
+
+#### Reasons for providing estimates
+
+* Promise to regulators
+* Promise to users
+* Catching market opportunity
+* Internal planning
+* Prioritization
+* ...
+* **None**
+
+++++
+
+<span class="breadcrumb-data">Communication for Developers » Estimates</span>
+
+#### You can't communicate effectively without understaning the other side
+
+++++
+
+<span class="breadcrumb-data">Communication for Developers » Estimates</span>
+
+### What to explicitly mention
+<small>When estimating a release date</small>
+
+<small>
+
+* Scope - what will be released and to whom <!-- .element: class="fragment fade-in-then-semi-out" data-fragment-index="1" -->
+* Num of dev-days - how much work-time it will take <!-- .element: class="fragment fade-in-then-semi-out" data-fragment-index="2" -->
+* Uncertainty factor - how confident we are about the work <!-- .element: class="fragment fade-in-then-semi-out" data-fragment-index="3" -->
+* Assumed dev assignment - how many devs will work on this <!-- .element: class="fragment fade-in-then-semi-out"  data-fragment-index="4" -->
+* Assumed dev availability - how much time a single dev can devote <!-- .element: class="fragment fade-in-then-semi-out"  data-fragment-index="4" -->
+* End result - what will be delivered <!-- .element: class="fragment fade-in-then-semi-out"  data-fragment-index="5" -->
+* Final date - by what date we expect the release <!-- .element: class="fragment fade-in-then-semi-out"  data-fragment-index="5" -->
+
+</small>
+
+++++
+
+<span class="breadcrumb-data">Communication for Developers » Estimates</span>
+
+### Example
+
+<img src="resources/estimate-example.png">
+
+<span style="font-size: 0.5em;color: gray">Real estimate of mine with small edits</span>
+
+++++
+
+<span class="breadcrumb-data">Communication for Developers » Estimates</span>
+
+### Estimate vs commitment
+
+Be clear
+
+<div style="font-size: 0.5em;color: gray">
+Estimate = Predicition<br/>
+Commitment = Promise
+</div>
+
+++++
+
+Words matter
+
+----
+
+<span class="breadcrumb-data">Communication for Developers</span>
+
+##### Problem 2
+
+## During implementation
+
+<small>Code & work coordination</small>
+
+++++
+
+<span class="breadcrumb-data">Communication for Developers » During implementation</span>
+
+### Business discussions
+
+<small>
+Part of the job is to be understood.
+
+Limit the amount of information.
+
+Forbidden words: PR, commit, branch.
+</small>
+
+++++
+
+Adjust content to the audience
+
+++++
+
+<span class="breadcrumb-data">Communication for Developers » During implementation</span>
+
+### Code comments
+
+It's a message into the future
+
+* Imagine what information might be needed  <!-- .element: class="fragment fade-in-then-semi-out	" -->
+* Provide historical context - "why not what" <!-- .element: class="fragment fade-in-then-semi-out	" -->
+* Humor is valuable <!-- .element: class="fragment fade-in-then-semi-out	" -->
+
+
+++++
+
+<span class="breadcrumb-data">Communication for Developers » During implementation</span>
+
+### Error messages
+
+Another message into the future.
+
+Imagine receiving it and what might be useful then.
+
+<br/>
+<pre style="margin-bottom: 0"><code style="text-align: center" class="language-text">Operation unsupported</code></pre>
+<p style="margin: 0">vs.</p>
+<pre style="margin-top: 0"><code style="text-align: center" class="language-text">Can't update address of an inactive user</code></pre>
+
+++++
+
+<span class="breadcrumb-data">Communication for Developers » During implementation</span>
+
+### Leave breadcrumbs behind
+
+<small>Pieces of context that will help in future investigations</small>
+
+<img src="resources/breadcrumbs.mermaid.png">
+
+++++
+
+<span class="breadcrumb-data">Communication for Developers » During implementation</span>
+
+### Build in the open
+
+You can never know who might be interested, who might be affected, and if it's not you who misses some context
+
+<span style="font-size: 0.7em;color: gray">We will talk about this more later</span>
+
+++++
+
+<span class="breadcrumb-data">Communication for Developers » During implementation » build in the open</span>
+
+### Keep people in the loop
+
+If you're irreplaceable, you've failed at your job.
+
+++++
+
+<span class="breadcrumb-data">Communication for Developers » During implementation</span>
+### Coordinating releases
+
+<div class="container">
+    <div class="col" style="font-size: 0.7em">
+        It can be really complicated when multiple parties are involved.
+        <small>Mobile, backend, marketing, legal, operations, etc.</small>
+    </div>
+</div>
+<span style="font-size: 0.4em;color: gray">release ≠ deployment</span>
+
+++++
+
+<span class="breadcrumb-data">Communication for Developers » During implementation » Coordinating releases</span>
+
+#### Thread & emojis can be enough
+
+<img src="resources/release-thread.png">
+
+----
+
+<span class="breadcrumb-data">Communication for Developers</span>
+
+##### Problem 3
+## Pull requests: Author
+
+Goal: Get your PRs reviewed
+
+
+++++
+
+<span class="breadcrumb-data">Communication for Developers » Pull requests: Author</span>
+
+### Find reviewers
+
+Concrete people, not groups. <br>
+As many as you need, but **not more** <br>
+<span style="font-size: 0.7em;color: gray">Diffusion of responsibility<br>
+    The greater the number of bystanders, the less likely it is that any one of them will help.</span>
+
+++++
+
+<span class="breadcrumb-data">Communication for Developers » Pull requests: Author</span>
+
+### Put a deadline
+
+Explicit date by which you want to merge
+
+++++
+
+<span class="breadcrumb-data">Communication for Developers » Pull requests: Author</span>
+
+### Example
+
+<div class="container">
+    <div class="col" style="font-size: 0.7em">
+        Do <br>
+        <img src="resources/review-request-good.png">
+    </div>
+    <div class="col" style="font-size: 0.7em">
+        Don't <br>
+        <img height="45" src="resources/review-request-bad.png">
+    </div>
+
+</div>
+
+
+++++
+
+<span class="breadcrumb-data">Communication for Developers » Pull requests: Author</span>
+
+### Make it reviewer-friendly
+
+++++
+
+<span class="breadcrumb-data">Communication for Developers » Pull requests: Author » Make it reviewer-friendly</span>
+
+## Make it small
+
+<img src="resources/pr-size-1.png">
+<img src="resources/pr-size-2.png">
+<img src="resources/pr-size-3.png">
+
+<span style="font-size: 0.7em;color: gray">Hehe</span>
+
+++++
+
+<span class="breadcrumb-data">Communication for Developers » Pull requests: Author » Make it reviewer-friendly</span>
+
+### When small is not an option
+
+* description - what the PR is about <!-- .element: class="fragment fade-in-then-semi-out	" -->
+* highlights - the most important places to look at <!-- .element: class="fragment fade-in-then-semi-out	" -->
+* remaining TODOs - to know what is not done yet <!-- .element: class="fragment fade-in-then-semi-out	" -->
+
+++++
+
+<span class="breadcrumb-data">Communication for Developers » Pull requests: Author » Make it reviewer-friendly</span>
+
+### No force-push
+
+<small>⚔️ rebase vs merge ⚔️</small>
+
+Is this a communication concern? <!-- .element: class="fragment" -->
+
+<img src="resources/git-ammend.png" class="fragment">
+
+
+----
+
+<span class="breadcrumb-data">Communication for Developers</span>
+##### Problem 4
+## Pull requests: Reviewer
+
+Goal: Give a good review. Don't make enemies
+
+++++
+
+<span class="breadcrumb-data">Communication for Developers » Pull requests: Reviewer</span>
+
+### The LOGAF Scale
+
+Level Of Give A Fuck
+
+<img src="resources/logaf.png">
+
+<span style="font-size: 0.7em;color: gray">There is no standard</span>
+
+++++
+
+<span class="breadcrumb-data">Communication for Developers » Pull requests: Reviewer</span>
+
+### Conventional comments
+
+[https://conventionalcomments.org](https://conventionalcomments.org/)
+
+<img src="resources/conventional-comments.png">
+
+++++
+
+<span class="breadcrumb-data">Communication for Developers » Pull requests: Reviewer</span>
+
+### Don't be a jerk
+
+<small>
+
+* propose solutions (e.g. new names) <!-- .element: class="fragment fade-in-then-semi-out	" -->
+* offer help (e.g. pair programming) <!-- .element: class="fragment fade-in-then-semi-out	" -->
+* show empathy (e.g. no one wants to fix stuff ad infinitum) <!-- .element: class="fragment fade-in-then-semi-out	" -->
+* pick your battles (not every issue is important, perfect doesn't exist) <!-- .element: class="fragment fade-in-then-semi-out	" -->
+
+</small>
+
+----
+
+<span class="breadcrumb-data">Communication for Developers</span>
+
+##### Problem 5
+## Everyday communication
+
+++++
+
+<span class="breadcrumb-data">Communication for Developers » Everyday Communication </span>
+
+### Hello
+
+Or rather [nohello.net](https://nohello.net)
+
+<img src="resources/no-hello-example.png"/>
+
+++++
+
+<span class="breadcrumb-data">Communication for Developers » Everyday Communication </span>
+
+### Repeat, repeat, repeat
+
+People will forget, miss messages or misinterpret. This is normal.
+
+++++
+
+<span class="breadcrumb-data">Communication for Developers » Everyday Communication </span>
+
+### How to get a response
+
+* Target your messages
+* Explain why you need something
+* Explain when you need it
+
+++++
+
+<span class="breadcrumb-data">Communication for Developers » Everyday Communication » How to get a response</span>
+
+### Target your messages
+
+No explicit `@mention` - no response.
+<div style="font-size: 0.7em;color: gray">
+    Diffusion of responsibility again<br>
+    Ping someone even if you're not sure if they can help.
+</div>
+
+++++
+
+<span class="breadcrumb-data">Communication for Developers » Everyday Communication » How to get a response</span>
+
+### Explain why you need something
+
+Giving _any_ explanation changes the situation diametrically.
+
+<span style="font-size: 0.7em;color: gray">Xerox Study by Ellen Langer</span>
+
+++++
+
+<span class="breadcrumb-data">Communication for Developers » Everyday Communication » How to get a response</span>
+
+### Explain when you need it
+
+People will try to deliver by that date. <br>
+Smaller chance of landing in "later" bucket.
+
+++++
+
+<span class="breadcrumb-data">Communication for Developers » Everyday Communication » How to get a response</span>
+
+### Example
+
+<img src="resources/get-response-example-bad.png">
+
+vs.
+
+<img src="resources/get-response-example-good.png">
+
+notes:
+Hey, where can I find CPU usage metrics? (edited)
+Hey, I need to get CPU usage of our servers. Not sure who can help with this, maybe @tiago?
+We are releasing a CPU heavy feature on Wednesday and I need to prepare the setup.
+
+++++
+
+<span class="breadcrumb-data">Communication for Developers » Everyday Communication</span>
+
+### Give the responses you want to get
+
+<small>
+
+* if you don't know the answer but you know someone who might - ping them <!-- .element: class="fragment fade-in-then-semi-out	" -->
+* if you don't have time - say this <!-- .element: class="fragment fade-in-then-semi-out	" -->
+* if you plan to look at it later on - say this <!-- .element: class="fragment fade-in-then-semi-out	" -->
+* if you started looking at the problem at it might take time - say this <!-- .element: class="fragment fade-in-then-semi-out	" -->
+
+</small>
+
+++++
+
+<span class="breadcrumb-data">Communication for Developers » Everyday Communication</span>
+
+### Adjust the tone
+
+😊 Humans like smiles 😊
+
+But over-enthusiasm can be worse than grumpiness.
+
+++++
+
+<span class="breadcrumb-data">Communication for Developers » Everyday Communication</span>
+
+### Adjust the tone
+
+😡 Don't be a pushover 😡
+
+Some messages need to be harsh
+
+++++
+
+<span class="breadcrumb-data">Communication for Developers » Everyday Communication</span>
+
+### Adjust the formatting
+
+Messages should be easy to scan.
+<small>People are busy, most of them won't read a wall of text.</small>
+
+* Put TL;DR at the top <!-- .element: class="fragment fade-in-then-semi-out	" -->
+* Bolden the essence <!-- .element: class="fragment fade-in-then-semi-out	" -->
+* Use bullet points <!-- .element: class="fragment fade-in-then-semi-out	" -->
+* Don't over-do it <!-- .element: class="fragment fade-in-then-semi-out	" -->
+
+++++
+
+<span class="breadcrumb-data">Communication for Developers » Everyday Communication</span>
+
+### Call or message
+
+<img src="resources/quick-call-meme.jpeg">
+
+++++
+
+<span class="breadcrumb-data">Communication for Developers » Everyday Communication</span>
+
+### Call or message
+
+Meetings are costly, inconvenient, annoying.<br>
+And effective.
+
+<small>Heuristic: threads with more than 10 messages sent in an hour should be a call.</small>
+
+++++
+
+<span class="breadcrumb-data">Communication for Developers » Everyday Communication</span>
+
+### Be gentle with `@pings`
+
+Use as little as possible but not less.
+
+When pinging from long thread - summarize.
+
+----
+
+<span class="breadcrumb-data">Communication for Developers</span>
+
+## Principles
+
+++++
+
+<span class="breadcrumb-data">Communication for Developers » Principles</span>
+
+## Understand
+
+Try to think why the question is being asked.<br>
+Don't take the message at face value.<br>
+But sometimes do.
+
+++++
+
+<span class="breadcrumb-data">Communication for Developers » Principles</span>
+
+## Ensure the message was understood
+
+Don't stop at saying what you want, make sure the audience got it.
+
+<span style="font-size: 0.7em;color: gray">Don't be the UDP.</span>
+
+
+++++
+
+<span class="breadcrumb-data">Communication for Developers » Principles</span>
+
+## Adjust to the audience
+
+Try to imagine how your message will be received
+
+++++
+
+<span class="breadcrumb-data">Communication for Developers » Principles</span>
+
+## Don't be a jerk
+
+Formalities, conventions, smiles matter
+
+++++
+
+<span class="breadcrumb-data">Communication for Developers » Principles</span>
+
+### Language proficiency is less important than you think
+
+Sophisticated language ~~can be detrimental to~~ is an enemy of efficient communication
+
+++++
+
+<span class="breadcrumb-data">Communication for Developers » Principles</span>
+
+### Brevity matters
+
+The shorter the message, the bigger the chance it will be read in full.
+
+<small>
+
+> "I didn't have time to write a short letter, so I wrote a long one instead."
+> <br><small>~Mark Twain</small>
+
+</small>
+
+++++
+
+<span class="breadcrumb-data">Communication for Developers » Principles » Brevity matters</span>
+
+### Where brevity matters the most
+
+* In code comments
+* In documentation
+
+++++
+
+<span class="breadcrumb-data">Communication for Developers » Principles</span>
+
+### Communicate in the open
+
+It's easier to ignore a message than to become a telepath
+
+<small>DMs should be an exception, not the norm.</small>
+
+++++
+
+<span class="breadcrumb-data">Communication for Developers » Principles » Communicate in the open</span>
+
+### Communicating in the open<br> is not easy
+
+<small>
+
+* Creates noise. <!-- .element: class="fragment fade-in-then-semi-out" data-fragment-index="1" -->
+* Requires a proper setup (e.g. slack channels) and mindset. <!-- .element: class="fragment fade-in-then-semi-out" data-fragment-index="2" -->
+* People have natural tendency for private communication. <!-- .element: class="fragment fade-in-then-semi-out" data-fragment-index="3" -->
+
+</small>
+
+++++
+
+<span class="breadcrumb-data">Communication for Developers » Principles</span>
+
+### Effective communication is hard and costly
+
+It's not always worth the effort
+
+++++
+
+<span class="breadcrumb-data">Communication for Developers » Principles</span>
+
+#### When you think you know enough
+
+<img src="resources/culture-map-cover.jpg" height="500" width="500"/>
+
+----
+
+<span class="breadcrumb-data">Communication for Developers</span>
+
+### Resources
+
+<small>
+
+* [kind.engineering](https://kind.engineering/) by Evan Smith
+* [Simply Said](https://www.audible.com/pd/Simply-Said-Audiobook/B06XRN58LM) by Jay Sullivan
+* [The Culture Map](https://www.audible.com/pd/The-Culture-Map-Audiobook/1549184032) by Erin Meyer
+* [How to Win Friends & Influence People](https://www.audible.com/pd/How-to-Win-Friends-Influence-People-Audiobook/B002V5BV96) by Dale Carnegie
+* [Radical Candor](https://www.audible.com/pd/Radical-Candor-Fully-Revised-Updated-Edition-Audiobook/1250245788) by Kim Scott
+* [Crucial Conversations](https://www.audible.com/pd/Crucial-Conversations-Third-Edition-Audiobook/B09MV39LHQ) By Joseph Grenny and more
+
+</small>
+
+<span style="font-size: 0.5em;color: gray">In order of importance</span>
+
+----
+
+<span class="breadcrumb-data">Communication for Developers</span>
+
+### Communication Is Everywhere
+
+<hr style="width:100%;height:0.15em;background-color: #eee;">
+<div style="font-size: 0.7em">
+Thank you!
+
+Voytek Pituła @ SwissBorg
+
+[https://w.pitula.me/presentations](https://w.pitula.me/presentations)
+</div>
