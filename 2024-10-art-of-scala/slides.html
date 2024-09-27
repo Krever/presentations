@@ -1,0 +1,787 @@
+<div id=left-6 style="font-family: ldr-ofer-michael">
+    <h1 style="text-transform: none">Decisions4s</h1>
+    <div class="container" style="align-items: center">
+        <div class="col" style="font-size: 0.6em">
+            <h2>Complicated conditionals</h2>
+        </div>
+        <!--        <div class="col" style="font-size: 0.6em">-->
+        <!--            <h2>❤️</h2>-->
+        <!--        </div>-->
+        <div class="col" style="font-size: 0.6em">
+            <h2>Scala&nbsp;3</h2>
+        </div>
+        <!--        <div class="col" style="font-size: 0.6em">-->
+        <!--            <h2>❤️</h2>-->
+        <!--        </div>-->
+        <div class="col" style="font-size: 0.6em">
+            <h2>Higher-Kinded <br/> Data</h2>
+        </div>
+    </div>
+
+</div>
+
+
+<span style="font-size: 0.7em;color: gray">Voytek Pituła</span>
+
+----
+
+##### &lt;Boring questions to artificially engage the audience&gt;
+
+* How the system works? <!-- .element: class="fragment fade-in-then-semi-out	" -->
+* Why this result? <!-- .element: class="fragment fade-in-then-semi-out	" -->
+* Is it correct? <!-- .element: class="fragment fade-in-then-semi-out	" -->
+* Engineers vs. Business <!-- .element: class="fragment fade-in-then-semi-out	" -->
+* Higher-kinded data? <!-- .element: class="fragment fade-in-then-semi-out	" -->
+
+notes:
+- who was asked by non-engineers how the system works?
+- who had to investigate why a particular if took a particular path?
+- who had to get a greenlight from the business on the logic?
+- who suffered due to disconnection between engineering and the business?
+- who has even the slightest idea what higher-kinded data is?
+
+++++
+
+<img src="resources/lord-savior-meme.jpg">
+
+notes:
+I built a library
+using fancy feature called higher kinded data
+and scala 3
+I want to tell you about both of them
+
+----
+
+# Decisions4s
+## THE <span style="color: red">what</span>
+
+notes:
+you have heard the why
+
+++++
+
+<span class="breadcrumb-data">Decisions4s » Example</span>
+
+### Business logic
+
+Approval process
+
+<small>
+    <ul>
+        <li><b>Unprotected</b> branch requires <b>1 approval</b></li>
+        <li><b>Protected</b> branch requires <b>2 approvals</b></li>
+        <li><b>Admin</b> can merge anything <b>without approvals</b>, but this sends a <b>notification</b></li>
+        <li><b>Nothing</b> can be merged <b>otherwise</b></li>
+    </ul>
+</small>
+
+++++
+
+<span class="breadcrumb-data">Decisions4s » Example</span>
+
+### Business logic
+
+```scala
+val allowMerging =
+  if (numOfApprovals > 0) {
+    if (isTargetBranchProtected && (
+      numOfApprovals > 1 || isUserAdmin
+    )) true
+  else !isTargetBranchProtected
+  } else if (isUserAdmin) true
+  else false
+val notifyUnusualAction = numOfApprovals == 0 && allowMerging
+```
+
+++++
+
+### Defining decisions
+
+* Input & Output
+* Rules
+* Hit Policy
+
+++++
+
+<span class="breadcrumb-data">Decisions4s » Example » Defining decisions</span>
+
+### Input & output
+
+```scala
+case class Input[F[_]](
+  numOfApprovals: F[Int],
+  isTargetBranchProtected: F[Boolean],
+  userIsAdmin: F[Boolean],
+) derives HKD
+
+case class Output[F[_]](
+  allowMerging: F[Boolean],
+  notifyUnusualAction: F[Boolean],
+) derives HKD
+```
+
+++++
+
+<span class="breadcrumb-data">Decisions4s » Example » Defining decisions</span>
+
+### Rule 1
+
+<b>Unprotected</b> branch requires <b>1 approval</b>
+
+```scala [2|7|3|4|5|8|9]
+val rule1 = Rule(
+  matching = Input(
+    numOfApprovals = it >= 1,
+    isTargetBranchProtected = it.isFalse,
+    userIsAdmin = it.catchAll,
+  ),
+  output = Output(
+    allowMerging = true,
+    notifyUnusualAction = false
+  ),
+)
+```
+
+++++
+
+<span class="breadcrumb-data">Decisions4s » Example » Defining decisions</span>
+
+### Rule 2
+
+
+<b>Protected</b> branch requires <b>2 approvals</b>
+
+```scala [3,4,8]
+val rule2 = Rule(
+  matching = Input(
+    numOfApprovals = it >= 2,
+    isTargetBranchProtected = it.isTrue,
+    userIsAdmin = it.catchAll,
+  ),
+  output = Output(
+    allowMerging = true,
+    notifyUnusualAction = false
+  ),
+)
+```
+
+++++
+
+<span class="breadcrumb-data">Decisions4s » Example » Defining decisions</span>
+
+### Rule 3
+
+<b>Admin</b> can merge anything <b>without approvals</b>, but this sends a <b>notification</b>
+
+```scala [5,9]
+val rule3 = Rule(
+  matching = Input(
+    numOfApprovals = it.catchAll,
+    isTargetBranchProtected = it.catchAll,
+    userIsAdmin = it.isTrue,
+  ),
+  output = Output(
+    allowMerging = true,
+    notifyUnusualAction = true
+  ),
+)
+```
+
+++++
+
+<span class="breadcrumb-data">Decisions4s » Example » Defining decisions</span>
+
+### Rule 4
+
+<b>Nothing</b> can be merged <b>otherwise</b>
+
+```scala
+val rule4 = Rule.default(
+  Output(
+    allowMerging = false,
+    notifyUnusualAction = false
+  ),
+)
+```
+
+++++
+
+<span class="breadcrumb-data">Decisions4s » Example » Defining decisions</span>
+
+### Decision table
+
+```scala [3|4|5]
+val decisionTable: DecisionTable[Input, Output, HitPolicy.First] =
+  DecisionTable(
+    Seq(rule1, rule2, rule3, rule4),
+    "PullRequestDecision",
+    HitPolicy.First
+  )
+
+++++
+
+visualize
+
+++++
+
+evaluate
+
+++++
+
+diagnose
+
+----
+
+## Higher Kinded Data
+
+<p style="color: gray; font-size: 0.7em">Fancy name for case classes with type parameter</p>
+
+<pre style="width: fit-content"><code class="hljs scala">case class Foo[F[_]](a: F[Int])</code></pre>
+
+++++
+
+<span class="breadcrumb-data">Decisions4s » Higher-Kinded Data</span>
+
+### Difference from tagless final?
+
+Higher-kinded data is actually useful
+
+++++
+
+<span class="breadcrumb-data">Decisions4s » Higher-Kinded Data</span>
+
+## How is it useful?
+
+Preserve shape and store
+
+<div class="container">
+    <div class="col">
+        <ul>
+            <li>Rule conditions</li>
+            <li>Rule output</li>
+            <li>Decision input</li>
+        </ul>
+    </div>
+    <div class="col">
+        <ul>
+            <li>Decision output</li>
+            <li>Rule condition result</li>
+            <li>Metadata</li>
+        </ul>
+    </div>
+</div>
+
+++++
+
+<span class="breadcrumb-data">Decisions4s » Higher-Kinded Data</span>
+
+### Rule conditions
+
+<pre style="width: fit-content"><code class="hljs scala">Input[[t] =>> Expr[t => Boolean]]</code></pre>
+
+++++
+
+<span class="breadcrumb-data">Decisions4s » Higher-Kinded Data</span>
+
+### Rule conditions
+
+```scala [1|3|5-8]
+case class Input[F[_]](a: F[Int], b: F[String])
+
+type RuleCondition = Input[[t] =>> Expr[t => Boolean]]
+
+case class InlinedInput(
+  a: Expr[Int => Boolean],
+  b: Expr[String => Boolean]
+)
+```
+
+++++
+
+<span class="breadcrumb-data">Decisions4s » Higher-Kinded Data</span>
+
+### Detour: `Expr`
+
+```scala
+trait Expr[T] {
+  def evaluate: T
+  def render: String
+}
+```
+
+++++
+
+<span class="breadcrumb-data">Decisions4s » Higher-Kinded Data</span>
+
+### Rule conditions
+
+<pre style="width: fit-content"><code class="hljs scala">Input[[t] =>> Expr[t => Boolean]]</code></pre>
+
+```scala [1-4|5-8|10|12]
+object IsPositive extends Expr[Int => Boolean] {
+  def evaluate: Int => Boolean = _.isPositive
+  def render: String = "isPositive"
+}
+object IsEmpty extends Expr[String => Boolean] {
+  def evaluate: String => Boolean = _.isEmpty
+  def render: String = "isEmpty"
+}
+
+type UnaryTest[T] = Expr[T => Boolean]
+
+Input[UnaryTest](a = IsPositive, b = IsEmpty)
+```
+
+++++
+
+<span class="breadcrumb-data">Decisions4s » Higher-Kinded Data</span>
+
+### Decision Input
+
+<pre style="width: fit-content"><code class="hljs scala">Input[[t] =>> t]</code></pre>
+
+```scala [3|4|6]
+case class Input[F[_]](a: F[Int], b: F[String])
+
+type Id[T] = T
+type Value[T] = T
+
+Input[Value](a = 1, b = "hi")
+```
+
+++++
+
+<span class="breadcrumb-data">Decisions4s » Higher-Kinded Data</span>
+
+### Rule Output
+
+<pre style="width: fit-content"><code class="hljs scala">Output[[t] =>> Expr[t]]</code></pre>
+<pre style="width: fit-content"><code class="hljs scala">Output[Expr]</code></pre>
+
+++++
+
+<span class="breadcrumb-data">Decisions4s » Higher-Kinded Data</span>
+
+### Rule Output
+
+```scala [3|5-8|11]
+case class Output[F[_]](a: F[Int], b: F[String])
+
+type RuleOutput = Output[Expr]
+
+case class Literal[T](value: T) extends Expr[T] {
+  def evaluate: T = value
+  def render: String = value.toString
+}
+
+val output: RuleOutput =
+    Input[Value](a = Literal(1), b = Literal("hi"))
+```
+
+++++
+
+<span class="breadcrumb-data">Decisions4s » Higher-Kinded Data</span>
+
+### Decision Output
+
+<pre style="width: fit-content"><code class="hljs scala">Output[[t] =>> t]</code></pre>
+<pre style="width: fit-content"><code class="hljs scala">Output[Value]</code></pre>
+
+++++
+
+<span class="breadcrumb-data">Decisions4s » Higher-Kinded Data</span>
+
+### Metadata
+
+<pre style="width: fit-content"><code class="hljs scala">Output[[t] =>> String]</code></pre>
+
+++++
+
+<span class="breadcrumb-data">Decisions4s » Higher-Kinded Data</span>
+
+### Other
+
+```scala [3|5|6|7|8|9]
+case class Input[F[_]](a: F[Int], b: F[String])
+
+type Const[T] = [t] =>> T
+
+type FieldNames              = Input[Const[String]]
+type FieldIndexes            = Input[Const[Int]]
+type RuleConditionEvaluated  = Input[Const[Boolean]]
+type InputConditionsRendered = Input[Const[String]]
+type OutputRendered          = Input[Const[String]]
+```
+
+++++
+
+<span class="breadcrumb-data">Decisions4s » Higher-Kinded Data</span>
+
+### Can we just use maps?
+
+- hard to implement heterogeneous ones
+- can't ensure key set
+- no IDE support
+
+++++
+
+<span class="breadcrumb-data">Decisions4s » Higher-Kinded Data</span>
+
+### HKD vs GADTs
+
+HKD can be seen as higher kinded GADT
+
+```scala
+// GADT
+enum Box[T](contents: T) {
+  case IntBox(n: Int) extends Box[Int](n)
+  case BoolBox(b: Boolean) extends Box[Boolean](b)
+}
+```
+
+----
+
+<span class="breadcrumb-data">Decisions4s » Higher-Kinded Data</span>
+
+## How to operate on HKD
+
+++++
+
+<span class="breadcrumb-data">Decisions4s » Higher-Kinded Data » Operations</span>
+
+## How to operate on HKD
+
+```scala [3,6,9]
+trait HKD[Data[_[_]]] {
+
+    def pure[A[_]](f: [t] => () => A[t]): Data[A]
+
+    extension [A[_]](af: Data[A]) {
+        def mapK[B[_]](f: [t] => A[t] => B[t]): Data[B]
+    }
+
+    def map2[A[_], B[_], C[_]](
+        dataA: Data[A],
+        dataB: Data[B],
+        f: [t] => (A[t], B[t]) => C[t],
+    ): Data[C]
+}
+```
+
+++++
+
+<span class="breadcrumb-data">Decisions4s » Higher-Kinded Data » Operations</span>
+
+### `HKD.pure`
+
+Create an instance for any field type
+```scala
+def pure[A[_]](f: [t] => () => A[t]): Data[A]
+```
+```scala [4-6]
+object Rule {
+    def default[Input[_[_]]: HKD, Output[_[_]]: HKD](output: Output[OutputValue]): Rule[Input, Output] = {
+        Rule(
+            matching = HKD[Input].pure[UnaryTest](
+                [t] => () => it.catchAll[t]
+            ),
+            output = output,
+        )
+    }
+}
+```
+
+++++
+
+<span class="breadcrumb-data">Decisions4s » Higher-Kinded Data » Operations</span>
+
+### `HKD.mapK`
+
+Transform each field
+```scala
+extension [A[_]](af: Data[A]) {
+    def mapK[B[_]](f: [t] => A[t] => B[t]): Data[B]
+}
+```
+```scala [3,6]
+class Rule[..., Output[_[_]]: HKD](...) {
+    def evaluateOutput(): Output[Value] = {
+        output.mapK([t] => expr => expr.evaluate)
+    }
+    def renderOutput(): Output[Const[String] = {
+        output.mapK([t] => expr => expr.render)
+    }
+}
+```
+
+
+++++
+
+<span class="breadcrumb-data">Decisions4s » Higher-Kinded Data » Operations</span>
+
+### `HKD.map2`
+
+Merge two objects field by field
+```scala
+def map2[A[_], B[_], C[_]](
+    dataA: Data[A],
+    dataB: Data[B]
+)(
+    f: [t] => (A[t], B[t]) => C[t],
+): Data[C]
+```
+```scala [3-6]
+class Rule[..., Output[_[_]]: HKD](...) {
+  def evaluate(in: Input[Value]) = {
+    val evaluated: Input[Const[Boolean]]  =
+      HKD.map2(matching, in)(
+        [t] => (expr, value) => expr.evaluate(value)
+      )
+    ...
+  }
+}
+```
+
+++++
+
+<span class="breadcrumb-data">Decisions4s » Higher-Kinded Data » Operations</span>
+
+### Don't implement this by hand
+
+[tschuchortdev/hkd4s](https://github.com/tschuchortdev/hkd4s)
+
+
+++++
+
+<span class="breadcrumb-data">Decisions4s » Higher-Kinded Data » Operations</span>
+
+### Recursion is hard
+
+How to express?
+
+```scala
+case class Foo[F[_]](a: F[Int])
+
+case class Bar1[F[_]](b: Foo[F])
+// or
+case class Bar2[F[_]](b: F[Foo[F]])
+```
+
+++++
+
+<span class="breadcrumb-data">Decisions4s » Higher-Kinded Data » Operations</span>
+
+### Recursion is hard
+
+Which variant to choose?
+
+```scala
+extension [A[_]](af: Data[A]) {
+    def mapK[B[_]](f: A ~> B)(using Functor[B]): Data[B]
+    def mapK1[B[_]](f: A ~> B)(using Functor[A]): Data[B]
+}
+```
+
+++++
+
+<span class="breadcrumb-data">Decisions4s » Higher-Kinded Data » Operations</span>
+
+### Recursion is hard
+
+`map2` is an absolute mess
+
+----
+
+<span class="breadcrumb-data">Decisions4s</span>
+
+## Scala 3
+
+Why `Decisions4s` wouldn't fly in Scala 2
+
+++++
+
+<span class="breadcrumb-data">Decisions4s » Scala 3</span>
+
+### Type lambdas
+
+Type-level functions
+
+```scala
+// Scala 3
+[t] =>> Either[Int, t]
+// Scala 2
+{type X[t] = Either[Int, t]})#X
+// Scala 2 with kind-projector
+Lambda[t => Either[Int, t]]
+```
+
+++++
+
+<span class="breadcrumb-data">Decisions4s » Scala 3</span>
+
+### Type lambdas
+
+TODO example
+
+++++
+
+<span class="breadcrumb-data">Decisions4s » Scala 3</span>
+
+### Polymorphic functions
+
+```scala
+// Scala 3
+type Poly[F[_], G[_]] = [A] => F[A] => G[A]
+
+// Scala 2
+trait Poly[F[_], G[_]] {
+  def run[A](fa: F[A]): G[A]
+}
+```
+
+++++
+
+<span class="breadcrumb-data">Decisions4s » Scala 3</span>
+
+### Polymorphic functions
+
+```scala
+// Scala 3
+val eitherToOption = [A] => (x: Either[Any, A]) => x.toOption
+
+// Scala 2
+val eitherToOption = new Poly[Either[Any, *], Option] {
+  def run[A](x: Either[Any, A]): Option[A] = x.toOption
+}
+```
+
+++++
+
+<span class="breadcrumb-data">Decisions4s » Scala 3</span>
+
+### Polymorphic functions
+
+TODO example
+
+++++
+
+<span class="breadcrumb-data">Decisions4s » Scala 3</span>
+
+### Context functions
+
+```scala
+// Scala 3
+val foo: Context ?=> Int => [A]
+
+// Scala 2, but not possible
+def foo(implicit ctx: Context): Int
+val fooAsValue = foo
+```
+
+
+++++
+
+<span class="breadcrumb-data">Decisions4s » Scala 3</span>
+
+### Context functions
+
+```scala
+class Rule[Input[_[_]]: HKD, Output[_[_]]: HKD](
+  val matching: EvaluationContext[Input] ?=> Input[UnaryTest],
+  val output: EvaluationContext[Input] ?=> Output[OutputValue],
+)
+
+trait EvaluationContext[In[_[_]]] {
+  def wholeInput: In[Expr]
+}
+```
+
+++++
+
+<span class="breadcrumb-data">Decisions4s » Scala 3</span>
+
+### Context functions
+
+```scala
+// syntax
+def wholeInput[In[_[_]]](using ec: EvaluationContext[In]): In[Expr] =
+    ec.wholeInput
+
+val rule = Rule(
+  ...
+  output = Output(c = wholeInput.a + wholeInput.b)
+)
+```
+
+++++
+
+<span class="breadcrumb-data">Decisions4s » Scala 3</span>
+
+### Type Class derivation
+
+```scala [2|5]
+case class Input[F[_]](a: F[Int])
+  derives HKD
+
+object HKD {
+  inline def derived[F[_[_]]](using K11.ProductGeneric[F], Labelling[F[Const[Any]]]): HKD[F] = shapeGen
+}
+```
+
+----
+
+<span class="breadcrumb-data">Decisions4s</span>
+
+## Decisions4s
+### A bit more context
+
+++++
+
+<span class="breadcrumb-data">Decisions4s » Context</span>
+
+### How and why was it built
+
+* I work at SwissBorg
+* I work at Payments
+* Each payment transaction goes through dozens of checks
+* Checks are defined by the business
+
+And we have couple more (KYC checks, fiat payment routing)
+
+++++
+
+<span class="breadcrumb-data">Decisions4s » Context</span>
+
+### We're hiring!
+
+++++
+
+<span class="breadcrumb-data">Decisions4s » Context</span>
+
+### Can we let the business edit the rules?
+
+We can but we shouldn't
+
+
+++++
+
+<span class="breadcrumb-data">Decisions4s » Context</span>
+
+### Is it production-ready?
+
+Everything is production-ready if you're brave enough
+
+----
+
+<span class="breadcrumb-data">Decisions4s</span>
+
+### Talk to the business!
+
+<hr style="width:100%;height:0.15em;background-color: #eee;">
+<div style="font-size: 0.7em">
+Thank you!
+
+Voytek Pituła @ SwissBorg
+
+[https://w.pitula.me/presentations](https://w.pitula.me/presentations)
+</div>

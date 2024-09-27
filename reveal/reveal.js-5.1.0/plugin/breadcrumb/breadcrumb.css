@@ -1,0 +1,14 @@
+
+.breadcrumb {
+  position: fixed;
+  font-size: 0.6em;
+  color: gray;
+  left: 40px;
+  top: 40px;
+  text-transform: capitalize;
+  /* text-align: center; */
+  /* width: 100%; */
+}
+.breadcrumb-data {
+  display: none;
+}
