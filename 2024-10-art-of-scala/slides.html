@@ -500,8 +500,8 @@ HKD can be seen as higher kinded GADT
 ```scala
 // GADT
 enum Box[T](contents: T) {
-case IntBox(n: Int) extends Box[Int](n)
-case BoolBox(b: Boolean) extends Box[Boolean](b)
+  case IntBox(n: Int) extends Box[Int](n)
+  case BoolBox(b: Boolean) extends Box[Boolean](b)
 }
 ```
 
@@ -520,17 +520,17 @@ case BoolBox(b: Boolean) extends Box[Boolean](b)
 ```scala [3,6,9]
 trait HKD[Data[_[_]]] {
 
-def pure[A[_]](f: [t] => () => A[t]): Data[A]
+    def pure[A[_]](f: [t] => () => A[t]): Data[A]
 
-extension [A[_]](af: Data[A]) {
-def mapK[B[_]](f: [t] => A[t] => B[t]): Data[B]
-}
+    extension [A[_]](af: Data[A]) {
+        def mapK[B[_]](f: [t] => A[t] => B[t]): Data[B]
+    }
 
-def map2[A[_], B[_], C[_]](
-dataA: Data[A],
-dataB: Data[B],
-f: [t] => (A[t], B[t]) => C[t],
-): Data[C]
+    def map2[A[_], B[_], C[_]](
+        dataA: Data[A],
+        dataB: Data[B],
+        f: [t] => (A[t], B[t]) => C[t],
+    ): Data[C]
 }
 ```
 
@@ -564,17 +564,17 @@ object Rule {
 Transform each field
 ```scala
 extension [A[_]](af: Data[A]) {
-def mapK[B[_]](f: [t] => A[t] => B[t]): Data[B]
+    def mapK[B[_]](f: [t] => A[t] => B[t]): Data[B]
 }
 ```
 ```scala [3,6]
 class Rule[..., Output[_[_]]: HKD](...) {
-def evaluateOutput(): Output[Value] = {
-output.mapK([t] => expr => expr.evaluate)
-}
-def renderOutput(): Output[Const[String] = {
-output.mapK([t] => expr => expr.render)
-}
+    def evaluateOutput(): Output[Value] = {
+        output.mapK([t] => expr => expr.evaluate)
+    }
+    def renderOutput(): Output[Const[String] = {
+        output.mapK([t] => expr => expr.render)
+    }
 }
 ```
 
@@ -587,21 +587,21 @@ output.mapK([t] => expr => expr.render)
 Merge two objects field by field
 ```scala
 def map2[A[_], B[_], C[_]](
-dataA: Data[A],
-dataB: Data[B]
+    dataA: Data[A],
+    dataB: Data[B]
 )(
-f: [t] => (A[t], B[t]) => C[t],
+    f: [t] => (A[t], B[t]) => C[t],
 ): Data[C]
 ```
 ```scala [3-6]
 class Rule[..., Output[_[_]]: HKD](...) {
-def evaluate(in: Input[Value]) = {
-val evaluated: Input[Const[Boolean]]  =
-HKD.map2(matching, in)(
-[t] => (expr, value) => expr.evaluate(value)
-)
-...
-}
+  def evaluate(in: Input[Value]) = {
+    val evaluated: Input[Const[Boolean]]  =
+      HKD.map2(matching, in)(
+        [t] => (expr, value) => expr.evaluate(value)
+      )
+    ...
+  }
 }
 ```
 
@@ -638,8 +638,8 @@ Which variant to choose?
 
 ```scala
 extension [A[_]](af: Data[A]) {
-def mapK[B[_]](f: A ~> B)(using Functor[B]): Data[B]
-def mapK1[B[_]](f: A ~> B)(using Functor[A]): Data[B]
+    def mapK[B[_]](f: A ~> B)(using Functor[B]): Data[B]
+    def mapK1[B[_]](f: A ~> B)(using Functor[A]): Data[B]
 }
 ```
 
@@ -705,7 +705,7 @@ type Poly[F[_], G[_]] = [A] => F[A] => G[A]
 
 // Scala 2
 trait Poly[F[_], G[_]] {
-def run[A](fa: F[A]): G[A]
+  def run[A](fa: F[A]): G[A]
 }
 ```
 
@@ -719,7 +719,7 @@ val eitherToOption = [A] => (x: Either[Any, A]) => x.toOption
 
 // Scala 2
 val eitherToOption = new Poly[Either[Any, *], Option] {
-def run[A](x: Either[Any, A]): Option[A] = x.toOption
+  def run[A](x: Either[Any, A]): Option[A] = x.toOption
 }
 ```
 
@@ -749,12 +749,12 @@ val fooAsValue = foo
 
 ```scala
 class Rule[Input[_[_]]: HKD, Output[_[_]]: HKD](
-val matching: EvaluationContext[Input] ?=> Input[UnaryTest],
-val output: EvaluationContext[Input] ?=> Output[OutputValue],
+  val matching: EvaluationContext[Input] ?=> Input[UnaryTest],
+  val output: EvaluationContext[Input] ?=> Output[OutputValue],
 )
 
 trait EvaluationContext[In[_[_]]] {
-def wholeInput: In[Expr]
+  def wholeInput: In[Expr]
 }
 ```
 
@@ -765,11 +765,11 @@ def wholeInput: In[Expr]
 ```scala
 // syntax
 def wholeInput[In[_[_]]](using ec: EvaluationContext[In]): In[Expr] =
-ec.wholeInput
+    ec.wholeInput
 
 val rule = Rule(
-...
-output = Output(c = wholeInput.a + wholeInput.b)
+  ...
+  output = Output(c = wholeInput.a + wholeInput.b)
 )
 ```
 
@@ -779,10 +779,10 @@ output = Output(c = wholeInput.a + wholeInput.b)
 
 ```scala [2|5]
 case class Input[F[_]](a: F[Int])
-derives HKD
+  derives HKD
 
 object HKD {
-inline def derived[F[_[_]]](using K11.ProductGeneric[F], Labelling[F[Const[Any]]]): HKD[F] = shapeGen
+  inline def derived[F[_[_]]](using K11.ProductGeneric[F], Labelling[F[Const[Any]]]): HKD[F] = shapeGen
 }
 ```
 
@@ -837,9 +837,9 @@ Everything is production-ready if you're brave enough
 
 <hr style="width:100%;height:0.15em;background-color: #eee;">
 <div style="font-size: 0.7em">
-    Thank you!
+Thank you!
 
-    Voytek Pituła @ SwissBorg
+Voytek Pituła @ SwissBorg
 
-    [https://w.pitula.me/presentations](https://w.pitula.me/presentations)
+[https://w.pitula.me/presentations](https://w.pitula.me/presentations)
 </div>
