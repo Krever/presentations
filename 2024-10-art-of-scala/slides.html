@@ -206,12 +206,11 @@ notifyUnusualAction = false
 
 ```scala [3|4|5]
 val decisionTable: DecisionTable[Input, Output, HitPolicy.First] =
-DecisionTable(
-Seq(rule1, rule2, rule3, rule4),
-"PullRequestDecision",
-HitPolicy.First
-)
-
+    DecisionTable(
+        Seq(rule1, rule2, rule3, rule4),
+        "PullRequestDecision",
+        HitPolicy.First
+    )
 ++++
 
 ### Detour: `HitPolicy`
@@ -392,12 +391,12 @@ b: Expr[String => Boolean]
 
 ```scala [1-4|5-8|10|12]
 object IsPositive extends Expr[Int => Boolean] {
-def evaluate: Int => Boolean = _ > 0
-def render: String = "isPositive"
+    def evaluate: Int => Boolean = _ > 0
+    def render: String = "isPositive"
 }
 object IsEmpty extends Expr[String => Boolean] {
-def evaluate: String => Boolean = _.isEmpty
-def render: String = "isEmpty"
+    def evaluate: String => Boolean = _.isEmpty
+    def render: String = "isEmpty"
 }
 
 Input[UnaryTest](a = IsPositive, b = IsEmpty)
@@ -440,8 +439,8 @@ case class Output[F[_]](a: F[Int], b: F[String])
 type RuleOutput = Output[Expr]
 
 case class Literal[T](value: T) extends Expr[T] {
-def evaluate: T = value
-def render: String = value.toString
+    def evaluate: T = value
+    def render: String = value.toString
 }
 
 val output: RuleOutput =
@@ -619,7 +618,7 @@ class Rule[..., Output[_[_]]: HKD](...) {
 
 ### Recursion is hard
 
-How to express?
+To wrap or not to wrap?
 
 ```scala
 case class Foo[F[_]](a: F[Int])
@@ -653,13 +652,13 @@ extension [A[_]](af: Data[A]) {
 
 ### Recursion is hard
 
-Storing metadata is hard
+Storing metadata is harder
 
 ```scala
 case class Meta[T](
-name: String,
-index: Int,
-child: Option[Meta[T]]
+    name: String,
+    index: Int,
+    child: Option[Meta[T]]
 )
 val meta: Input[Meta]
 ```
@@ -670,7 +669,7 @@ val meta: Input[Meta]
 
 ## Scala 3
 
-Why `Decisions4s` wouldn't fly in Scala 2
+Why `Decisions4s` would be very awakward in Scala 2
 
 ++++
 
@@ -689,18 +688,14 @@ Type-level functions
 Lambda[t => Either[Int, t]]
 ```
 
-++++
-
-### Type lambdas
-
-TODO example
+<span style="font-size: 0.7em;color: gray">Plenty of examples presented before</span>
 
 ++++
 
 ### Polymorphic functions
 
 ```scala
-// Scala 3
+// Scala 3, can be inline
 type Poly[F[_], G[_]] = [A] => F[A] => G[A]
 
 // Scala 2
@@ -727,7 +722,12 @@ val eitherToOption = new Poly[Either[Any, *], Option] {
 
 ### Polymorphic functions
 
-TODO example
+Examples
+
+```scala
+[T] => (x: Expr[T]) => x.render
+[T] => (x: Expr[T => Boolean], v: T) = x.evaluate(v)
+```
 
 ++++
 
@@ -737,8 +737,9 @@ TODO example
 // Scala 3
 val foo: Context ?=> Int => [A]
 
-// Scala 2, but not possible
+// Scala 2
 def foo(implicit ctx: Context): Int
+// not possible
 val fooAsValue = foo
 ```
 
@@ -748,14 +749,15 @@ val fooAsValue = foo
 ### Context functions
 
 ```scala
+// grants access to the whole input
+trait EvaluationContext[In[_[_]]] {
+  def wholeInput: In[Expr]
+}
+
 class Rule[Input[_[_]]: HKD, Output[_[_]]: HKD](
   val matching: EvaluationContext[Input] ?=> Input[UnaryTest],
   val output: EvaluationContext[Input] ?=> Output[OutputValue],
 )
-
-trait EvaluationContext[In[_[_]]] {
-  def wholeInput: In[Expr]
-}
 ```
 
 ++++
@@ -791,7 +793,7 @@ object HKD {
 <span class="breadcrumb-data">Decisions4s</span>
 
 ## Decisions4s
-### A bit more context
+### A bit more <span style="color: red">context</span>
 
 ++++
 
@@ -799,12 +801,11 @@ object HKD {
 
 ### How and why was it built
 
-* I work at SwissBorg
-* I work at Payments
-* Each payment transaction goes through dozens of checks
-* Checks are defined by the business
-
-And we have couple more (KYC checks, fiat payment routing)
+* I work at SwissBorg <!-- .element: class="fragment fade-in-then-semi-out	" -->
+* I work at Payments <!-- .element: class="fragment fade-in-then-semi-out	" -->
+* Each payment transaction goes through dozens of checks <!-- .element: class="fragment fade-in-then-semi-out	" -->
+* Checks are defined by the business <!-- .element: class="fragment fade-in-then-semi-out	" -->
+* We also have other usecases (KYC checks, fiat payment routing) <!-- .element: class="fragment fade-in-then-semi-out	" -->
 
 ++++
 
