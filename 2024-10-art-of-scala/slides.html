@@ -66,7 +66,7 @@ you have heard the why
 
 ### Business logic
 
-Approval process
+Pull request approval process
 
 <small>
     <ul>
@@ -193,10 +193,10 @@ val rule3 = Rule(
 
 ```scala
 val rule4 = Rule.default(
-Output(
-allowMerging = false,
-notifyUnusualAction = false
-),
+  Output(
+    allowMerging = false,
+    notifyUnusualAction = false
+  )
 )
 ```
 
@@ -204,16 +204,20 @@ notifyUnusualAction = false
 
 ### Decision table
 
-```scala [3|4|5]
+```scala [1|3|4|5]
 val decisionTable: DecisionTable[Input, Output, HitPolicy.First] =
     DecisionTable(
         Seq(rule1, rule2, rule3, rule4),
         "PullRequestDecision",
         HitPolicy.First
     )
+```
+
 ++++
 
 ### Detour: `HitPolicy`
+
+Strategy defining what to do with triggered rules outputs
 
 * unique
 * first
@@ -293,6 +297,12 @@ Rule 1 [✓]:
   == Output(true,false)
 ```
 
+++++
+
+# Cool?
+
+[TODO some funny pic]
+
 ----
 
 <span class="breadcrumb-data">Decisions4s</span>
@@ -316,7 +326,11 @@ Rule 1 [✓]:
 
 ### Difference from tagless final?
 
-Higher-kinded data is actually useful
+<pre style="width: fit-content"><code class="hljs scala">trait Foo[F[_]]{
+  def a: F[Int]
+}</code></pre>
+
+<span class="fragment">Higher-kinded data is actually useful</span>
 
 ++++
 
@@ -358,8 +372,8 @@ Check if rule is satisfied for given field (renderable)
 
 ```scala
 trait Expr[T] {
-def evaluate: T
-def render: String
+  def evaluate: T
+  def render: String
 }
 ```
 
@@ -377,8 +391,8 @@ type RuleCondition = Input[UnaryTest]
 
 // Input[UnaryTest]
 case class InlinedInput(
-a: Expr[Int => Boolean],
-b: Expr[String => Boolean]
+  a: Expr[Int => Boolean],
+  b: Expr[String => Boolean]
 )
 ```
 
@@ -389,7 +403,7 @@ b: Expr[String => Boolean]
 
 <pre style="width: fit-content"><code class="hljs scala">Input[[t] =>> Expr[t => Boolean]]</code></pre>
 
-```scala [1-4|5-8|10|12]
+```scala [1-4|5-8|10]
 object IsPositive extends Expr[Int => Boolean] {
     def evaluate: Int => Boolean = _ > 0
     def render: String = "isPositive"
@@ -439,12 +453,12 @@ case class Output[F[_]](a: F[Int], b: F[String])
 type RuleOutput = Output[Expr]
 
 case class Literal[T](value: T) extends Expr[T] {
-    def evaluate: T = value
-    def render: String = value.toString
+  def evaluate: T = value
+  def render: String = value.toString
 }
 
 val output: RuleOutput =
-Input[Expr](a = Literal(1), b = Literal("hi"))
+  Input[Expr](a = Literal(1), b = Literal("hi"))
 ```
 
 ++++
@@ -465,7 +479,7 @@ Value produced by the whole decision table<br>(not renderable)
 ```scala [3|5-6|7-8|9-10|11-12|13-14]
 case class Input[F[_]](a: F[Int], b: F[String])
 
-type Const[T] = [t] =>> T
+type Const[A] = [t] =>> A
 
 type FieldNames              = Input[Const[String]]
 // Input("a", "b")
@@ -485,9 +499,9 @@ type RuleOutputRendered      = Output[Const[String]]
 
 ### Can we just use maps?
 
-- hard to implement heterogeneous ones
-- can't ensure key set
-- no IDE support
+- hard to implement heterogeneous ones <!-- .element: class="fragment fade-in-then-semi-out	" -->
+- can't ensure the key set <!-- .element: class="fragment fade-in-then-semi-out	" -->
+- no IDE support <!-- .element: class="fragment fade-in-then-semi-out	" -->
 
 ++++
 
@@ -618,9 +632,13 @@ class Rule[..., Output[_[_]]: HKD](...) {
 
 ### Recursion is hard
 
+++++
+
+### Recursion is hard
+
 To wrap or not to wrap?
 
-```scala
+```scala [3-5]
 case class Foo[F[_]](a: F[Int])
 
 case class Bar1[F[_]](b: Foo[F])
@@ -652,7 +670,7 @@ extension [A[_]](af: Data[A]) {
 
 ### Recursion is hard
 
-Storing metadata is harder
+Storing metadata is more complicated
 
 ```scala
 case class Meta[T](
@@ -662,6 +680,7 @@ case class Meta[T](
 )
 val meta: Input[Meta]
 ```
+<span style="font-size: 0.7em;color: gray">Works only with wrapping</span>
 
 ----
 
@@ -683,7 +702,7 @@ Type-level functions
 // Scala 3
 [t] =>> Either[Int, t]
 // Scala 2
-{type X[t] = Either[Int, t]})#X
+({ type X[t] = Either[Int, t] })#X
 // Scala 2 with kind-projector
 Lambda[t => Either[Int, t]]
 ```
@@ -748,7 +767,7 @@ val fooAsValue = foo
 
 ### Context functions
 
-```scala
+```scala [1-4|6-9]
 // grants access to the whole input
 trait EvaluationContext[In[_[_]]] {
   def wholeInput: In[Expr]
@@ -764,7 +783,7 @@ class Rule[Input[_[_]]: HKD, Output[_[_]]: HKD](
 
 ### Context functions
 
-```scala
+```scala [7]
 // syntax
 def wholeInput[In[_[_]]](using ec: EvaluationContext[In]): In[Expr] =
     ec.wholeInput
