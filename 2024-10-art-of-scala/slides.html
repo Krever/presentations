@@ -301,7 +301,7 @@ Rule 1 [✓]:
 
 # Cool?
 
-[TODO some funny pic]
+<img src="resources/cool-flork-meme-vector-illustration_622487-2016.avif">
 
 ----
 
@@ -401,8 +401,6 @@ case class InlinedInput(
 
 ### Rule conditions
 
-<pre style="width: fit-content"><code class="hljs scala">Input[[t] =>> Expr[t => Boolean]]</code></pre>
-
 ```scala [1-4|5-8|10]
 object IsPositive extends Expr[Int => Boolean] {
     def evaluate: Int => Boolean = _ > 0
@@ -420,6 +418,8 @@ Input[UnaryTest](a = IsPositive, b = IsEmpty)
 
 
 ### Decision Input
+
+Values passed during evaluation
 
 <pre style="width: fit-content"><code class="hljs scala">Input[[t] =>> t]</code></pre>
 
@@ -556,7 +556,9 @@ Create an instance for any field type
 ```scala
 def pure[A[_]](f: [t] => () => A[t]): Data[A]
 ```
-```scala [4-6]
+<div class="fragment">
+
+```scala [|4-6]
 object Rule {
     def default[Input[_[_]]: HKD, Output[_[_]]: HKD](output: Output[OutputValue]): Rule[Input, Output] = {
         Rule(
@@ -569,6 +571,8 @@ object Rule {
 }
 ```
 
+</div>
+
 ++++
 
 
@@ -580,7 +584,9 @@ extension [A[_]](af: Data[A]) {
     def mapK[B[_]](f: [t] => A[t] => B[t]): Data[B]
 }
 ```
-```scala [3,6]
+<div class="fragment">
+
+```scala [|3|6]
 class Rule[..., Output[_[_]]: HKD](...) {
     def evaluateOutput(): Output[Value] = {
         output.mapK([t] => expr => expr.evaluate)
@@ -591,6 +597,8 @@ class Rule[..., Output[_[_]]: HKD](...) {
 }
 ```
 
+</div>
+
 
 ++++
 
@@ -598,7 +606,7 @@ class Rule[..., Output[_[_]]: HKD](...) {
 ### `HKD.map2`
 
 Merge two objects field by field
-```scala
+```scala [|2,3|5]
 def map2[A[_], B[_], C[_]](
     dataA: Data[A],
     dataB: Data[B]
@@ -606,17 +614,18 @@ def map2[A[_], B[_], C[_]](
     f: [t] => (A[t], B[t]) => C[t],
 ): Data[C]
 ```
-```scala [3-6]
+<div class="fragment">
+
+```scala [2|3-6]
 class Rule[..., Output[_[_]]: HKD](...) {
-  def evaluate(in: Input[Value]) = {
-    val evaluated: Input[Const[Boolean]]  =
-      HKD.map2(matching, in)(
-        [t] => (expr, value) => expr.evaluate(value)
-      )
-    ...
-  }
+  def evaluate(in: Input[Value]): Input[Const[Boolean]] =
+    HKD.map2(matching, in)(
+      [t] => (expr, value) => expr.evaluate(value)
+    )
 }
 ```
+
+</div>
 
 ++++
 
@@ -754,7 +763,7 @@ Examples
 
 ```scala
 // Scala 3
-val foo: Context ?=> Int => [A]
+val foo: Context ?=> Int => String
 
 // Scala 2
 def foo(implicit ctx: Context): Int
