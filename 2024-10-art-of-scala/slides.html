@@ -552,7 +552,7 @@ trait HKD[Data[_[_]]] {
 
 ### `HKD.pure`
 
-Create an instance for any field type
+Create an instance
 ```scala
 def pure[A[_]](f: [t] => () => A[t]): Data[A]
 ```
@@ -682,12 +682,11 @@ extension [A[_]](af: Data[A]) {
 Storing metadata is more complicated
 
 ```scala
-case class Meta[T](
-    name: String,
-    index: Int,
-    child: Option[Meta[T]]
+case class Const[V](
+    value: V
+    child: Option[Const[V]]
 )
-val meta: Input[Meta]
+val meta: Input[Const]
 ```
 <span style="font-size: 0.7em;color: gray">Works only with wrapping</span>
 
@@ -839,7 +838,9 @@ object HKD {
 
 <span class="breadcrumb-data">Decisions4s » Context</span>
 
-### We're hiring!
+## We're hiring!
+### Remotely!
+#### For good bucks!
 
 ++++
 
