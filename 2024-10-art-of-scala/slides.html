@@ -299,6 +299,20 @@ Rule 1 [✓]:
 
 ++++
 
+### Bonus: effectful inputs
+
+Run the IO only when needed
+
+```scala
+val result: IO[...] = decisionTable.evaluateFirst(
+    Input[IO](
+      numOfApprovals = fetchFromApi(),
+      ...
+    )
+```
+
+++++
+
 # Cool?
 
 <img src="resources/cool-flork-meme-vector-illustration_622487-2016.avif">
@@ -437,7 +451,7 @@ Input[Value](a = 1, b = "hi")
 
 ### Rule Output
 
-Value produced by the rule (renderable)
+Values produced by the rule (renderable)
 
 <pre style="width: fit-content"><code class="hljs scala">Output[[t] =>> Expr[t]]</code></pre>
 <pre style="width: fit-content"><code class="hljs scala">Output[Expr]</code></pre>
@@ -466,7 +480,7 @@ val output: RuleOutput =
 
 ### Decision Output
 
-Value produced by the whole decision table<br>(not renderable)
+Values produced by the whole decision table<br>(not renderable)
 
 <pre style="width: fit-content"><code class="hljs scala">Output[[t] =>> t]</code></pre>
 <pre style="width: fit-content"><code class="hljs scala">Output[Value]</code></pre>
@@ -487,7 +501,7 @@ type FieldIndexes            = Input[Const[Int]]
 // Input(0, 1)
 type RuleConditionEvaluated  = Input[Const[Boolean]]
 // Input(true, false)
-type RuleConditionsRendered = Input[Const[String]]
+type RuleConditionsRendered  = Input[Const[String]]
 // Input("isPositive", "isEmpty")
 type RuleOutputRendered      = Output[Const[String]]
 // Output("a * 2")
@@ -637,13 +651,13 @@ class Rule[..., Output[_[_]]: HKD](...) {
 
 ++++
 
-<span class="breadcrumb-data">Decisions4s » The how » Higher-Kinded Data » Recursion</span>
+<span class="breadcrumb-data">Decisions4s » The how » Higher-Kinded Data » Nesting</span>
 
-### Recursion is hard
+### Nesting is hard
 
 ++++
 
-### Recursion is hard
+### Nesting is hard
 
 To wrap or not to wrap?
 
@@ -658,7 +672,7 @@ case class Bar2[F[_]](b: F[Foo[F]])
 ++++
 
 
-### Recursion is hard
+### Nesting is hard
 
 Which variant to choose?
 
@@ -671,22 +685,23 @@ extension [A[_]](af: Data[A]) {
 
 ++++
 
-### Recursion is hard
+### Nesting is hard
 
 `map2` is an absolute mess
 
 ++++
 
-### Recursion is hard
+### Nesting is hard
 
 Storing metadata is more complicated
 
 ```scala
-case class Const[V](
+case class ConstT[V](
     value: V
     child: Option[Const[V]]
 )
-val meta: Input[Const]
+type Const[A] = [t] => ConstT[A]
+val meta: Input[Const[String]]
 ```
 <span style="font-size: 0.7em;color: gray">Works only with wrapping</span>
 
@@ -709,6 +724,7 @@ Type-level functions
 ```scala
 // Scala 3
 [t] =>> Either[Int, t]
+
 // Scala 2
 ({ type X[t] = Either[Int, t] })#X
 // Scala 2 with kind-projector
@@ -858,6 +874,14 @@ We can but we shouldn't
 ### Is it production-ready?
 
 Everything is production-ready if you're brave enough
+
+++++
+
+<span class="breadcrumb-data">Decisions4s » Context</span>
+
+### Can I use it from scala 2?
+
+Yes, kind of.
 
 ----
 
