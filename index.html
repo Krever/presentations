@@ -3,24 +3,29 @@
 <head>
     <meta charset="utf-8"/>
     <title>Voytek's talks</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.2.9/semantic.min.css"/>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.2.9/semantic.min.js"></script>
-    <style>
-        .talk-conf {
-            /*font-size: 0.8em;*/
-        }
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/semantic-ui@2.5.0/dist/semantic.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/semantic-ui@2.5.0/dist/semantic.min.js"></script>
 
-        .talk-conf > td {
+
+    <style>
+        #accordionContainer .ui.cards>.card>.content>.header {
+            font-weight: 600;
+            font-size: 1em;
+        }
+        #accordionContainer .card {
+            max-width: 200px;
+        }
+        #accordionContainer .card>.content {
+            padding-bottom: 1em;
+        }
+        #accordionContainer .title .ui.label {
+            float: right;
         }
     </style>
 </head>
 <body>
-<div class="ui container">
-
-    <br>
-    <br>
-    <br>
+<div class="ui text container">
 
     <div class="ui basic clearing segment">
         <a class="ui primary right floated button" href="https://forms.gle/wXF9YDizRDA3w9odA">
@@ -31,180 +36,10 @@
     <hr/>
 
     <div class="ui basic segment">
-        <table class="ui very basic table" style="font-size: 1.5em; line-height: 1.2em">
-            <tbody>
-            <tr>
-                <td colspan="4"><strong>Decisions4s: Complicated Conditionals, Higher-Kinded Data and Scala 3</strong>
-                </td>
-            </tr>
-            <tr class="talk-conf">
-                <td></td>
-                <td><a href="https://artofscala.com/">Art of Scala 2024</a></td>
-                <td><a href="2024-10-art-of-scala">slides</a></td>
-                <td><a href="https://www.youtube.com/watch?v=J4ZXsR25M7k">video</a></td>
-            </tr>
-            <tr class="talk-conf">
-                <td></td>
-                <td><a href="https://scala.io/">Scala.io 2024</a></td>
-                <td><a href="2024-11-scala-io">slides</a></td>
-                <td><a href=""></a></td>
-            </tr>
-            <tr>
-                <td colspan="4"><strong>Communication for developers</strong></td>
-            </tr>
-            <tr class="talk-conf">
-                <td></td>
-                <td><a href="https://sphere.it/event/sphere-it-conf-2023/">Sphere.it Conf 2023 </a></td>
-                <td><a href="2023-09-sphere-it">slides</a></td>
-                <td><a href="https://www.youtube.com/watch?v=rXSu3Q6wFj0">video</a></td>
-            </tr>
-            <tr class="talk-conf">
-                <td></td>
-                <td><a href="https://voxxeddays.com/zurich/">Voxxed Days Zurich 2024</a></td>
-                <td><a href="2024-03-voxxed-days-zurich">slides</a></td>
-                <td>
-                    <a href="https://www.youtube.com/watch?v=bVRbxVCHrPE&list=PLRsbF2sD7JVrJJWeSPM7WjYNO42O-aF_o&index=21">video</a>
-                </td>
-            </tr>
-            <tr class="talk-conf">
-                <td></td>
-                <td><a href="https://2024.geecon.org/">Geecon 2024</a></td>
-                <td><a href="2024-03-voxxed-days-zurich">slides</a></td>
-                <td>
-                    <a href="https://www.youtube.com/watch?v=i3T9_ntm1S4&list=PLxZQe6I1pYpet-lLqg22YWMiANXGhJxCN&index=67">video</a>
-                </td>
-            </tr>
-            <tr class="talk-conf">
-                <td></td>
-                <td><a href="https://devdays.lt/">Dev Days Europe 2024</a></td>
-                <td><a href="2024-03-voxxed-days-zurich">slides</a></td>
-                <td>
-                    <a href="https://www.youtube.com/watch?v=NLYLHZQ-Qj8&list=PLqYhGsQ9iSEpFD1hBBle_VkpJ-S-FC4Lc&index=53">video</a>
-                </td>
-            </tr>
-            <tr>
-                <td colspan="4"><strong>Love, hate and workflows</strong></td>
-            </tr>
-            <tr class="talk-conf">
-                <td></td>
-                <td><a href="https://www.functionalscala.com/">Functional Scala 2022</a></td>
-                <td><a href="2022-12-functional-scala">slides</a></td>
-                <td><a href="https://www.youtube.com/watch?v=jLN1ibwUwuY">video</a></td>
-            </tr>
-            <tr class="talk-conf">
-                <td></td>
-                <td>
-                    <a href="https://www.eventbrite.com/e/a-unique-conference-for-scala-engineers-and-enthusiasts-tickets-431525433187">Art
-                        of Scala 2022</a></td>
-                <td><a href="2022-09-yava-conf">slides</a></td>
-                <td></td>
-            </tr>
-            <tr class="talk-conf">
-                <td></td>
-                <td><a href="https://www.meetup.com/functionalworld/events/288622105/">Functional World #5</a></td>
-                <td><a href="2022-09-yava-conf">slides</a></td>
-                <td><a href="https://youtu.be/S5lohF1YTl0">video</a></td>
-            </tr>
-            <tr class="talk-conf">
-                <td></td>
-                <td><a href="https://yavaconf.com/">Ya!va Conf 2022</a></td>
-                <td><a href="2022-09-yava-conf">slides</a></td>
-                <td></td>
-            </tr>
-            <tr>
-                <td colspan="4"><strong>Magic of integrations. Ecosystem better than any framework</strong></td>
-            </tr>
-            <tr class="talk-conf">
-                <td></td>
-                <td><a href="https://scalaconf.ru/en/2019">ScalaConf.ru 2019</a></td>
-                <td><a href="2019-11-scalaconfru">slides</a></td>
-                <td><a href="https://www.youtube.com/watch?v=CxitC7fNTRU">video</a></td>
-            </tr>
-            <tr>
-                <td colspan="4"><strong>Functional Frontend. Practical survival guide for backend engineers.</strong>
-                </td>
-            </tr>
-            <tr class="talk-conf">
-                <td></td>
-                <td><a href="https://scala.io/">Scala.io 2019</a></td>
-                <td><a href="2019-10-scalaio">slides</a></td>
-                <td><a href="https://www.youtube.com/watch?v=72GyZuStsvM">video</a></td>
-            </tr>
-            <tr>
-                <td colspan="4"><strong>Pragmatic object oriented tagless final.</strong></td>
-            </tr>
-            <tr class="talk-conf">
-                <td></td>
-                <td><a href="https://www.meetup.com/krakow-scala-user-group/events/268614614/">Kraków SUG 2020</a></td>
-                <td><a href="2020-02-krakow-sug">slides</a></td>
-                <td></td>
-            </tr>
-            <tr class="talk-conf">
-                <td></td>
-                <td><a href="http://2019.scala-italy.it/">Scala Italy 2019</a></td>
-                <td><a href="2019-09-scalaitaly">slides</a></td>
-                <td><a href="https://vimeo.com/363249962">video</a></td>
-            </tr>
-            <tr class="talk-conf">
-                <td></td>
-                <td><a href="https://www.facebook.com/LXScala/">LxScala 2019</a></td>
-                <td><a href="2019-09-scalaitaly">slides</a></td>
-                <td></td>
-            </tr>
-            <tr>
-                <td colspan="4"><strong>That's enough bash. That's enough.</strong></td>
-            </tr>
-            <tr class="talk-conf">
-                <td></td>
-                <td><a href="https://scalawave.io/">Scalawave 2018</a></td>
-                <td><a href="2018-09-scalawave">slides</a></td>
-                <td><a href="https://youtu.be/xHdgeOco-OU">video</a></td>
-            </tr>
-            <tr class="talk-conf">
-                <td colspan="4"><strong>Object algebras and why you won't touch http library ever again</strong></td>
-            </tr>
-            <tr class="talk-conf">
-                <td></td>
-                <td><a href="https://scalar-conf.com/2018/">Scalar 2018</a></td>
-                <td><a href="2018-04-scalar">slides</a></td>
-                <td><a href="https://youtu.be/2Jo75rgnVW0">video</a></td>
-            </tr>
-            <tr>
-                <td colspan="4"><strong>It's just a monoid in the category of endofunctors</strong></td>
-            </tr>
-            <tr class="talk-conf">
-                <td></td>
-                <td><a href="https://www.meetup.com/functionalworld/events/239505311/">Functional Tricity #7</a></td>
-                <td><a href="2017-06-functional-tricity/index.html">slides</a></td>
-                <td><a href="https://youtu.be/5JfddiM3uHk">video</a></td>
-            </tr>
-            <tr>
-                <td colspan="4"><strong>Why do we need 9 different data processing engines? What makes Spark 2.32 times
-                    better than
-                    flink?</strong></td>
-            </tr>
-            <tr class="talk-conf">
-                <td></td>
-                <td><a href="https://summit.datamass.io/">Datamass 2017</a></td>
-                <td><a href="2017-09-datamass/index.html">slides</a></td>
-                <td><a href="https://youtu.be/sMEfvnIX4Co">video</a></td>
-            </tr>
-            <tr>
-                <td colspan="4"><strong>
-                    [code_smarter => test_less] functional guide to reasonable development
-                </strong></td>
-            </tr>
-            <tr class="talk-conf">
-                <td></td>
-                <td><a href="https://norwegian-it-night-tricity.confetti.events/">Norwegian IT Night Tricity 2017</a>
-                </td>
-                <td><a href="2017-10-norwegian-it-night-tricity/index.html">slides</a>
-                <td>
-                </td>
-            </tr>
-            </tbody>
-        </table>
+        <div id="accordionContainer" class="ui styled fluid accordion"></div>
     </div>
+    <script src="assets/build-accordion.js"></script>
+
 </div>
 </body>
 </html>
