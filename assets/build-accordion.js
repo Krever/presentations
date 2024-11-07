@@ -1,6 +1,28 @@
 // Sample data in JSON format
 const presentationsData = [
     {
+        title: "Durable Event-Sourced Workflow Monad... Seriously!",
+        conferences: [
+            {
+                name: "Scalar 2025",
+                link: "https://www.scalar-conf.com/",
+                slides: null,
+                video: null
+            }
+        ]
+    },
+    {
+        title: "Creative Engineering: The Subtle Art of Cutting Corners",
+        conferences: [
+            {
+                name: "L8Conf 2025",
+                link: "https://l8conf.com/",
+                slides: null,
+                video: null
+            }
+        ]
+    },
+    {
         title: "Decisions4s: Complicated Conditionals, Higher-Kinded Data and Scala 3",
         conferences: [
             {
@@ -215,6 +237,10 @@ function createAccordion(data) {
 
             const descriptionDiv = document.createElement("div");
             descriptionDiv.className = "description";
+
+            if (!conference.slides) {
+                descriptionDiv.innerHTML = "Incoming!"
+            }
 
             // Slides link
             if (conference.slides) {
