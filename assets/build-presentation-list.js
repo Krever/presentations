@@ -2,6 +2,7 @@
 const presentationsData = [
     {
         title: "Durable Event-Sourced Workflow Monad... Seriously!",
+        meta: "Scala",
         conferences: [
             {
                 name: "Scalar 2025",
@@ -13,9 +14,11 @@ const presentationsData = [
     },
     {
         title: "Creative Engineering: The Subtle Art of Cutting Corners",
+        meta: "General",
         conferences: [
             {
                 name: "L8Conf 2025",
+                meta: "General",
                 link: "https://l8conf.com/",
                 slides: null,
                 video: null
@@ -24,6 +27,7 @@ const presentationsData = [
     },
     {
         title: "Decisions4s: Complicated Conditionals, Higher-Kinded Data and Scala 3",
+        meta: "Scala",
         conferences: [
             {
                 name: "Art of Scala 2024",
@@ -41,6 +45,7 @@ const presentationsData = [
     },
     {
         title: "Communication For Developers",
+        meta: "General",
         conferences: [
             {
                 name: "Sphere.it 2023",
@@ -70,6 +75,7 @@ const presentationsData = [
     },
     {
         title: "Love, Hate And Workflows",
+        meta: "Scala",
         conferences: [
             {
                 name: "Functional Scala 2022",
@@ -99,6 +105,7 @@ const presentationsData = [
     },
     {
         title: "Magic Of Integrations. Ecosystem Better Than Any Framework",
+        meta: "Scala",
         conferences: [
             {
                 name: "ScalaConf.ru 2019",
@@ -110,6 +117,7 @@ const presentationsData = [
     },
     {
         title: "Functional Frontend. Practical Survival Guide For Backend Engineers",
+        meta: "Scala",
         conferences: [
             {
                 name: "Scala.io 2019",
@@ -121,6 +129,7 @@ const presentationsData = [
     },
     {
         title: "Pragmatic, Object-Oriented Tagless Final",
+        meta: "Scala",
         conferences: [
             {
                 name: "Kraków SUG 2020",
@@ -144,6 +153,7 @@ const presentationsData = [
     },
     {
         title: "That's Enough, Bash. That's Enough.",
+        meta: "Scala",
         conferences: [
             {
                 name: "Scalawave 2018",
@@ -155,6 +165,7 @@ const presentationsData = [
     },
     {
         title: "Object Algebras And Why You Won't Touch Http Library Ever Again",
+        meta: "Scala",
         conferences: [
             {
                 name: "Scalar 2018",
@@ -166,6 +177,7 @@ const presentationsData = [
     },
     {
         "title": "It's Just A Monoid In The Category Of Endofunctors",
+        meta: "Scala",
         "conferences": [
             {
                 "name": "Functional Tricity #7",
@@ -177,6 +189,7 @@ const presentationsData = [
     },
     {
         "title": "Why Do We Need 9 Different Data Processing Engines? What Makes Spark 2.32 Times Better Than Flink?",
+        meta: "General",
         "conferences": [
             {
                 "name": "Datamass 2017",
@@ -188,6 +201,7 @@ const presentationsData = [
     },
     {
         "title": "[code_smarter => test_less] Functional Guide To Reasonable Development",
+        meta: "General",
         "conferences": [
             {
                 "name": "Norwegian IT Night Tricity 2017",
@@ -199,82 +213,97 @@ const presentationsData = [
     }
 ];
 
-// Function to create the accordion HTML structure from JSON
-function createAccordion(data) {
-    const container = document.getElementById("accordionContainer");
+function createCards(data) {
+    const container = document.getElementById("cardContainer");
 
     data.forEach(presentation => {
-        // Title
-        const titleDiv = document.createElement("div");
-        titleDiv.className = "title";
-        titleDiv.innerHTML = `<i class="dropdown icon"></i>${presentation.title} 
-            <div class="ui mini label">
-                <i class="microphone icon"></i>
-                ${presentation.conferences.length}
-            </div>
-        `;
-        container.appendChild(titleDiv);
+        // Card
+        const columnDiv = document.createElement("div");
+        columnDiv.className = "column";
 
-        // Content
-        const contentDiv = document.createElement("div");
-        contentDiv.className = "content";
+        const cardDiv = document.createElement("div");
+        cardDiv.className = "ui fluid card";
 
-        const cardsDiv = document.createElement("div");
-        cardsDiv.className = "ui cards";
+        // Card Content
+        const cardContent = document.createElement("div");
+        cardContent.className = "content";
+        cardDiv.appendChild(cardContent);
+
+        // Card Header (Presentation Title)
+        const headerDiv = document.createElement("div");
+        headerDiv.className = "header";
+        headerDiv.textContent = presentation.title;
+        cardContent.appendChild(headerDiv);
+
+        const descContent = document.createElement("div");
+        descContent.className = "content";
+        cardDiv.appendChild(descContent);
+
+        const descriptionDiv = document.createElement("div");
+        descriptionDiv.className = "description";
+        descContent.appendChild(descriptionDiv);
+
+        // Card Content
+        const cardExtraContent = document.createElement("div");
+        cardExtraContent.className = "extra content";
+        cardDiv.appendChild(cardExtraContent)
+
+        const metaDiv = document.createElement("div")
+        metaDiv.className = "ui tiny label";
+        metaDiv.textContent = presentation.meta;
+        cardExtraContent.appendChild(metaDiv);
+
+        // Conference List
+        const conferenceList = document.createElement("div");
+        conferenceList.className = "ui list";
 
         presentation.conferences.forEach(conference => {
-            const cardDiv = document.createElement("div");
-            cardDiv.className = "fluid card";
+            const conferenceItem = document.createElement("div");
+            conferenceItem.className = "item";
 
-            const cardContent = document.createElement("div");
-            cardContent.className = "content";
+            const conferenceHeader = document.createElement("div");
+            conferenceHeader.className = "header";
+            conferenceItem.appendChild(conferenceHeader);
 
-            const headerDiv = document.createElement("a");
-            headerDiv.href = conference.link;
-            headerDiv.target = "blank"
-            headerDiv.className = "header";
-            headerDiv.textContent = conference.name;
+            // Conference Name
+            const conferenceName = document.createElement("a");
+            conferenceName.href = conference.url;
+            conferenceName.className = "conference-name"
+            conferenceName.textContent = conference.name;
+            conferenceHeader.prepend(conferenceName);
 
-            const descriptionDiv = document.createElement("div");
-            descriptionDiv.className = "description";
-
-            if (!conference.slides) {
-                descriptionDiv.innerHTML = "Incoming!"
-            }
-
-            // Slides link
+            // Slides Icon Link
             if (conference.slides) {
-                const slidesLabel = document.createElement("a");
-                slidesLabel.href = conference.slides;
-                slidesLabel.target = "blank"
-                slidesLabel.className = "ui blue tiny label";
-                slidesLabel.innerHTML = `<i class="file alternate outline icon"></i>Slides`;
-                descriptionDiv.appendChild(slidesLabel);
+                const slidesLink = document.createElement("a");
+                slidesLink.href = conference.slides;
+                slidesLink.target = "_blank";
+                slidesLink.className = "ui right floated icon";
+                slidesLink.style.marginLeft = "8px";
+                slidesLink.title = "Slides";
+                slidesLink.innerHTML = `<i class="file powerpoint outline icon"></i>`;
+                conferenceHeader.appendChild(slidesLink);
             }
 
-            // Video link
+            // Video Icon Link
             if (conference.video) {
-                const videoLabel = document.createElement("a");
-                videoLabel.href = conference.video;
-                videoLabel.target = "blank"
-                videoLabel.className = "ui green tiny label";
-                videoLabel.innerHTML = `<i class="video icon"></i>Video</a>`;
-                descriptionDiv.appendChild(videoLabel);
+                const videoLink = document.createElement("a");
+                videoLink.href = conference.video;
+                videoLink.target = "_blank";
+                videoLink.className = "ui right floated icon";
+                videoLink.style.marginLeft = "8px";
+                videoLink.title = "Video";
+                videoLink.innerHTML = `<i class="video icon"></i>`;
+                conferenceHeader.appendChild(videoLink);
             }
 
-            cardContent.appendChild(headerDiv);
-            cardContent.appendChild(descriptionDiv);
-            cardDiv.appendChild(cardContent);
-            cardsDiv.appendChild(cardDiv);
+            conferenceList.appendChild(conferenceItem);
         });
 
-        contentDiv.appendChild(cardsDiv);
-        container.appendChild(contentDiv);
+        descriptionDiv.appendChild(conferenceList)
+        columnDiv.appendChild(cardDiv);
+        container.appendChild(columnDiv);
     });
-
-    // Initialize the Semantic UI accordion
-    $('.ui.accordion').accordion();
 }
 
-// Initialize the accordion with data
-createAccordion(presentationsData);
+// Initialize the cards with data
+createCards(presentationsData);

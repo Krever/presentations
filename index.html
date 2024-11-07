@@ -2,32 +2,23 @@
 <html>
 <head>
     <meta charset="utf-8"/>
-    <title>Voytek's talks</title>
+    <title>My Talks</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/semantic-ui@2.5.0/dist/semantic.min.css">
     <script src="https://cdn.jsdelivr.net/npm/semantic-ui@2.5.0/dist/semantic.min.js"></script>
 
 
     <style>
-        #accordionContainer .ui.cards>.card>.content>.header {
-            font-weight: 600;
-            font-size: 1em;
-        }
-        #accordionContainer .card {
-            max-width: 200px;
-        }
-        #accordionContainer .card>.content {
-            padding-bottom: 1em;
-        }
-        #accordionContainer .title .ui.label {
-            float: right;
+        .conference-name {
+            color: rgb(0, 0, 0);
         }
     </style>
 </head>
 <body>
-<div class="ui text container">
+<div class="ui container">
 
     <div class="ui basic clearing segment">
+        <h1 class="ui left floated header" style="padding-bottom: 0">My Talks</h1>
         <a class="ui primary right floated button" href="https://forms.gle/wXF9YDizRDA3w9odA">
             Leave feedback 🙏
         </a>
@@ -36,9 +27,10 @@
     <hr/>
 
     <div class="ui basic segment">
-        <div id="accordionContainer" class="ui styled fluid accordion"></div>
+        <div id="cardContainer" class="ui three column grid"></div>
     </div>
-    <script src="assets/build-accordion.js"></script>
+
+    <script src="assets/build-presentation-list.js"></script>
 
 </div>
 </body>
