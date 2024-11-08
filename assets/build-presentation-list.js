@@ -212,98 +212,47 @@ const presentationsData = [
         ]
     }
 ];
+import { html, render } from 'https://unpkg.com/lit-html@2.0.2/lit-html.js';
 
-function createCards(data) {
-    const container = document.getElementById("cardContainer");
+const createCard = (presentation) => html`
+    <div class="column">
+        <div class="ui fluid card">
+            <div class="content">
+                <div class="header">${presentation.title}</div>
+            </div>
+            <div class="content">
+                <div class="description">
+                    <div class="ui list">
+                        ${presentation.conferences.map(conference => html`
+                            <div class="item">
+                                <a class="conference-name" href="${conference.link}">${conference.name}</a>
+                                ${conference.slides ? html`
+                                    <a href="${conference.slides}" target="_blank" class="ui right floated icon" title="Slides">
+                                        <i class="file powerpoint outline icon"></i>
+                                    </a>
+                                ` : ''}
+                                ${conference.video ? html`
+                                    <a href="${conference.video}" target="_blank" class="ui right floated icon" title="Video">
+                                        <i class="video icon"></i>
+                                    </a>
+                                ` : ''}
+                            </div>
+                        `)}
+                    </div>
+                </div>
+            </div>
+            <div class="extra content">
+                <div class="ui tiny label">${presentation.meta}</div>
+            </div>
+        </div>
+    </div>
+`;
 
-    data.forEach(presentation => {
-        // Card
-        const columnDiv = document.createElement("div");
-        columnDiv.className = "column";
+const renderCards = () => {
+    const cardsTemplate = html`
+            ${presentationsData.map(presentation => createCard(presentation))}
+        `;
+    render(cardsTemplate, document.getElementById('cardContainer'));
+};
 
-        const cardDiv = document.createElement("div");
-        cardDiv.className = "ui fluid card";
-
-        // Card Content
-        const cardContent = document.createElement("div");
-        cardContent.className = "content";
-        cardDiv.appendChild(cardContent);
-
-        // Card Header (Presentation Title)
-        const headerDiv = document.createElement("div");
-        headerDiv.className = "header";
-        headerDiv.textContent = presentation.title;
-        cardContent.appendChild(headerDiv);
-
-        const descContent = document.createElement("div");
-        descContent.className = "content";
-        cardDiv.appendChild(descContent);
-
-        const descriptionDiv = document.createElement("div");
-        descriptionDiv.className = "description";
-        descContent.appendChild(descriptionDiv);
-
-        // Card Content
-        const cardExtraContent = document.createElement("div");
-        cardExtraContent.className = "extra content";
-        cardDiv.appendChild(cardExtraContent)
-
-        const metaDiv = document.createElement("div")
-        metaDiv.className = "ui tiny label";
-        metaDiv.textContent = presentation.meta;
-        cardExtraContent.appendChild(metaDiv);
-
-        // Conference List
-        const conferenceList = document.createElement("div");
-        conferenceList.className = "ui list";
-
-        presentation.conferences.forEach(conference => {
-            const conferenceItem = document.createElement("div");
-            conferenceItem.className = "item";
-
-            const conferenceHeader = document.createElement("div");
-            conferenceHeader.className = "header";
-            conferenceItem.appendChild(conferenceHeader);
-
-            // Conference Name
-            const conferenceName = document.createElement("a");
-            conferenceName.href = conference.url;
-            conferenceName.className = "conference-name"
-            conferenceName.textContent = conference.name;
-            conferenceHeader.prepend(conferenceName);
-
-            // Slides Icon Link
-            if (conference.slides) {
-                const slidesLink = document.createElement("a");
-                slidesLink.href = conference.slides;
-                slidesLink.target = "_blank";
-                slidesLink.className = "ui right floated icon";
-                slidesLink.style.marginLeft = "8px";
-                slidesLink.title = "Slides";
-                slidesLink.innerHTML = `<i class="file powerpoint outline icon"></i>`;
-                conferenceHeader.appendChild(slidesLink);
-            }
-
-            // Video Icon Link
-            if (conference.video) {
-                const videoLink = document.createElement("a");
-                videoLink.href = conference.video;
-                videoLink.target = "_blank";
-                videoLink.className = "ui right floated icon";
-                videoLink.style.marginLeft = "8px";
-                videoLink.title = "Video";
-                videoLink.innerHTML = `<i class="video icon"></i>`;
-                conferenceHeader.appendChild(videoLink);
-            }
-
-            conferenceList.appendChild(conferenceItem);
-        });
-
-        descriptionDiv.appendChild(conferenceList)
-        columnDiv.appendChild(cardDiv);
-        container.appendChild(columnDiv);
-    });
-}
-
-// Initialize the cards with data
-createCards(presentationsData);
+renderCards();
