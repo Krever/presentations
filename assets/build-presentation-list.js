@@ -141,7 +141,7 @@ const presentationsData = [
                 name: "Scala Italy 2019",
                 link: "http://2019.scala-italy.it",
                 slides: "2019-09-scalaitaly",
-                video: "https://vimeo.com/363249962"
+                video: "https://www.youtube.com/watch?v=Oc3JzTps04M"
             },
             {
                 name: "LxScala 2019",
