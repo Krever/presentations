@@ -212,7 +212,7 @@ const presentationsData = [
         ]
     }
 ];
-import { html, render } from 'https://unpkg.com/lit-html@2.0.2/lit-html.js';
+import { html, render } from 'https://cdn.jsdelivr.net/npm/lit-html@3.2.1';
 
 const createCard = (presentation) => html`
     <div class="column">
