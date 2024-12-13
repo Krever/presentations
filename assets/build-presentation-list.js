@@ -39,7 +39,7 @@ const presentationsData = [
                 name: "Scala.io 2024",
                 link: "https://scala.io/",
                 slides: "2024-11-scala-io",
-                video: null
+                video: "https://www.youtube.com/watch?v=uROjY0GSCoc&list=PLjkHSzY9VuL9NQT1obd9FYWQDHLsLZHzd&index=12"
             }
         ]
     },
