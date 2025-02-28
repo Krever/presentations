@@ -1,0 +1,187 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+
+    <title>Creative Engineering: The Subtle Art of Cutting Corners</title>
+
+    <link rel="stylesheet" href="../reveal/reveal.js-5.1.0/dist/reveal.css">
+    <link rel="stylesheet" href="../reveal/reveal.js-5.1.0/dist/theme/sky.css" id="theme">
+
+    <link rel="stylesheet" href="../reveal/reveal.js-5.1.0/plugin/highlight/monokai.css">
+    <link rel="stylesheet" href="../reveal/reveal.js-5.1.0/plugin/breadcrumb/breadcrumb.css">
+    <link rel="stylesheet" href="../reveal/font-awesome/fontawesome-free-6.6.0-web/css/all.min.css"/>
+    <link rel="stylesheet" href="../reveal/font-awesome/fontawesome-free-6.6.0-web/css/brands.min.css"/>
+
+    <script src="https://cdn.jsdelivr.net/npm/reveal.js-mermaid-plugin@11.4.1/plugin/mermaid/mermaid.js"></script>
+
+
+    <script>
+        class RedText extends HTMLElement {
+            constructor() {
+                super();
+                this.attachShadow({ mode: "open" });
+                const style = document.createElement("style");
+                style.textContent = `
+            :host {
+                color: red;
+            }
+        `;
+                const slot = document.createElement("slot");
+                this.shadowRoot.append(style, slot);
+            }
+        }
+
+        customElements.define("red-t", RedText);
+    </script>
+
+    <style>
+        code.hljs.mermaid {
+            text-align: center;
+        }
+
+        .container {
+            display: flex;
+        }
+
+        .col {
+            flex: 1;
+        }
+
+        p:has(> span.why-i-subtext) {
+            font-size: 0.5em;
+            line-height: 0.5em;
+            padding: 0;
+            margin: 0;
+        }
+
+        .blink {
+            animation: blink 0.5s step-end infinite;
+            color: darkred;
+        }
+
+        .rainbow-text {
+            background: linear-gradient(90deg, purple, blue, red );
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .book-container {
+            display: flex;
+            gap: 10px;
+        }
+        .book {
+            height: 250px; /* Adjust as needed */
+            transform: rotate(var(--rotation));
+            transition: transform 0.3s ease-in-out;
+            z-index: -1;
+        }
+        /* Randomized rotation */
+        .book:nth-child(1) { --rotation: -5deg; }
+        .book:nth-child(2) { --rotation: 3deg; }
+        .book:nth-child(3) { --rotation: -3deg; }
+        .book:nth-child(4) { --rotation: 5deg; }
+
+        .crossed {
+            position: relative;
+        }
+
+        .crossed::before,
+        .crossed::after {
+            content: "";
+            position: absolute;
+            top: 50%;
+            left: 10%;
+            width: 80%;
+            height: 40%;
+            z-index: 10; /* Ensures it’s above everything */
+            pointer-events: none; /* Prevents interaction issues */
+        }
+
+        .crossed::before {
+            transform: rotate(25deg);
+            border-top: 10px dashed black;
+        }
+
+        .crossed::after {
+            transform: rotate(-25deg);
+            border-top: 10px dashed black;
+        }
+        @keyframes shake {
+            0% { transform: translate(0, 0); }
+            20% { transform: translate(-3px, 3px); }
+            40% { transform: translate(3px, -3px); }
+            60% { transform: translate(-3px, -3px); }
+            80% { transform: translate(3px, 3px); }
+            100% { transform: translate(0, 0); }
+        }
+
+        .shaking-text {
+            font-size: 2rem;
+            font-weight: bold;
+            display: inline-block;
+            animation: shake 0.15s infinite;
+        }
+
+
+    </style>
+</head>
+
+<body>
+
+<div class="reveal">
+    <div id="twitterhandle" style="
+                        position: absolute;
+                        bottom: 50px;
+                        left: 30px;
+                        width: 200px;
+                        font-size: 0.6em;
+                        z-index: 1;
+                        height: 100px;">
+
+        <a href="https://twitter.com/Krever01" target="_blank">
+            <i class="fa-brands fa-x-twitter"></i><i class="fa-brands fa-bluesky"></i> @Krever01
+        </a>
+        <a href="https://swissborg.com/" target="_blank"><img src="resources/Logo-Dark-Gradient%20(3).png" alt=""></a>
+    </div>
+
+    <div class="slides">
+
+        <section data-markdown="slides.html"
+                 data-separator="^\r?\n----\r?\n$"
+                 data-separator-vertical="^\r?\n\+\+\+\+\r?\n$"
+                 data-separator-notes="^notes:"
+                 data-attributes="--\s(.*?)$"
+                 data-charset="utf-8">
+        </section>
+
+    </div>
+</div>
+
+<script src="../reveal/reveal.js-5.1.0/dist/reveal.js"></script>
+<script src="../reveal/reveal.js-5.1.0/plugin/markdown/markdown.js"></script>
+<script src="../reveal/reveal.js-5.1.0/plugin/highlight/highlight.js"></script>
+<script src="../reveal/reveal.js-5.1.0/plugin/notes/notes.js"></script>
+<script src="../reveal/reveal.js-5.1.0/plugin/math/math.js"></script>
+
+<script>
+
+    Reveal.initialize({
+        controls: true,
+        progress: true,
+        history: true,
+        center: true,
+        slideNumber: 'c/t',
+        mermaid: {},
+
+        plugins: [RevealMarkdown, RevealHighlight, RevealNotes, RevealMath.KaTeX, RevealMermaid],
+        dependencies: [
+            {src: '../reveal/reveal.js-5.1.0/plugin/breadcrumb/breadcrumb2.js', async: true}
+        ]
+    });
+
+</script>
+
+</body>
+</html>

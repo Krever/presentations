@@ -1,0 +1,425 @@
+## <span class="rainbow-text">Creative</span> <span class="rainbow-text">Engineering</span></h2>
+---
+#### The Subtle Art of Cutting Corners
+
+<span style="font-size: 0.5em;color: gray">Voytek Pituła</span>
+
+----
+
+<section data-background-color="white">
+
+### ⚠️ Warning ⚠️
+<span style="font-size: 0.6em">
+<p>The techniques discussed in this talk are for <strong>demonstration purposes only</strong> and
+were performed by trained professionals.</p>
+
+Attempting them at work may lead to unexpected results, including, but not limited to
+<strong>system failure, severe frustration, a job promotion or permanent banishment from the industry</strong> — none of which we can be held liable for.
+</span>
+</section>
+
+----
+
+### We <red-t>learn</red-t> things
+
+<img src="resources/clean-code.jpg" alt="Book Cover 1" class="book">
+<img src="resources/data-int-apps.jpg" alt="Book Cover 2" class="book">
+<img src="resources/modern-swe.jpg" alt="Book Cover 3" class="book">
+<img src="resources/swe-at-google.jpg" alt="Book Cover 4" class="book">
+
+++++
+
+### So we can <red-t>ignore</red-t> them
+
+<div class="crossed">
+    <img src="resources/clean-code.jpg" alt="Book Cover 1" class="book">
+    <img src="resources/data-int-apps.jpg" alt="Book Cover 2" class="book">
+    <img src="resources/modern-swe.jpg" alt="Book Cover 3" class="book">
+    <img src="resources/swe-at-google.jpg" alt="Book Cover 4" class="book">
+</div>
+
+
+++++
+
+### Why this talk?
+
+<p class="fragment strike">To brag!</p>
+<p class="fragment">To spark <red-t>creativity</red-t>!</p>
+
+++++
+
+## Why is it <red-t>important</red-t>?
+
+> Product development is about learning as much as possible as fast as possible.
+
+++++
+
+#### <red-t>Disclaimer</red-t>
+
+### Not everything will be super creative
+
+----
+
+## <red-t>Remote Code Execution</red-t>
+
+😱😱😱
+
+++++
+
+```mermaid
+%%{init: {'theme': 'dark', 'themeVariables': { 'darkMode': false }}}%%
+flowchart LR
+    A[Client]
+    B[Config Service]
+    C[Service A]
+    D[Service B]
+    E[Kafka topic]
+    A --"manage config"--> B
+    B --> E
+    E --> C
+    E --> D
+```
+
+- Config
+- Config has to be shared between services
+- We don't want a SPOF
+- So we send config over kafka
+- But we want to personalize config
+- So we send also personalization logic!
+
+++++
+
+## Java Stored Procedures
+
+😱😱😱😱😱😱😱😱😱😱😱😱😱😱😱😱😱😱😱😱😱
+
+----
+
+### Let's talk about
+## <red-t>ETL<span style="text-transform: lowercase">s</span></red-t>
+
+++++
+
+### How to transform data?
+
+spark, airflow, dbt, kafka connect...
+
+++++
+
+### Streaming has costs
+
+- rewind
+- backpressure
+- disconnects
+
+++++
+
+### Batch has costs
+- storage
+- triggering
+- latency
+
+++++
+
+## <red-t>SQL Views</red-t> to the rescue!
+
+++++
+
+##### <red-t>SQL Views</red-t> to the rescue!
+
+
+```mermaid
+%%{init: {'theme': 'dark', 'themeVariables': { 'darkMode': false }}}%%
+flowchart LR
+A[Datasource A]
+B[Datasource B]
+C[Viev A]
+D[View B]
+E[View C]
+F[View D]
+G[Result View]
+H[Datasource C]
+A --> C
+A --> D
+H --> D
+B --> E
+B --> F
+C --> E
+C --> F
+E --> G
+F --> G
+D --> G
+```
+
+++++
+
+### But Why?
+
+- immediate
+- easy to modify
+- easy to test
+- easy to debug
+
+- slow???
+
+++++
+
+##### Example 1
+#### Security Cases @ Sony Electronics
+
+```mermaid
+%%{init: {'theme': 'dark', 'themeVariables': { 'darkMode': false }}}%%
+flowchart LR
+A[Splunk]
+B[Jira]
+C[McAfee]
+D[...]
+E[System]
+F[Security Backlog]
+A --> E
+B --> E
+C --> E
+D --> E
+E --> F
+```
+
+++++
+
+##### Example 2
+#### Books Reading Summary @ Home
+
+```mermaid
+%%{init: {'theme': 'dark', 'themeVariables': { 'darkMode': false }}}%%
+flowchart LR
+A[Audible library]
+B[Obsidian Reviews]
+C[Openlibrary]
+E[System]
+F[Reading Summary]
+A --> E
+B --> E
+C --> E
+E --> F
+```
+
+----
+
+### How many DBs do you need?
+
+<p class="fragment">One: postgres</p>
+<p class="fragment">Two: postgres, redis</p>
+<p class="fragment">A few: postgres, redis, mongo, cassandra</p>
+
+++++
+
+<!-- .element: data-background-image="resources/all-of-them.webp" -->
+
+<h1 class="shaking-text" style="font-weight: bolder"><red-t>All Of Them !!!</red-t></h1>
+
+++++
+
+<h2><red-t>Extreme</red-t> Sharding</h2>
+
+#### When single db is not enough
+
+
+++++
+
+![](resources/dhh-multitenacy.png)
+
+[link](https://world.hey.com/dhh/multi-tenancy-is-what-s-hard-about-scaling-web-services-dd1e0e81)
+
+++++
+
+#### A database <red-t>per Workflow</red-t>?
+
+`SQLite`s in shared volume, archived to S3.
+
+[business4/workflows4s](https://business4s.org/workflows4s/)
+
+----
+
+### <red-t>Never</red-t> expose <red-t>DB</red-t> to your <red-t>fronted</red-t>!
+
+<h2 class="fragment">Or maybe <red-t>do</red-t>?</h2>
+
+++++
+
+<img src="resources/hasura.svg" style="width: 50%">
+
+<span class="fragment">Generates GraphQL from PostgreSQL with a bit of configuration.</span>
+
+++++
+
+##### Oh, and btw
+### How do you expose XML to the fronted?
+
+Through a database, of course.
+
+++++
+
+## Showing BPMN
+
+```mermaid
+%%{init: {'theme': 'dark', 'themeVariables': { 'darkMode': false }}}%%
+flowchart LR
+A[Service]
+B[Backoffice Gateway]
+C[Backoffice UI]
+A --grpc--> B
+B --rest--> C
+```
+
+```mermaid
+%%{init: {'theme': 'dark', 'themeVariables': { 'darkMode': false }}}%%
+flowchart LR
+A[Service]
+B[Database]
+C[Hasura]
+D[Backoffice UI]
+A --> B
+B --> C
+C --> D
+```
+
+
+----
+
+# API<span style="text-transform: lowercase">s</span>
+
+++++
+
+### You need to do bank lookup
+
+Find name of the bank based on IBAN.
+
+++++
+
+### Consuming Solana API
+
+A tale of myriad ways
+
+notes:
+Its binary, with a lot of bytes manipulation.
+It has SDK for Typescript and Rust but our system is in Scala.
+
+++++
+
+#### The Myriad ways
+
+<ul style="font-size: 0.7em">
+<li class="fragment fade-in-then-semi-out">json-rpc in Scala </li>
+<li class="fragment fade-in-then-semi-out">interact with Rust via JNI</li>
+<li class="fragment fade-in-then-semi-out">expose RPC from Rust</li>
+<li class="fragment fade-in-then-semi-out">use JS through Rhino/Graal</li>
+<li class="fragment fade-in-then-semi-out">use JS through node subprocess</li>
+<li class="fragment fade-in-then-semi-out">☝️ with TS or Scala.js</li>
+<li class="fragment fade-in-then-semi-out">use Java lib (solanaj) or Kotlin (sol4k)</li>
+<li class="fragment fade-in-then-semi-out">do it via TS/Rust/Scala.js as a sidecar (dedicated local subpcomponent)</li>
+</ul>
+
+----
+
+#### Speaking of options
+
+<img src="resources/12-ways.png" style="width: 50%">
+
+JVM vs JS vs native vs graal
+
+lambda vs service
+
+<a style="font-size: 0.6em" href="https://medium.com/swissborg-engineering/12-ways-to-call-a-solana-rpc-endpoint-from-java-88677710107e">link</a>
+
+
+++++
+
+#### One word about scala.js
+
+Can a niche transpiled language make sense?
+
+<span class="fragment">We've built a Hipchat plugin</span>
+
+<span class="fragment">Hipchat died before we've hit any issues</span>
+
+++++
+
+#### What about a CLI
+
+Can you do command line tools with a JVM?
+
+----
+
+#### Creative things to we do with
+## Logs
+
+++++
+
+## Log based <red-t>alerting</red-t>
+
+```mermaid
+%%{init: {'theme': 'dark', 'themeVariables': { 'darkMode': false }}}%%
+flowchart LR
+A[App]
+B[Elastic]
+C[Elastalert]
+D[OpsGenie]
+A --> B
+B --> C
+C --> D
+```
+
+<img src="resources/alerting.png" style="width: 50%"><br>
+
+<p style="font-size: 0.6em; margin-top: -50px"><a href="https://medium.com/swissborg-engineering/alerting-and-how-50-lines-of-code-changed-how-we-do-it-4c2bb5bb67b4">link</a></p>
+
+++++
+
+## Log based <red-t>analytics</red-t>
+
+Maybe you don't need Redshift?
+
+++++
+
+## Log based
+## <red-t>machine-learning</red-t>
+
+Maybe you don't need another dataset?
+
+----
+
+## Can you see a <red-t>pattern</red-t>?
+
+++++
+
+# Questioning Assumptions
+
+++++
+
+- Sending code over the wire is not a good idea
+- You need "proper ETL"
+- SQL views are slow
+- You need one logical database per system
+- Exposing database to the fronted is not a good idea
+- XML should be shared over dedicated API
+- You have to use API only as author intended it
+- The only way to consume API is through SDK
+- The only way to integrate ith another language is through Web API
+- Niche languages don't make sense
+- CLI is too slow for a CLI
+- Logs are only for monitoring
+
+----
+
+<span class="breadcrumb-data">Creative Engineering</span>
+
+# Be Creative !
+
+---
+
+<div style="font-size: 0.7em">
+    Thank you!
+
+    Voytek Pituła @ SwissBorg
+
+    [https://w.pitula.me/presentations](https://w.pitula.me/presentations)
+</div>

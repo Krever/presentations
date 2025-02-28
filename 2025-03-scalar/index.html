@@ -1,0 +1,134 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+
+    <title>Durable Event-Sourced Workflow Monad... Seriously!</title>
+
+    <link rel="stylesheet" href="../reveal/reveal.js-5.1.0/dist/reveal.css">
+    <link rel="stylesheet" href="../reveal/reveal.js-5.1.0/dist/theme/dracula.css" id="theme">
+<!--    <link rel="stylesheet" href="resources/monadic-flow.css">-->
+
+    <link rel="stylesheet" href="../reveal/reveal.js-5.1.0/plugin/highlight/monokai.css">
+    <link rel="stylesheet" href="../reveal/reveal.js-5.1.0/plugin/breadcrumb/breadcrumb.css">
+    <link rel="stylesheet" href="../reveal/font-awesome/fontawesome-free-6.6.0-web/css/all.min.css"/>
+    <link rel="stylesheet" href="../reveal/font-awesome/fontawesome-free-6.6.0-web/css/brands.min.css"/>
+
+
+    <style>
+        .container {
+            display: flex;
+        }
+
+        .col {
+            flex: 1;
+        }
+
+        p:has(> span.why-i-subtext) {
+            font-size: 0.5em;
+            line-height: 0.5em;
+            padding: 0;
+            margin: 0;
+        }
+
+        .blink {
+            animation: blink 0.5s step-end infinite;
+            color: darkred;
+        }
+
+        .crossed {
+            background:
+                    linear-gradient(to top left,
+                    rgba(0,0,0,0) 0%,
+                    rgba(0,0,0,0) calc(50% - 1px),
+                    rgba(0,0,0,1) 50%,
+                    rgba(0,0,0,0) calc(50% + 1px),
+                    rgba(0,0,0,0) 100%),
+                    linear-gradient(to top right,
+                    rgba(0,0,0,0) 0%,
+                    rgba(0,0,0,0) calc(50% - 1px),
+                    rgba(0,0,0,1) 50%,
+                    rgba(0,0,0,0) calc(50% + 1px),
+                    rgba(0,0,0,0) 100%);
+        }
+
+        @keyframes blink {
+            67% {
+                opacity: 0
+            }
+        }
+
+    </style>
+    <script>
+        class Yellow extends HTMLElement {
+            constructor() {
+                super();
+                const span = document.createElement('span');
+                span.style.color = 'yellow';
+                span.innerHTML = this.innerHTML;
+                this.replaceWith(span);
+            }
+        }
+
+        // Define the custom element
+        customElements.define('y-ellow', Yellow);
+    </script>
+</head>
+
+<body>
+
+<div class="reveal">
+    <div id="twitterhandle" style="
+                        position: absolute;
+                        bottom: 50px;
+                        left: 30px;
+                        width: 200px;
+                        font-size: 0.6em;
+                        z-index: 1;
+                        height: 100px;">
+
+        <a href="https://twitter.com/Krever01" target="_blank">
+            <i class="fa-brands fa-x-twitter"></i><i class="fa-brands fa-bluesky"></i> @Krever01
+        </a>
+        <a href="https://swissborg.com/" target="_blank"><img src="resources/Logo-Dark-Gradient%20(3).png" alt=""></a>
+    </div>
+
+    <div class="slides">
+
+        <section data-markdown="slides.md"
+                 data-separator="^\r?\n----\r?\n$"
+                 data-separator-vertical="^\r?\n\+\+\+\+\r?\n$"
+                 data-separator-notes="^notes:"
+                 data-attributes="--\s(.*?)$"
+                 data-charset="utf-8">
+        </section>
+
+    </div>
+</div>
+
+<script src="../reveal/reveal.js-5.1.0/dist/reveal.js"></script>
+<script src="../reveal/reveal.js-5.1.0/plugin/markdown/markdown.js"></script>
+<script src="../reveal/reveal.js-5.1.0/plugin/highlight/highlight.js"></script>
+<script src="../reveal/reveal.js-5.1.0/plugin/notes/notes.js"></script>
+<script src="../reveal/reveal.js-5.1.0/plugin/math/math.js"></script>
+
+<script>
+
+    Reveal.initialize({
+        controls: true,
+        progress: true,
+        history: true,
+        center: true,
+        slideNumber: 'c/t',
+
+        plugins: [RevealMarkdown, RevealHighlight, RevealNotes, RevealMath.KaTeX],
+        dependencies: [
+            {src: '../reveal/reveal.js-5.1.0/plugin/breadcrumb/breadcrumb2.js', async: true}
+        ]
+    });
+
+</script>
+
+</body>
+</html>
