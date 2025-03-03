@@ -21,15 +21,16 @@
         class RedText extends HTMLElement {
             constructor() {
                 super();
-                this.attachShadow({ mode: "open" });
-                const style = document.createElement("style");
-                style.textContent = `
-            :host {
-                color: red;
-            }
-        `;
-                const slot = document.createElement("slot");
-                this.shadowRoot.append(style, slot);
+                const container = document.createElement("span");
+                container.classList.add("rainbow-text");
+
+                // Move all child nodes into the span
+                while (this.firstChild) {
+                    container.appendChild(this.firstChild);
+                }
+
+                // Replace the custom element with the span
+                this.replaceWith(container);
             }
         }
 
@@ -62,9 +63,10 @@
         }
 
         .rainbow-text {
-            background: linear-gradient(90deg, purple, blue, red );
+            background: linear-gradient(90deg, purple, blue, red);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
+            padding-right: 5px;
         }
 
         .book-container {

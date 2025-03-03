@@ -14,7 +14,7 @@
 were performed by trained professionals.</p>
 
 Attempting them at work may lead to unexpected results, including, but not limited to
-<strong>system failure, severe frustration, a job promotion or permanent banishment from the industry</strong> — none of which we can be held liable for.
+<strong>systems failure, severe frustration, a job promotion or permanent banishment from the industry</strong> — none of which we can be held liable for.
 </span>
 </section>
 
@@ -41,7 +41,7 @@ Attempting them at work may lead to unexpected results, including, but not limit
 
 ++++
 
-### Why this talk?
+### Why <red-t>this</red-t> talk?
 
 <p class="fragment strike">To brag!</p>
 <p class="fragment">To spark <red-t>creativity</red-t>!</p>
@@ -50,13 +50,7 @@ Attempting them at work may lead to unexpected results, including, but not limit
 
 ## Why is it <red-t>important</red-t>?
 
-> Product development is about learning as much as possible as fast as possible.
-
-++++
-
-#### <red-t>Disclaimer</red-t>
-
-### Not everything will be super creative
+> Product development is about <red-t>learning</red-t> as much as possible as <red-t>fast</red-t> as possible.
 
 ----
 
@@ -66,32 +60,41 @@ Attempting them at work may lead to unexpected results, including, but not limit
 
 ++++
 
-```mermaid
+### A tale of a <red-t>Config</red-t>
+
+<ul style="font-size: .7em;">
+    <li class="fragment">Config</li>
+    <li class="fragment">Config has to be shared between services</li>
+    <li class="fragment">We don't want a SPOF</li>
+    <li class="fragment">So we send config over kafka</li>
+    <li class="fragment">But we want to personalize config</li>
+    <li class="fragment">So we send also personalization logic! (Jsonnet)</li>
+</ul>
+
+<code class="hljs mermaid fragment">
 %%{init: {'theme': 'dark', 'themeVariables': { 'darkMode': false }}}%%
 flowchart LR
-    A[Client]
-    B[Config Service]
-    C[Service A]
-    D[Service B]
-    E[Kafka topic]
-    A --"manage config"--> B
-    B --> E
-    E --> C
-    E --> D
-```
-
-- Config
-- Config has to be shared between services
-- We don't want a SPOF
-- So we send config over kafka
-- But we want to personalize config
-- So we send also personalization logic!
+A[Client]
+B[Config Service]
+C[Service A]
+D[Service B]
+E[Kafka topic]
+A --"manages config"--> B
+B --config + jsonnet logic--> E
+E --> C
+E --> D
+</code>
 
 ++++
 
-## Java Stored Procedures
+### Java Stored Procedures
+
+<img src="resources/java-stored-procedures.png">
 
 😱😱😱😱😱😱😱😱😱😱😱😱😱😱😱😱😱😱😱😱😱
+
+🙈🙈🙈🙈🙈🙈🙈🙈🙈🙈🙈🙈🙈🙈🙈🙈🙈🙈🙈🙈🙈
+
 
 ----
 
@@ -100,28 +103,29 @@ flowchart LR
 
 ++++
 
-### How to transform data?
+### How to <red-t>transform data</red-t>?
 
 spark, airflow, dbt, kafka connect...
 
 ++++
 
-### Streaming has costs
+### <red-t>Streaming</red-t> has costs
 
-- rewind
+- rewinding
 - backpressure
 - disconnects
 
 ++++
 
-### Batch has costs
+### <red-t>Batch processing</red-t> has costs
 - storage
 - triggering
 - latency
 
 ++++
 
-## <red-t>SQL Views</red-t> to the rescue!
+## <red-t>SQL Views</red-t>
+## to the rescue!
 
 ++++
 
@@ -153,19 +157,20 @@ D --> G
 
 ++++
 
-### But Why?
+### But <red-t>Why</red-t>?
 
-- immediate
-- easy to modify
-- easy to test
-- easy to debug
-
-- slow???
+<ul>
+    <li class="fragment">Immediate</li>
+    <li class="fragment">Easy to modify</li>
+    <li class="fragment">Easy to test</li>
+    <li class="fragment">Easy to debug</li>
+    <li class="fragment">Slow?</li>
+</ul>
 
 ++++
 
 ##### Example 1
-#### Security Cases @ Sony Electronics
+#### <red-t>Security Cases</red-t> @ Sony Electronics
 
 ```mermaid
 %%{init: {'theme': 'dark', 'themeVariables': { 'darkMode': false }}}%%
@@ -186,12 +191,12 @@ E --> F
 ++++
 
 ##### Example 2
-#### Books Reading Summary @ Home
+#### <red-t>Books Reading Summary</red-t> @ Home
 
 ```mermaid
 %%{init: {'theme': 'dark', 'themeVariables': { 'darkMode': false }}}%%
 flowchart LR
-A[Audible library]
+A[Audible Library]
 B[Obsidian Reviews]
 C[Openlibrary]
 E[System]
@@ -204,7 +209,7 @@ E --> F
 
 ----
 
-### How many DBs do you need?
+### <red-t>How many</red-t> DBs do you need?
 
 <p class="fragment">One: postgres</p>
 <p class="fragment">Two: postgres, redis</p>
@@ -222,28 +227,32 @@ E --> F
 
 #### When single db is not enough
 
+<img width="50%" src="resources/dhh-multitenacy.png">
+
+<p style="font-size: 0.6em; margin-top: -20px"><a href="https://world.hey.com/dhh/multi-tenancy-is-what-s-hard-about-scaling-web-services-dd1e0e81">link</a></p>
 
 ++++
 
-![](resources/dhh-multitenacy.png)
-
-[link](https://world.hey.com/dhh/multi-tenancy-is-what-s-hard-about-scaling-web-services-dd1e0e81)
+### A database <red-t>per User</red-t>?
 
 ++++
 
-#### A database <red-t>per Workflow</red-t>?
+### A database <red-t>per Workflow</red-t>?
 
-`SQLite`s in shared volume, archived to S3.
+<span style="font-size: .7em">
+
+`SQLite` s in shared volume, archived to S3.
 
 [business4/workflows4s](https://business4s.org/workflows4s/)
+</span>
 
 ----
 
 ### <red-t>Never</red-t> expose <red-t>DB</red-t> to your <red-t>fronted</red-t>!
 
-<h2 class="fragment">Or maybe <red-t>do</red-t>?</h2>
-
 ++++
+
+<h2>Or maybe <red-t>do</red-t>?</h2>
 
 <img src="resources/hasura.svg" style="width: 50%">
 
@@ -258,7 +267,7 @@ Through a database, of course.
 
 ++++
 
-## Showing BPMN
+## Showing <red-t>BPMN</red-t>
 
 ```mermaid
 %%{init: {'theme': 'dark', 'themeVariables': { 'darkMode': false }}}%%
@@ -269,6 +278,8 @@ C[Backoffice UI]
 A --grpc--> B
 B --rest--> C
 ```
+
+vs.
 
 ```mermaid
 %%{init: {'theme': 'dark', 'themeVariables': { 'darkMode': false }}}%%
@@ -285,19 +296,34 @@ C --> D
 
 ----
 
-# API<span style="text-transform: lowercase">s</span>
+# <red-t>API<span style="text-transform: lowercase">s</span></red-t>
 
 ++++
 
-### You need to do bank lookup
+### You need to do <red-t>bank lookup</red-t>
 
 Find name of the bank based on IBAN.
 
+<div class="fragment">
+<code class="hljs mermaid">
+    %%{init: {'theme': 'dark', 'themeVariables': { 'darkMode': false }}}%%
+    flowchart LR
+    A[Service]
+    B[Provider for jurisdiction A]
+    C[Provider for jurisdiction B]
+    A --"just lookup"--> B
+    B --> A
+    A --> C
+</code>
+</div>
+
 ++++
 
-### Consuming Solana API
+### Consuming <red-t>Solana API</red-t>
 
 A tale of myriad ways
+
+<img src="resources/solana.png" style="width: 40%">
 
 notes:
 Its binary, with a lot of bytes manipulation.
@@ -320,37 +346,42 @@ It has SDK for Typescript and Rust but our system is in Scala.
 
 ----
 
-#### Speaking of options
+### Speaking of options
 
 <img src="resources/12-ways.png" style="width: 50%">
 
+<p style="font-size: .7em; margin-top: -40px"><a style="font-size: 0.6em" href="https://medium.com/swissborg-engineering/12-ways-to-call-a-solana-rpc-endpoint-from-java-88677710107e">link</a></p>
+
+<div style="font-size: .7em">
 JVM vs JS vs native vs graal
 
 lambda vs service
-
-<a style="font-size: 0.6em" href="https://medium.com/swissborg-engineering/12-ways-to-call-a-solana-rpc-endpoint-from-java-88677710107e">link</a>
-
+</div>
 
 ++++
 
-#### One word about scala.js
+#### One word about <red-t>scala.js</red-t>
 
 Can a niche transpiled language make sense?
 
+<hr>
+
 <span class="fragment">We've built a Hipchat plugin</span>
 
-<span class="fragment">Hipchat died before we've hit any issues</span>
+<span class="fragment">Hipchat <red-t>died</red-t> before we've hit any issues</span>
 
 ++++
 
-#### What about a CLI
+### What about a <red-t>CLI</red-t>
 
 Can you do command line tools with a JVM?
+
+<img src="resources/cli-article.png" style="width: 50%">
 
 ----
 
 #### Creative things to we do with
-## Logs
+## <red-t>Logs</red-t>
 
 ++++
 
@@ -391,35 +422,47 @@ Maybe you don't need another dataset?
 
 ++++
 
-# Questioning Assumptions
+# <red-t>Questioning Assumptions</red-t>
 
 ++++
 
-- Sending code over the wire is not a good idea
-- You need "proper ETL"
-- SQL views are slow
-- You need one logical database per system
-- Exposing database to the fronted is not a good idea
-- XML should be shared over dedicated API
-- You have to use API only as author intended it
-- The only way to consume API is through SDK
-- The only way to integrate ith another language is through Web API
-- Niche languages don't make sense
-- CLI is too slow for a CLI
-- Logs are only for monitoring
+#### Assumptions
+
+<div class="container">
+    <div class="col" style="font-size: 0.7em">
+        <ul>
+            <li class="fragment fade-in-then-semi-out">Sending code over the wire is not a good idea</li>
+            <li class="fragment fade-in-then-semi-out">You need "proper ETL"</li>
+            <li class="fragment fade-in-then-semi-out">SQL views are slow</li>
+            <li class="fragment fade-in-then-semi-out">You need one logical database per system</li>
+            <li class="fragment fade-in-then-semi-out">Exposing database to the fronted is not a good idea</li>
+            <li class="fragment fade-in-then-semi-out">XML should be shared over dedicated API</li>
+        </ul>
+    </div>
+    <div class="col" style="font-size: 0.7em">
+        <ul>
+            <li class="fragment fade-in-then-semi-out">You have to use API only as author intended it</li>
+            <li class="fragment fade-in-then-semi-out">The only way to consume API is through SDK</li>
+            <li class="fragment fade-in-then-semi-out">The only way to integrate ith another language is through Web API</li>
+            <li class="fragment fade-in-then-semi-out">Niche languages don't make sense</li>
+            <li class="fragment fade-in-then-semi-out">CLI is too slow for a CLI</li>
+            <li class="fragment fade-in-then-semi-out">Logs are only for monitoring</li>
+        </ul>
+    </div>
+</div>
 
 ----
 
 <span class="breadcrumb-data">Creative Engineering</span>
 
-# Be Creative !
+# <red-t>Be Creative !</red-t>
 
 ---
 
 <div style="font-size: 0.7em">
-    Thank you!
+Thank you!
 
-    Voytek Pituła @ SwissBorg
+Voytek Pituła @ SwissBorg
 
-    [https://w.pitula.me/presentations](https://w.pitula.me/presentations)
+[https://w.pitula.me/presentations](https://w.pitula.me/presentations)
 </div>
