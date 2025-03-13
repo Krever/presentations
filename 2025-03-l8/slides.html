@@ -1,4 +1,4 @@
-## <span class="rainbow-text">Creative</span> <span class="rainbow-text">Engineering</span></h2>
+## <span class="rainbow-text">Creative</span> <span class="rainbow-text">Engineering</span>
 ---
 #### The Subtle Art of Cutting Corners
 
@@ -8,7 +8,7 @@
 
 <section data-background-color="white">
 
-### ⚠️ Warning ⚠️
+### ⚠️ <red-t>Warning</red-t> ⚠️
 <span style="font-size: 0.6em">
 <p>The techniques discussed in this talk are for <strong>demonstration purposes only</strong> and
 were performed by trained professionals.</p>
@@ -50,7 +50,17 @@ Attempting them at work may lead to unexpected results, including, but not limit
 
 ## Why is it <red-t>important</red-t>?
 
-> Product development is about <red-t>learning</red-t> as much as possible as <red-t>fast</red-t> as possible.
+++++
+
+### Reason 1
+
+<blockquote>Product development is about <red-t>learning</red-t> as much as possible as <red-t>fast</red-t> as possible.</blockquote>
+
+++++
+
+## Reason 2
+
+> <red-t>Impossible doesn’t exist</red-t> in software development—when the product asks, we ask by when you need it.
 
 ----
 
@@ -67,7 +77,7 @@ Attempting them at work may lead to unexpected results, including, but not limit
     <li class="fragment">Config has to be shared between services</li>
     <li class="fragment">We don't want a SPOF</li>
     <li class="fragment">So we send config over kafka</li>
-    <li class="fragment">But we want to personalize config</li>
+    <li class="fragment">But we want to <red-t>personalize</red-t> config</li>
     <li class="fragment">So we send also personalization logic! (Jsonnet)</li>
 </ul>
 
@@ -91,10 +101,7 @@ E --> D
 
 <img src="resources/java-stored-procedures.png">
 
-😱😱😱😱😱😱😱😱😱😱😱😱😱😱😱😱😱😱😱😱😱
-
-🙈🙈🙈🙈🙈🙈🙈🙈🙈🙈🙈🙈🙈🙈🙈🙈🙈🙈🙈🙈🙈
-
+<img src="resources/ptsd.gif">
 
 ----
 
@@ -106,6 +113,8 @@ E --> D
 ### How to <red-t>transform data</red-t>?
 
 spark, airflow, dbt, kafka connect...
+
+<img class="fragment" src="resources/data-eng-tools.webp">
 
 ++++
 
@@ -126,6 +135,19 @@ spark, airflow, dbt, kafka connect...
 
 ## <red-t>SQL Views</red-t>
 ## to the rescue!
+
+++++
+
+##### <red-t>SQL Views</red-t> to the rescue!
+
+```sql
+--- standard migration
+create table source_1 (data jsonb);
+
+--- repeatable migration
+drop view if exists viev_a;
+create view view_a as select data ->> "my_field" from source_1;
+```
 
 ++++
 
@@ -211,9 +233,9 @@ E --> F
 
 ### <red-t>How many</red-t> DBs do you need?
 
-<p class="fragment">One: postgres</p>
-<p class="fragment">Two: postgres, redis</p>
-<p class="fragment">A few: postgres, redis, mongo, cassandra</p>
+<p class="fragment">One?</p>
+<p class="fragment">Two?</p>
+<p class="fragment">A few?</p>
 
 ++++
 
@@ -223,13 +245,15 @@ E --> F
 
 ++++
 
-<h2><red-t>Extreme</red-t> Sharding</h2>
+<h2><span class="fragment" data-fragment-index="1"><red-t>Extreme</red-t></span> Sharding</h2>
+<div class="fragment" data-fragment-index="1">
 
 #### When single db is not enough
 
 <img width="50%" src="resources/dhh-multitenacy.png">
 
 <p style="font-size: 0.6em; margin-top: -20px"><a href="https://world.hey.com/dhh/multi-tenancy-is-what-s-hard-about-scaling-web-services-dd1e0e81">link</a></p>
+</div>
 
 ++++
 
@@ -239,12 +263,14 @@ E --> F
 
 ### A database <red-t>per Workflow</red-t>?
 
+<div class="fragment">
 <span style="font-size: .7em">
 
-`SQLite` s in shared volume, archived to S3.
+`SQLite`s in shared volume, archived to S3.
 
 [business4/workflows4s](https://business4s.org/workflows4s/)
 </span>
+</div>
 
 ----
 
@@ -260,14 +286,20 @@ E --> F
 
 ++++
 
+#### You don't have to expose your main database!
+
+### Create a <red-t>dedicate one</red-t>
+
+++++
+
 ##### Oh, and btw
-### How do you expose XML to the fronted?
+### How do you <red-t>expose XML</red-t> to the fronted?
 
 Through a database, of course.
 
 ++++
 
-## Showing <red-t>BPMN</red-t>
+## Showing <red-t>DMN</red-t>
 
 ```mermaid
 %%{init: {'theme': 'dark', 'themeVariables': { 'darkMode': false }}}%%
@@ -300,9 +332,13 @@ C --> D
 
 ++++
 
-### You need to do <red-t>bank lookup</red-t>
+<h4>Payments processing</h4>
 
-Find name of the bank based on IBAN.
+<div class="fragment">
+<h3>You need to do <red-t>bank lookup</red-t></h3>
+
+<span style="font-size: .7em">Find name of the bank based on IBAN.</span>
+</div>
 
 <div class="fragment">
 <code class="hljs mermaid">
@@ -353,9 +389,9 @@ It has SDK for Typescript and Rust but our system is in Scala.
 <p style="font-size: .7em; margin-top: -40px"><a style="font-size: 0.6em" href="https://medium.com/swissborg-engineering/12-ways-to-call-a-solana-rpc-endpoint-from-java-88677710107e">link</a></p>
 
 <div style="font-size: .7em">
-JVM vs JS vs native vs graal
+<red-t>JVM</red-t> vs <red-t>JS</red-t> vs <red-t>native</red-t> vs <red-t>graal</red-t>
 
-lambda vs service
+<red-t>lambda</red-t> vs <red-t>service</red-t>
 </div>
 
 ++++
@@ -377,6 +413,8 @@ Can a niche transpiled language make sense?
 Can you do command line tools with a JVM?
 
 <img src="resources/cli-article.png" style="width: 50%">
+
+<p style="font-size: 0.6em; margin-top: -20px"><a href="https://medium.com/swissborg-engineering/from-python-to-scala-rewriting-27k-lines-of-a-cli-8513e20cd268">link</a></p>
 
 ----
 
@@ -418,6 +456,14 @@ Maybe you don't need another dataset?
 
 ----
 
+TODO documentation?
+ledger?
+checks diagrams?
+decisions4s
+workflows4s
+
+----
+
 ## Can you see a <red-t>pattern</red-t>?
 
 ++++
@@ -445,7 +491,7 @@ Maybe you don't need another dataset?
             <li class="fragment fade-in-then-semi-out">The only way to consume API is through SDK</li>
             <li class="fragment fade-in-then-semi-out">The only way to integrate ith another language is through Web API</li>
             <li class="fragment fade-in-then-semi-out">Niche languages don't make sense</li>
-            <li class="fragment fade-in-then-semi-out">CLI is too slow for a CLI</li>
+            <li class="fragment fade-in-then-semi-out">JVM is too slow for a CLI</li>
             <li class="fragment fade-in-then-semi-out">Logs are only for monitoring</li>
         </ul>
     </div>
