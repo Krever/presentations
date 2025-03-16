@@ -20,7 +20,7 @@ const presentationsData = [
                 name: "L8Conf 2025",
                 meta: "General",
                 link: "https://l8conf.com/",
-                slides: null,
+                slides: "2025-03-l8",
                 video: null
             }
         ]
