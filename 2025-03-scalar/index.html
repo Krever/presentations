@@ -7,7 +7,7 @@
     <title>Durable Event-Sourced Workflow Monad... Seriously!</title>
 
     <link rel="stylesheet" href="../reveal/reveal.js-5.1.0/dist/reveal.css">
-    <link rel="stylesheet" href="../reveal/reveal.js-5.1.0/dist/theme/dracula.css" id="theme">
+    <link rel="stylesheet" href="../reveal/reveal.js-5.1.0/dist/theme/blood.css" id="theme">
 <!--    <link rel="stylesheet" href="resources/monadic-flow.css">-->
 
     <link rel="stylesheet" href="../reveal/reveal.js-5.1.0/plugin/highlight/monokai.css">
@@ -15,6 +15,7 @@
     <link rel="stylesheet" href="../reveal/font-awesome/fontawesome-free-6.6.0-web/css/all.min.css"/>
     <link rel="stylesheet" href="../reveal/font-awesome/fontawesome-free-6.6.0-web/css/brands.min.css"/>
 
+    <script src="https://cdn.jsdelivr.net/npm/reveal.js-mermaid-plugin@11.4.1/plugin/mermaid/mermaid.js"></script>
 
     <style>
         .container {
@@ -58,6 +59,9 @@
                 opacity: 0
             }
         }
+        .reveal .fragment.fade-in-then-semi-out.current-fragment.yellow {
+            color: yellow;
+        }
 
     </style>
     <script>
@@ -91,7 +95,7 @@
         <a href="https://twitter.com/Krever01" target="_blank">
             <i class="fa-brands fa-x-twitter"></i><i class="fa-brands fa-bluesky"></i> @Krever01
         </a>
-        <a href="https://swissborg.com/" target="_blank"><img src="resources/Logo-Dark-Gradient%20(3).png" alt=""></a>
+        <a href="https://swissborg.com/" target="_blank"><img src="resources/Logo-Light-Flat copy.png" alt=""></a>
     </div>
 
     <div class="slides">
@@ -121,6 +125,7 @@
         history: true,
         center: true,
         slideNumber: 'c/t',
+        mermaid: {},
 
         plugins: [RevealMarkdown, RevealHighlight, RevealNotes, RevealMath.KaTeX],
         dependencies: [
