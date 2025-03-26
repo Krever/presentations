@@ -29,7 +29,7 @@
 
 ----
 
-<span class="breadcrumb-data">Workflows4s4s » What is a workflow?</span>
+<span class="breadcrumb-data">Workflows4s » What is a workflow?</span>
 
 ## What is a <y-ellow>workflow</y-ellow>?
 
@@ -41,10 +41,11 @@ Steps + State + Time
 
 <div style="font-size: .7em">
 
+* Long running process
+* Business process
+* Service orchestration
 * Saga
 * Finite state machine
-* Long running process
-* Service orchestration
 
 </div>
 
@@ -72,7 +73,7 @@ Steps + State + Time
 
 ----
 
-<span class="breadcrumb-data">Workflows4s4s » Why everything is broken?</span>
+<span class="breadcrumb-data">Workflows4s » Why everything is broken?</span>
 
 ## Why everything is <y-ellow>broken</y-ellow>?
 
@@ -80,7 +81,7 @@ Steps + State + Time
 
 ++++
 
-<span class="breadcrumb-data">Workflows4s4s » Why everything is broken?</span>
+<span class="breadcrumb-data">Workflows4s » Why everything is broken?</span>
 
 ### What <y-ellow>goes into</y-ellow> a workflow solution?
 
@@ -92,7 +93,7 @@ Steps + State + Time
 
 ++++
 
-<span class="breadcrumb-data">Workflows4s4s » Why everything is broken?</span>
+<span class="breadcrumb-data">Workflows4s » Why everything is broken?</span>
 
 ### What <y-ellow>REALLY</y-ellow> goes into a workflow solution?
 
@@ -102,7 +103,7 @@ Steps + State + Time
 
 ++++
 
-<span class="breadcrumb-data">Workflows4s4s » Why everything is broken?</span>
+<span class="breadcrumb-data">Workflows4s » Why everything is broken?</span>
 
 ### What's in place?
 
@@ -112,7 +113,7 @@ Steps + State + Time
 
 ++++
 
-<span class="breadcrumb-data">Workflows4s4s » Why everything is broken? » What's in place?</span>
+<span class="breadcrumb-data">Workflows4s » Why everything is broken? » What's in place?</span>
 
 #### Data workflows are <y-ellow>not</y-ellow> our workflows
 
@@ -122,7 +123,7 @@ Hence, no Airflow & friends
 
 ----
 
-<span class="breadcrumb-data">Workflows4s4s » Meet Workflows4s</span>
+<span class="breadcrumb-data">Workflows4s » Meet Workflows4s</span>
 
 ## <y-ellow>Workflows4s</y-ellow>
 
@@ -135,10 +136,6 @@ Hence, no Airflow & friends
 * Possible only in <y-ellow>Scala</y-ellow>
 
 </div>
-
-----
-
-## Not-Demo
 
 ----
 
@@ -176,7 +173,7 @@ Hence, no Airflow & friends
 
 ## Is it a <y-ellow>monad</y-ellow>?
 
-Maybe?
+Maybe? <!-- .element: class="fragment" -->
 
 ++++
 
@@ -195,18 +192,18 @@ Maybe?
         Pure
         <pre><code class="hljs scala">val doThings: WIO[In, Nothing, Out] =
   WIO
-    .runIO[In](input => IO(MyEvent()))
-    .handleEvent((input, event) => Out(...))
-    .autoNamed</code></pre>
+    .pure
+    .makeFrom[In]
+    .value(input => Out(...))
+    .autonamed</code></pre>
     </div>
     <div class="col" style="font-size: 0.7em">
         Impure
         <pre><code class="hljs scala">val doThings: WIO[In, Nothing, Out] =
   WIO
-    .pure
-    .makeFrom[In]
-    .value(input => Out(...))
-    .autonamed</code></pre>
+    .runIO[In](input => IO(MyEvent()))
+    .handleEvent((input, event) => Out(...))
+    .autoNamed</code></pre>
     </div>
 </div>
 
@@ -225,6 +222,11 @@ val sequence1 = step1 >>> step2
 
 <img width="20%" src="resources/sequence-mermaid.png">
 
+++++
+
+### Sequencing steps
+
+Don't use `.flatMap`
 
 ++++
 
@@ -264,7 +266,7 @@ val waitForInput: WIO[MyState, Nothing, MyState] =
 
 ### Error handling
 
-```scala
+```scala [1|2|4-5]
 val doThings: WIO[In, MyError, Out]                        = ???
 val handleThatError: WIO[(MyState, MyError), Nothing, Out] = ???
 
@@ -315,7 +317,7 @@ val interruptedThroughSignal = doA.interruptWith(interruption)</code></pre>
 
 ### Drafts
 
-<div class="container">
+<div class="container fragment">
 <div class="col" style="font-size: .6em">
 
 ```scala
@@ -411,6 +413,8 @@ val instance = runtime.createInstance(id)
 
 ++++
 
+<span class="breadcrumb-data">Workflows4s » Visualization</span>
+
 ### BPMN 
 
 <div style="font-size: .7em">
@@ -459,9 +463,31 @@ val mermaidString = MermaidRenderer
 </div>
 </div>
 
+
+++++
+
+### Debugging
+
+```text
+ [Sequence](no-name) 
+  - step 0: [HandleError](no-name) 
+    - base: [Sequence](no-name) 
+      - step 0: [Interruptible](no-name) 
+        - base: [Sequence](no-name) 
+          - step 0: [HandleSignal](Validate) Executed: Initiated(abc,100,Iban(A))
+          - step 1: [RunIO](Calculate Fees) Executed: Validated(abc,100,Iban(A),Fee(11))
+          - step 2: [RunIO](Put Funds On Hold) Executed: Validated(abc,100,Iban(A),Fee(11))
+          - step 3: [Pure](no-name) 
+          - 5 more steps
+        - trigger: [HandleSignal](no-name) Signal: Cancel Withdrawal
+      - 1 more steps
+    - handler: [RunIO](Cancel Funds If Needed) 
+  - 1 more steps
+```
+
 ----
 
-<span class="breadcrumb-data">Workflows4s4s » Meet Workflows4s</span>
+<span class="breadcrumb-data">Workflows4s</span>
 
 ## <y-ellow>Workflows4s</y-ellow>
 
@@ -476,6 +502,8 @@ val mermaidString = MermaidRenderer
 </div>
 
 ++++
+
+<span class="breadcrumb-data">Workflows4s » Key Properties</span>
 
 ### Composable
 
@@ -515,20 +543,23 @@ val mermaidString = MermaidRenderer
 
 ----
 
-## Production readiness
+<span class="breadcrumb-data">Workflows4s</span>
+
+### Is it production ready?
+
+> Everything is production ready if you're brave enough
 
 ++++
 
 ### What's still missing?
 
-* Polishing <!-- .element: class="fragment fade-in-then-semi-out yellow" -->
-* Workflow evolution strategy <!-- .element: class="fragment fade-in-then-semi-out yellow" -->
-* USAGE ATTEMPTS! <!-- .element: class="fragment fade-in-then-semi-out yellow" -->
+* Polishing <!-- .element: class="fragment fade-in-then-semi-out" -->
+* Workflow evolution strategy <!-- .element: class="fragment fade-in-then-semi-out" -->
+* USAGE ATTEMPTS! <!-- .element: class="fragment fade-in-then-semi-out" -->
 
 ----
 
-### There is 
-### <y-ellow>hope for workflows</y-ellow> 
+### There is <y-ellow>hope</y-ellow> 
 
 <hr style="width:100%;height:0.15em;background-color: #eee;">
 <div style="font-size: 0.7em">
