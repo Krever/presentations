@@ -570,9 +570,13 @@ val mermaidString = MermaidRenderer
 
 ## More?
 
-- [Love, Hate & Workflows](https://www.youtube.com/watch?v=jLN1ibwUwuY)
-- [Workflows4s Docs](https://business4s.org/workflows4s/)
-- [Workflows4s DevLog](https://www.youtube.com/@Business4scalaHQ)
+<ul style="font-size: .7em">
+  <li class="fragment fade-in-then-semi-out yellow"><a href="https://www.youtube.com/watch?v=jLN1ibwUwuY">Love, Hate & Workflows</a></li>
+  <li class="fragment fade-in-then-semi-out yellow"><a href="https://business4s.org/workflows4s/">Workflows4s Docs</a></li>
+  <li class="fragment fade-in-then-semi-out yellow"><a href="https://www.youtube.com/@Business4scalaHQ">Workflows4s DevLog</a></li>
+  <li class="fragment fade-in-then-semi-out yellow"><a href="https://github.com/business4s/workflows4s/issues?q=is%3Aissue%20state%3Aopen%20label%3A%22good%20first%20issue%22">Workflows4s Issues</a></li>
+  <li class="fragment fade-in-then-semi-out yellow"><a href="https://bit.ly/business4s-discord">Business4s Discord</a></li>
+</ul>
 
 ----
 
