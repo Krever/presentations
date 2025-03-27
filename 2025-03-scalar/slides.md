@@ -24,6 +24,7 @@
  <li class="fragment fade-in-then-semi-out">2019 - Cadence & Temporal <y-ellow>@</y-ellow> Sony</li>
  <li class="fragment fade-in-then-semi-out">2020 - Event-sourcing <y-ellow>@</y-ellow> SwissBorg</li>
  <li class="fragment fade-in-then-semi-out">Q4 2022 - <y-ellow>Everything is broken</y-ellow></li>
+ <li class="fragment fade-in-then-semi-out">Q1 2024 - Kakfa + postgres <y-ellow>@</y-ellow> SwissBorg </li>
  <li class="fragment fade-in-then-semi-out">Q1 2024 - <y-ellow>Workflows4s</y-ellow> prototype</li>
 </ul>
 
@@ -343,6 +344,10 @@ val workflow: WIO.Draft = (
 
 </div>
 
+++++
+
+### Direct style?
+
 ----
 
 <span class="breadcrumb-data">Workflows4s</span>
@@ -485,6 +490,10 @@ val mermaidString = MermaidRenderer
   - 1 more steps
 ```
 
+++++
+
+### <y-ellow>Web UI</y-ellow> Coming!
+
 ----
 
 <span class="breadcrumb-data">Workflows4s</span>
@@ -556,6 +565,14 @@ val mermaidString = MermaidRenderer
 * Polishing <!-- .element: class="fragment fade-in-then-semi-out" -->
 * Workflow evolution strategy <!-- .element: class="fragment fade-in-then-semi-out" -->
 * USAGE ATTEMPTS! <!-- .element: class="fragment fade-in-then-semi-out" -->
+
+----
+
+## More?
+
+- [Love, Hate & Workflows](https://www.youtube.com/watch?v=jLN1ibwUwuY)
+- [Workflows4s Docs](https://business4s.org/workflows4s/)
+- [Workflows4s DevLog](https://www.youtube.com/@Business4scalaHQ)
 
 ----
 

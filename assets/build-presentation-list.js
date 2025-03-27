@@ -7,7 +7,7 @@ const presentationsData = [
             {
                 name: "Scalar 2025",
                 link: "https://www.scalar-conf.com/",
-                slides: null,
+                slides: "2025-03-scalar",
                 video: null
             }
         ]
