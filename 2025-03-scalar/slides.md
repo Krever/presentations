@@ -583,10 +583,16 @@ val mermaidString = MermaidRenderer
 ### There is <y-ellow>hope</y-ellow> 
 
 <hr style="width:100%;height:0.15em;background-color: #eee;">
-<div style="font-size: 0.7em">
+
+<div class="container" style="font-size: 0.7em; vertical-align: center">
+<div class="col" style="padding-top: 70px; max-width: 57%" >
 Thank you!
 
-Voytek Pituła @ SwissBorg
-
-[w.pitula.me/presentations](https://w.pitula.me/presentations)
+Voytek Pituła <y-ellow>@</y-ellow> SwissBorg
+</div>
+<div>
+<img width="40%" src="resources/slides-qrcode.png">
+<br>
+<a href="https://w.pitula.me/presentations">w.pitula.me/presentations</a>
+</div>
 </div>
