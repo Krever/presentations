@@ -8,7 +8,7 @@ const presentationsData = [
                 name: "Scalar 2025",
                 link: "https://www.scalar-conf.com/",
                 slides: "2025-03-scalar",
-                video: null
+                video: "https://www.youtube.com/watch?v=2-WUxH7vVsw"
             }
         ]
     },
