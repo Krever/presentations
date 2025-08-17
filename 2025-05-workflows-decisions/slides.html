@@ -1,0 +1,1483 @@
+<div id=left-6 style="font-family: ldr-ofer-michael">
+    <h2 style="text-transform: none">Decisions <y-ellow>&</y-ellow> Workflows</h2>
+    <h3>bringing your business closer</h3>
+
+</div>
+
+
+<span style="font-size: 0.7em;color: gray">Voytek Pituła</span>
+
+----
+
+### I'm not good at math
+
+30min + 30 min = 45 min
+
+<small>Note your questions!</small>
+
+----
+
+
+<span class="breadcrumb-data">Decisions4s</span>
+
+### Familiar question
+
+* How does the system work? <!-- .element: class="fragment fade-in-then-semi-out	" -->
+* Why this result? <!-- .element: class="fragment fade-in-then-semi-out	" -->
+* Is it correct? <!-- .element: class="fragment fade-in-then-semi-out	" -->
+
+Engineers vs. Business <!-- .element: class="fragment fade-in-then-semi-out	" -->
+
+notes:
+- who was asked by non-engineers how the system works?
+- who had to investigate why a particular if took a particular path?
+- who had to get a greenlight from the business on the logic?
+- who suffered due to disconnection between engineering and the business?
+- who has even the slightest idea what higher-kinded data is?
+
+++++
+
+<img src="resources/lord-savior-meme.jpg">
+
+notes:
+I built a library
+using fancy feature called higher kinded data
+and scala 3
+I want to tell you about both of them
+
+----
+
+# Decisions4s
+## THE <span style="color: red">what</span>
+
+notes:
+you have heard the why
+
+++++
+
+<span class="breadcrumb-data">Decisions4s » The What » Example</span>
+
+### Business logic
+
+Pull request approval process
+
+<small>
+    <ul>
+        <li class="fragment fade-in-then-semi-out"><b>Unprotected</b> branch requires <b>1 approval</b></li>
+        <li class="fragment fade-in-then-semi-out"><b>Protected</b> branch requires <b>2 approvals</b></li>
+        <li class="fragment fade-in-then-semi-out"><b>Admin</b> can merge anything <b>without approvals</b>, but this
+            sends a <b>notification</b></li>
+        <li class="fragment fade-in-then-semi-out"><b>Nothing</b> can be merged <b>otherwise</b></li>
+    </ul>
+</small>
+
+++++
+
+### Business logic
+
+```scala
+val allowMerging =
+  if (numOfApprovals > 0) {
+    if (isTargetBranchProtected && (
+      numOfApprovals > 1 || isUserAdmin
+    )) true
+  else !isTargetBranchProtected
+  } else if (isUserAdmin) true
+  else false
+val notifyUnusualAction = numOfApprovals == 0 && allowMerging
+```
+
+++++
+
+### Defining decisions
+
+* Input & Output
+* Rules
+* Hit Policy
+
+++++
+
+<span class="breadcrumb-data">Decisions4s » The What » Example » Defining decisions</span>
+
+### Input & output
+
+```scala
+case class Input[F[_]](
+  numOfApprovals: F[Int],
+  isTargetBranchProtected: F[Boolean],
+  userIsAdmin: F[Boolean],
+) derives HKD
+
+case class Output[F[_]](
+  allowMerging: F[Boolean],
+  notifyUnusualAction: F[Boolean],
+) derives HKD
+```
+
+++++
+
+### Rule 1
+
+<b>Unprotected</b> branch requires <b>1 approval</b>
+
+```scala [2|7|3|4|5|8|9]
+val rule1 = Rule(
+  matching = Input(
+    numOfApprovals = it >= 1,
+    isTargetBranchProtected = it.isFalse,
+    userIsAdmin = it.catchAll,
+  ),
+  output = Output(
+    allowMerging = true,
+    notifyUnusualAction = false
+  ),
+)
+```
+
+++++
+
+
+### Rule 2
+
+
+<b>Protected</b> branch requires <b>2 approvals</b>
+
+```scala [3,4,8]
+val rule2 = Rule(
+  matching = Input(
+    numOfApprovals = it >= 2,
+    isTargetBranchProtected = it.isTrue,
+    userIsAdmin = it.catchAll,
+  ),
+  output = Output(
+    allowMerging = true,
+    notifyUnusualAction = false
+  ),
+)
+```
+
+++++
+
+
+### Rule 3
+
+<b>Admin</b> can merge anything <b>without approvals</b>, but this sends a <b>notification</b>
+
+```scala [5,9]
+val rule3 = Rule(
+  matching = Input(
+    numOfApprovals = it.catchAll,
+    isTargetBranchProtected = it.catchAll,
+    userIsAdmin = it.isTrue,
+  ),
+  output = Output(
+    allowMerging = true,
+    notifyUnusualAction = true
+  ),
+)
+```
+
+++++
+
+
+### Rule 4
+
+<b>Nothing</b> can be merged <b>otherwise</b>
+
+```scala
+val rule4 = Rule.default(
+  Output(
+    allowMerging = false,
+    notifyUnusualAction = false
+  )
+)
+```
+
+++++
+
+### Decision table
+
+```scala [1|3|4|5]
+val decisionTable: DecisionTable[Input, Output, HitPolicy.First] =
+    DecisionTable(
+        Seq(rule1, rule2, rule3, rule4),
+        "PullRequestDecision",
+        HitPolicy.First
+    )
+```
+
+++++
+
+### Detour: `HitPolicy`
+
+Strategy defining what to do with triggered rules outputs
+
+* unique
+* first
+* combine
+* count
+
+++++
+
+### Evaluate
+
+```scala [1-7|8-11]
+val result = decisionTable.evaluateFirst(
+  Input[Value](
+    numOfApprovals = 2,
+    isTargetBranchProtected = true,
+    authorIsAdmin = false,
+  ),
+)
+result.output == Some(Output[Value](
+  allowMerging = true,
+  notifyUnusualAction = false
+))
+```
+
+++++
+
+### Diagnose
+
+<pre style="width: fit-content"><code class="hljs scala">println(result.makeDiagnosticsString)</code></pre>
+
+```text [1-3|4-7|8|10|13|17]
+Evaluation diagnostics for "PullRequestDecision"
+Hit policy: First
+Result: Some(Output(true,false))
+Input:
+  numOfApprovals: 2
+  isTargetBranchProtected: true
+  authorIsAdmin: false
+Rule 0 [✗]:
+  numOfApprovals          [✓]: > 0
+  isTargetBranchProtected [✗]: false
+  authorIsAdmin           [✓]: -
+  == ✗
+Rule 1 [✓]:
+  numOfApprovals          [✓]: > 1
+  isTargetBranchProtected [✓]: true
+  authorIsAdmin           [✓]: -
+  == Output(true,false)
+```
+
+++++
+
+<span class="breadcrumb-data">Decisions4s » The What » Example</span>
+
+### Visualize: markdown
+
+```scala
+val markdown = MarkdownRenderer.render(decisionTable)
+```
+
+```markdown
+|(I) numOfApprovals|(I) isTargetBranchProtected|(I) authorIsAdmin|(O) allowMerging|(O) notifyUnusualAction|
+|------------------|---------------------------|-----------------|----------------|-----------------------|
+|       > 0        |           false           |        -        |      true      |         false         |
+|       > 1        |           true            |        -        |      true      |         false         |
+|        -         |             -             |      true       |      true      |         true          |
+|        -         |             -             |        -        |     false      |         false         |
+```
+
+++++
+
+### Visualize: DMN
+
+```scala
+val dmnXML = DmnRenderer.render(decisionTable).toXML
+```
+
+<img src="resources/PullRequestDecision-50329dacab102e3c924e247982d62948.png">
+
+++++
+
+### Bonus: effectful inputs
+
+Run the IO only when needed
+
+```scala
+val result: IO[...] = decisionTable.evaluateFirst(
+    Input[IO](
+      userIsAdmin = fetchFromApi(),
+      ...
+    )
+```
+
+++++
+
+# Cool?
+
+<img src="resources/cool-flork-meme-vector-illustration_622487-2016.avif">
+
+----
+
+<span class="breadcrumb-data">Decisions4s</span>
+
+# Decisions4s
+## THE <span style="color: red">how</span>
+
+----
+
+<span class="breadcrumb-data">Decisions4s » The how</span>
+
+## Higher Kinded Data
+
+<p style="color: gray; font-size: 0.7em">Fancy name for case classes with wrapped fields</p>
+
+<pre style="width: fit-content"><code class="hljs scala">case class Foo[F[_]](a: F[Int])</code></pre>
+
+++++
+
+<span class="breadcrumb-data">Decisions4s » The how » Higher-Kinded Data</span>
+
+### Difference from tagless final?
+
+<pre style="width: fit-content"><code class="hljs scala">trait Foo[F[_]]{
+  def a: F[Int]
+}</code></pre>
+
+<span class="fragment">Higher-kinded data is actually useful</span>
+
+++++
+
+
+## How is it useful?
+
+Preserve shape and store
+
+<div class="container">
+    <div class="col">
+        <ul>
+            <li>Rule conditions</li>
+            <li>Rule output</li>
+            <li>Decision input</li>
+        </ul>
+    </div>
+    <div class="col">
+        <ul>
+            <li>Decision output</li>
+            <li>Rule condition result</li>
+            <li>Metadata</li>
+        </ul>
+    </div>
+</div>
+
+++++
+
+<span class="breadcrumb-data">Decisions4s » The how » Higher-Kinded Data » How is it useful?</span>
+
+### Rule conditions
+
+Check if rule is satisfied for given field (renderable)
+
+<pre style="width: fit-content"><code class="hljs scala">Input[[t] =>> Expr[t => Boolean]]</code></pre>
+
+++++
+
+### Detour: `Expr`
+
+```scala
+trait Expr[T] {
+  def evaluate: T
+  def render: String
+}
+```
+
+++++
+
+
+### Rule conditions
+
+```scala [1|3-4|5|7-11]
+case class Input[F[_]](a: F[Int], b: F[String])
+
+// [t] =>> Expr[t => Boolean]
+type UnaryTest[T] = Expr[T => Boolean]
+type RuleCondition = Input[UnaryTest]
+
+// Input[UnaryTest]
+case class InlinedInput(
+  a: Expr[Int => Boolean],
+  b: Expr[String => Boolean]
+)
+```
+
+++++
+
+
+### Rule conditions
+
+```scala [1-4|5-8|10]
+object IsPositive extends Expr[Int => Boolean] {
+    def evaluate: Int => Boolean = _ > 0
+    def render: String = "isPositive"
+}
+object IsEmpty extends Expr[String => Boolean] {
+    def evaluate: String => Boolean = _.isEmpty
+    def render: String = "isEmpty"
+}
+
+Input[UnaryTest](a = IsPositive, b = IsEmpty)
+```
+
+++++
+
+
+### Decision Input
+
+Values passed during evaluation
+
+<pre style="width: fit-content"><code class="hljs scala">Input[[t] =>> t]</code></pre>
+
+```scala [3|4|6]
+case class Input[F[_]](a: F[Int], b: F[String])
+
+type Id[T] = T
+type Value[T] = T
+
+Input[Value](a = 1, b = "hi")
+```
+
+++++
+
+
+### Rule Output
+
+Values produced by the rule (renderable)
+
+<pre style="width: fit-content"><code class="hljs scala">Output[[t] =>> Expr[t]]</code></pre>
+<pre style="width: fit-content"><code class="hljs scala">Output[Expr]</code></pre>
+
+++++
+
+
+### Rule Output
+
+```scala [3|5-8|11]
+case class Output[F[_]](a: F[Int], b: F[String])
+
+type RuleOutput = Output[Expr]
+
+case class Literal[T](value: T) extends Expr[T] {
+  def evaluate: T = value
+  def render: String = value.toString
+}
+
+val output: RuleOutput =
+  Output[Expr](a = Literal(1), b = Literal("hi"))
+```
+
+++++
+
+
+### Decision Output
+
+Values produced by the whole decision table<br>(not renderable)
+
+<pre style="width: fit-content"><code class="hljs scala">Output[[t] =>> t]</code></pre>
+<pre style="width: fit-content"><code class="hljs scala">Output[Value]</code></pre>
+
+++++
+
+
+### Other
+
+```scala [3|5-6|7-8|9-10|11-12|13-14]
+case class Input[F[_]](a: F[Int], b: F[String])
+
+type Const[A] = [t] =>> A
+
+type FieldNames              = Input[Const[String]]
+// Input("a", "b")
+type FieldIndexes            = Input[Const[Int]]
+// Input(0, 1)
+type RuleConditionEvaluated  = Input[Const[Boolean]]
+// Input(true, false)
+type RuleConditionsRendered  = Input[Const[String]]
+// Input("isPositive", "isEmpty")
+type RuleOutputRendered      = Output[Const[String]]
+// Output("a * 2")
+```
+
+++++
+
+<span class="breadcrumb-data">Decisions4s » The how » Higher-Kinded Data</span>
+
+### Can't we just use maps?
+
+- hard to implement heterogeneous ones <!-- .element: class="fragment fade-in-then-semi-out	" -->
+- can't ensure the key set <!-- .element: class="fragment fade-in-then-semi-out	" -->
+- no IDE support <!-- .element: class="fragment fade-in-then-semi-out	" -->
+
+++++
+
+
+### HKD vs GADTs
+
+HKD can be seen as higher kinded GADT
+
+```scala
+// GADT
+enum Box[T](contents: T) {
+  case IntBox(n: Int) extends Box[Int](n)
+  case BoolBox(b: Boolean) extends Box[Boolean](b)
+}
+```
+
+----
+
+<span class="breadcrumb-data">Decisions4s » The how » Higher-Kinded Data</span>
+
+### Higher-Kinded Data<br><span style="color: red">Operations</span>
+
+++++
+
+<span class="breadcrumb-data">Decisions4s » The how » Higher-Kinded Data » Operations</span>
+
+## How to operate on HKD
+
+```scala [3,6,9]
+trait HKD[Data[_[_]]] {
+
+    def pure[A[_]](f: [t] => () => A[t]): Data[A]
+
+    extension [A[_]](af: Data[A]) {
+        def mapK[B[_]](f: [t] => A[t] => B[t]): Data[B]
+    }
+
+    def map2[A[_], B[_], C[_]](
+        dataA: Data[A],
+        dataB: Data[B],
+        f: [t] => (A[t], B[t]) => C[t],
+    ): Data[C]
+}
+```
+
+++++
+
+
+### `HKD.pure`
+
+Create an instance
+```scala
+def pure[A[_]](f: [t] => () => A[t]): Data[A]
+```
+<div class="fragment">
+
+```scala [|4-6]
+object Rule {
+    def default[Input[_[_]]: HKD, Output[_[_]]: HKD](output: Output[OutputValue]): Rule[Input, Output] = {
+        Rule(
+            matching = HKD[Input].pure[UnaryTest](
+                [t] => () => it.catchAll[t]
+            ),
+            output = output,
+        )
+    }
+}
+```
+
+</div>
+
+++++
+
+
+### `HKD.mapK`
+
+Transform each field
+```scala
+extension [A[_]](af: Data[A]) {
+    def mapK[B[_]](f: [t] => A[t] => B[t]): Data[B]
+}
+```
+<div class="fragment">
+
+```scala [|3|6]
+class Rule[..., Output[_[_]]: HKD](...) {
+    def evaluateOutput(): Output[Value] = {
+        output.mapK([t] => expr => expr.evaluate)
+    }
+    def renderOutput(): Output[Const[String] = {
+        output.mapK([t] => expr => expr.render)
+    }
+}
+```
+
+</div>
+
+
+++++
+
+
+### `HKD.map2`
+
+Merge two objects field by field
+```scala [|2,3|5]
+def map2[A[_], B[_], C[_]](
+    dataA: Data[A],
+    dataB: Data[B]
+)(
+    f: [t] => (A[t], B[t]) => C[t],
+): Data[C]
+```
+<div class="fragment">
+
+```scala [2|3-6]
+class Rule[..., Output[_[_]]: HKD](...) {
+  def evaluate(in: Input[Value]): Input[Const[Boolean]] =
+    HKD.map2(matching, in)(
+      [t] => (expr, value) => expr.evaluate(value)
+    )
+}
+```
+
+</div>
+
+++++
+
+
+### Don't implement this by hand
+
+[tschuchortdev/hkd4s](https://github.com/tschuchortdev/hkd4s)
+
+
+++++
+
+<span class="breadcrumb-data">Decisions4s » The how » Higher-Kinded Data » Nesting</span>
+
+### Nesting is hard
+
+++++
+
+### Nesting is hard
+
+To wrap or not to wrap?
+
+```scala [3-5]
+case class Foo[F[_]](a: F[Int])
+
+case class Bar1[F[_]](b: Foo[F])
+// or
+case class Bar2[F[_]](b: F[Foo[F]])
+```
+
+++++
+
+
+### Nesting is hard
+
+Which variant to choose?
+
+```scala
+extension [A[_]](af: Data[A]) {
+    def mapK[B[_]](f: A ~> B)(using Functor[B]): Data[B]
+    def mapK1[B[_]](f: A ~> B)(using Functor[A]): Data[B]
+}
+```
+
+++++
+
+### Nesting is hard
+
+`map2` is an absolute mess
+
+++++
+
+### Nesting is hard
+
+Storing metadata is more complicated
+
+```scala
+case class ConstT[V](
+    value: V
+    child: Option[Const[V]]
+)
+type Const[A] = [t] => ConstT[A]
+val meta: Input[Const[String]]
+```
+<span style="font-size: 0.7em;color: gray">Works only with wrapping</span>
+
+++++
+
+### HKD in the wild
+
+* SQL
+    * `kubukoz/datas`
+    * `scalalandio/ocdquery`
+    * `com-lihaoyi/scalasql`
+* Tapir (`RequestT` and uri presence)
+* Validations
+
+----
+
+<span class="breadcrumb-data">Decisions4s » The how</span>
+
+## Scala 3
+
+Why `Decisions4s` would be very awakward in Scala 2
+
+++++
+
+<span class="breadcrumb-data">Decisions4s » The how » Scala 3</span>
+
+### Type lambdas
+
+Type-level functions
+
+```scala
+// Scala 3
+[t] =>> Either[Int, t]
+
+// Scala 2
+({ type X[t] = Either[Int, t] })#X
+// Scala 2 with kind-projector
+Lambda[t => Either[Int, t]]
+```
+
+<span style="font-size: 0.7em;color: gray">Plenty of examples presented before</span>
+
+++++
+
+### Polymorphic functions
+
+```scala
+// Scala 3, can be inline
+type Poly[F[_], G[_]] = [A] => F[A] => G[A]
+
+// Scala 2
+trait Poly[F[_], G[_]] {
+  def run[A](fa: F[A]): G[A]
+}
+```
+
+++++
+
+### Polymorphic functions
+
+```scala
+// Scala 3
+val eitherToOption = [A] => (x: Either[Any, A]) => x.toOption
+
+// Scala 2
+val eitherToOption = new Poly[Either[Any, *], Option] {
+  def run[A](x: Either[Any, A]): Option[A] = x.toOption
+}
+```
+
+++++
+
+### Polymorphic functions
+
+Examples
+
+```scala
+[T] => (x: Expr[T]) => x.render
+[T] => (x: Expr[T => Boolean], v: T) = x.evaluate(v)
+```
+
+++++
+
+### Context functions
+
+```scala
+// Scala 3
+val foo: Context ?=> Int => String
+
+// Scala 2
+def foo(implicit ctx: Context): Int
+// not possible
+val fooAsValue = foo
+```
+
+
+++++
+
+### Context functions
+
+```scala [1-4|6-9]
+// grants access to the whole input
+trait EvaluationContext[In[_[_]]] {
+  def wholeInput: In[Expr]
+}
+
+class Rule[Input[_[_]]: HKD, Output[_[_]]: HKD](
+  val matching: EvaluationContext[Input] ?=> Input[UnaryTest],
+  val output: EvaluationContext[Input] ?=> Output[OutputValue],
+)
+```
+
+++++
+
+### Context functions
+
+```scala [7]
+// syntax
+def wholeInput[In[_[_]]](using ec: EvaluationContext[In]): In[Expr] =
+    ec.wholeInput
+
+val rule = Rule(
+  ...
+  output = Output(c = wholeInput.a + wholeInput.b)
+)
+```
+
+++++
+
+### Type Class derivation
+
+```scala [2|5]
+case class Input[F[_]](a: F[Int])
+  derives HKD
+
+object HKD {
+  inline def derived[F[_[_]]](using K11.ProductGeneric[F], Labelling[F[Const[Any]]]): HKD[F] = shapeGen
+}
+```
+
+----
+
+<span class="breadcrumb-data">Decisions4s</span>
+
+## Decisions4s
+### A bit more <span style="color: red">context</span>
+
+++++
+
+<span class="breadcrumb-data">Decisions4s » Context</span>
+
+### How and why was it built
+
+* I work at SwissBorg <!-- .element: class="fragment fade-in-then-semi-out	" -->
+* I work at Payments <!-- .element: class="fragment fade-in-then-semi-out	" -->
+* Each payment transaction goes through dozens of checks <!-- .element: class="fragment fade-in-then-semi-out	" -->
+* Checks are defined by the business <!-- .element: class="fragment fade-in-then-semi-out	" -->
+* We also have other usecases (KYC checks, fiat payment routing) <!-- .element: class="fragment fade-in-then-semi-out	" -->
+
+++++
+
+<span class="breadcrumb-data">Decisions4s » Context</span>
+
+### Can we let the business edit the rules?
+
+We can but we shouldn't
+
+++++
+
+<span class="breadcrumb-data">Decisions4s » Context</span>
+
+### Can we do more?
+
+Yes, but should we?
+
+<span style="font-size: 0.6em;color: gray">Json serialization and SQL execution should be possible</span>
+
+++++
+
+<span class="breadcrumb-data">Decisions4s » Context</span>
+
+### Is it production-ready?
+
+Yes
+
+++++
+
+<span class="breadcrumb-data">Decisions4s » Context</span>
+
+### Can I use it from scala 2?
+
+Yes, kind of.
+
+----
+
+<span class="breadcrumb-data">Decisions4s</span>
+
+### Questions?
+
+Before we move to workflows
+
+----
+
+## Let's talk about
+# workflows
+
+----
+
+### My <y-ellow>history</y-ellow> with Workflows
+
+<ul style="font-size: .7em">
+    <li class="fragment fade-in-then-semi-out">2018 - Camunda <y-ellow>@</y-ellow> Sony</li>
+    <li class="fragment fade-in-then-semi-out">2019 - Cadence & Temporal <y-ellow>@</y-ellow> Sony</li>
+    <li class="fragment fade-in-then-semi-out">2020 - Event-sourcing <y-ellow>@</y-ellow> SwissBorg</li>
+    <li class="fragment fade-in-then-semi-out">Q4 2022 - <y-ellow>Everything is broken</y-ellow></li>
+    <li class="fragment fade-in-then-semi-out">Q1 2024 - Kakfa + postgres <y-ellow>@</y-ellow> SwissBorg </li>
+    <li class="fragment fade-in-then-semi-out">Q1 2024 - <y-ellow>Workflows4s</y-ellow> prototype</li>
+</ul>
+
+----
+
+<span class="breadcrumb-data">Workflows4s » What is a workflow?</span>
+
+## What is a <y-ellow>workflow</y-ellow>?
+
+Steps + State + Time
+
+++++
+
+#### Different names?
+
+<div style="font-size: .7em">
+
+* Long running process
+* Business process
+* Service orchestration
+* Saga
+* Finite state machine
+
+</div>
+
+++++
+
+### Examples
+
+<dl style="font-size: .7em">
+<dt class="fragment fade-in-then-semi-out" data-fragment-index="1">Employee Onboarding</dt>
+<dd class="fragment fade-in-then-semi-out" data-fragment-index="1">Sign a contract <i>(Event)</i> → Wait → Create accounts
+
+<dt class="fragment fade-in-then-semi-out" data-fragment-index="2">Food delivery</dt>
+<dd class="fragment fade-in-then-semi-out" data-fragment-index="2">Order <i>(Event)</i> → Funds Lock → Delivery <i>(Event)</i> → Funds capture </dd>
+
+<dt class="fragment fade-in-then-semi-out" data-fragment-index="3">Expense Reimbursement</dt>
+<dd class="fragment fade-in-then-semi-out" data-fragment-index="3">Submit expense <i>(Event)</i> → Approval granted <i>(Event)</i> → Funds transfer</dd>
+</dl>
+
+
+++++
+
+### Rings a bell?
+
+🔔🔔🔔
+
+----
+
+<span class="breadcrumb-data">Workflows4s » Why everything is broken?</span>
+
+## Why everything is <y-ellow>broken</y-ellow>?
+
+<span style="font-size: .7em">You don't invent stuff without a good reason</span>
+
+++++
+
+<span class="breadcrumb-data">Workflows4s » Why everything is broken?</span>
+
+### What <y-ellow>goes into</y-ellow> a workflow solution?
+
+* Definition
+* Execution
+* Monitoring
+* Management
+
+
+++++
+
+<span class="breadcrumb-data">Workflows4s » Why everything is broken?</span>
+
+### What <y-ellow>REALLY</y-ellow> goes into a workflow solution?
+
+* Definition
+* Understandability
+* Migrations
+
+++++
+
+<span class="breadcrumb-data">Workflows4s » Why everything is broken?</span>
+
+### What's in place?
+
+<img src="resources/solutions.png" width="30%">
+
+<!--TODO wording, self contained is not a good term -->
+
+++++
+
+<span class="breadcrumb-data">Workflows4s » Why everything is broken? » What's in place?</span>
+
+#### Data workflows are <y-ellow>not</y-ellow> our workflows
+
+Hence, no Airflow & friends
+
+<!--TODO gray -->
+
+----
+
+<span class="breadcrumb-data">Workflows4s » Meet Workflows4s</span>
+
+## <y-ellow>Workflows4s</y-ellow>
+
+<div style="font-size: .7em">
+
+* Composable
+* Scalable (up & down)
+* Business-friendly
+* <y-ellow>LIBRARY</y-ellow>
+* Possible only in <y-ellow>Scala</y-ellow>
+
+</div>
+
+----
+
+<span class="breadcrumb-data">Workflows4s</span>
+
+## <y-ellow>Defining</y-ellow> workflows
+
+++++
+
+<span class="breadcrumb-data">Workflows4s » Defining workflows</span>
+
+<pre style="width: fit-content"><code class="hljs scala">sealed trait WIO[In, Err, Out]</code></pre>
+
+++++
+
+<pre style="width: fit-content"><code class="hljs scala">trait WorkflowContext {
+  type Event
+  type State
+}</code></pre>
+
+<pre style="width: fit-content"><code class="hljs scala">sealed trait WIO[In, Err, Out, Ctx <: WorkflowCtx]</code></pre>
+
+++++
+
+<pre style="width: fit-content"><code class="hljs scala">trait WorkflowContext {
+  type Event
+  type State
+}</code></pre>
+
+<pre style="width: fit-content"><code class="hljs scala">sealed trait WIO[In, Err, Out <: Ctx#State, Ctx <: WorkflowCtx]</code></pre>
+
+<span style="font-size: .5em; color: gray">If we still had general type projections</span>
+
+++++
+
+## Is it a <y-ellow>monad</y-ellow>?
+
+Maybe? <!-- .element: class="fragment" -->
+
+++++
+
+<span class="breadcrumb-data">Workflows4s » Defining workflows</span>
+
+## Operations
+
+++++
+
+<span class="breadcrumb-data">Workflows4s » Defining workflows » Operations</span>
+
+### Executing Code
+
+<div class="container">
+    <div class="col" style="font-size: 0.7em">
+        Pure
+        <pre><code class="hljs scala">val doThings: WIO[In, Nothing, Out] =
+  WIO
+    .pure
+    .makeFrom[In]
+    .value(input => Out(...))
+    .autonamed</code></pre>
+    </div>
+    <div class="col" style="font-size: 0.7em">
+        Impure
+        <pre><code class="hljs scala">val doThings: WIO[In, Nothing, Out] =
+  WIO
+    .runIO[In](input => IO(MyEvent()))
+    .handleEvent((input, event) => Out(...))
+    .autoNamed</code></pre>
+    </div>
+</div>
+
+<img width="20%" src="resources/run-io-mermaid.png">
+
+++++
+
+### Sequencing steps
+
+```scala
+val step1: WIO[A, Nothing, B] = ???
+val step2: WIO[B, Nothing, C] = ???
+
+val sequence1 = step1 >>> step2
+```
+
+<img width="20%" src="resources/sequence-mermaid.png">
+
+++++
+
+### Sequencing steps
+
+Don't use `.flatMap`
+
+++++
+
+### Signals
+
+```scala [1|5|7-9]
+val MySignal = SignalDef[MyRequest, MyResponse]()
+
+val doThings: WIO[MyState, Nothing, MyState] =
+WIO
+.handleSignal(MySignal)
+.using[MyState]
+.withSideEffects((state, request) => IO(MyEvent()))
+.handleEvent((state, event) => state)
+.produceResponse((state, event) => MyResponse())
+.autoNamed
+```
+
+<img width="20%" src="resources/signals-mermaid.png">
+
+++++
+
+### Timers
+
+```scala
+val waitForInput: WIO[MyState, Nothing, MyState] =
+WIO
+.await[MyState](1.day)
+.persistStartThrough(start => MyEvent1(start.at))(evt => evt.time)
+.persistReleaseThrough(release => MyEvent2(release.at))(evt => evt.time)
+.autoNamed
+```
+
+<img width="20%" src="resources/timer-mermaid.png">
+
+++++
+
+### Error handling
+
+```scala [1|2|4-5]
+val doThings: WIO[In, MyError, Out]                        = ???
+val handleThatError: WIO[(MyState, MyError), Nothing, Out] = ???
+
+val errorHandled: WIO[In, Nothing, Out] =
+doThings.handleErrorWith(handleThatError)
+```
+
+<img width="20%" src="resources/handle-error-mermaid.png">
+
+++++
+
+### Interruptions
+
+<div class="container">
+    <div class="col">
+
+<pre style="font-size: .3em; width: fit-content"><code class="hljs scala">val MySignal = SignalDef[MyRequest, MyResponse]()
+val doA      = WIO.pure(MyState(1)).autoNamed
+val doB      = WIO.pure(MyState(1)).autoNamed
+
+val interruption =
+  WIO.interruption
+    .throughSignal(MySignal)
+    .handleSync((state, request) => MyEvent())
+    .handleEvent((state, event) => MyState(0))
+    .produceResponse((state, event) => MyResponse())
+    .autoNamed()
+    .andThen(_ >>> doB)
+
+val interruptedThroughSignal = doA.interruptWith(interruption)</code></pre>
+
+    </div>
+    <div class="col">
+        <img width="20%" src="resources/interruption-mermaid.png">
+    </div>
+</div>
+
+++++
+
+### More?
+
+* Forks
+* Loop
+* Parallel paths
+* Embedding sub-workflows
+
+++++
+
+### Drafts
+
+<div class="container fragment">
+<div class="col" style="font-size: .6em">
+
+```scala
+val createPR: WIO.Draft    = WIO.draft.signal()
+val runPipeline: WIO.Draft = WIO.draft.step(error = "Critical Issue")
+val awaitReview: WIO.Draft = WIO.draft.signal(error = "Rejected")
+
+val mergePR: WIO.Draft = WIO.draft.step()
+val closePR: WIO.Draft = WIO.draft.step()
+
+val workflow: WIO.Draft = (
+    createPR >>>
+    runPipeline >>>
+    awaitReview >>>
+    mergePR
+).handleErrorWith(closePR)
+```
+
+</div>
+<div>
+    <img src="resources/draft-mermaid.png">
+</div>
+
+</div>
+
+----
+
+<span class="breadcrumb-data">Workflows4s</span>
+
+## <y-ellow>Running</y-ellow> workflows
+
+++++
+
+<span class="breadcrumb-data">Workflows4s » Running workflows</span>
+
+```scala
+trait WorkflowRuntime[F[_], Ctx <: WorkflowContext, WorkflowId]{
+    def createInstance(id: WorkflowId):
+        F[WorkflowInstance[F, WCState[Ctx]]]
+}
+```
+
+++++
+
+<span class="breadcrumb-data">Workflows4s » Running workflows</span>
+
+```scala [1|3|5-8|10|12]
+trait WorkflowInstance[F[_], State] {
+
+def queryState(): F[State]
+
+def deliverSignal[Req, Resp](
+    signalDef: SignalDef[Req, Resp],
+    req: Req
+): F[Either[UnexpectedSignal, Resp]]
+
+def wakeup(): F[Unit]
+
+def getProgress: F[WIOExecutionProgress[State]]
+}
+```
+
+++++
+
+<span class="breadcrumb-data">Workflows4s » Running workflows</span>
+
+```scala [1|2|3]
+val myWorkflow: WIO[Any, Nothing, WCState[Ctx], Ctx] = ???
+val runtime = SomeRuntime.create(wio) // simplified
+val instance = runtime.createInstance(id)
+```
+
+++++
+
+## Available Runtimes
+
+* In Memory <!-- .element: class="fragment fade-in-then-semi-out yellow" -->
+* Pekko <!-- .element: class="fragment fade-in-then-semi-out yellow" -->
+* Postgres <!-- .element: class="fragment fade-in-then-semi-out yellow" -->
+* SQLite <!-- .element: class="fragment fade-in-then-semi-out yellow" -->
+
+++++
+
+## Knocker-Uppers
+
+* Sleeping <!-- .element: class="fragment fade-in-then-semi-out yellow" -->
+* Quartz <!-- .element: class="fragment fade-in-then-semi-out yellow" -->
+* Filesystem <!-- .element: class="fragment fade-in-then-semi-out yellow" -->
+
+----
+
+## Visualization
+
+++++
+
+<span class="breadcrumb-data">Workflows4s » Visualization</span>
+
+### BPMN
+
+<div style="font-size: .7em">
+
+```scala
+val wio: WIO[?, ?, ?, ?] = ???
+val bpmnXML              = BPMNConverter.convert(wio.toProgress.toModel, "process")
+```
+
+</div>
+
+<img style="background: white; padding: 10px" src="resources/pull-request-bpmn.svg">
+
+
+++++
+
+### Mermaid
+
+<div style="font-size: .7em">
+
+```scala
+val wio: WIO[?, ?, ?, ?] = ???
+val mermaidString        = MermaidRenderer.renderWorkflow(wio.toProgress)
+```
+
+</div>
+
+<img src="resources/pr-mermaid.png">
+
+++++
+
+### Progress tracking
+
+<div class="container">
+    <div class="col" style="font-size: .7em;">
+
+```scala
+val instance: WorkflowInstance[?, ?] = ???
+val mermaidString = MermaidRenderer
+        .renderWorkflow(instance.getProgress)
+```
+
+</div>
+<div class="col">
+    <img width="500px" src="resources/progress-mermaid.png">
+</div>
+</div>
+
+
+++++
+
+### Debugging
+
+```text
+[Sequence](no-name)
+- step 0: [HandleError](no-name)
+    - base: [Sequence](no-name)
+    - step 0: [Interruptible](no-name)
+        - base: [Sequence](no-name)
+            - step 0: [HandleSignal](Validate) Executed: Initiated(abc,100,Iban(A))
+            - step 1: [RunIO](Calculate Fees) Executed: Validated(abc,100,Iban(A),Fee(11))
+            - step 2: [RunIO](Put Funds On Hold) Executed: Validated(abc,100,Iban(A),Fee(11))
+            - step 3: [Pure](no-name)
+            - 5 more steps
+    - trigger: [HandleSignal](no-name) Signal: Cancel Withdrawal
+    - 1 more steps
+    - handler: [RunIO](Cancel Funds If Needed)
+- 1 more steps
+```
+
+++++
+
+### <y-ellow>Web UI</y-ellow> Coming!
+
+----
+
+<span class="breadcrumb-data">Workflows4s</span>
+
+## <y-ellow>Workflows4s</y-ellow>
+
+<div style="font-size: .7em">
+
+* Composable
+* Scalable (up & down)
+* Business-friendly
+* <y-ellow>LIBRARY</y-ellow>
+* Possible only in <y-ellow>Scala</y-ellow>
+
+</div>
+
+++++
+
+<span class="breadcrumb-data">Workflows4s » Key Properties</span>
+
+### Composable
+
+- Definitions
+- Sub-workflows
+
+++++
+
+### Scalable
+
+- Runtimes
+- Knocker-uppers
+- Sub-workflows
+- Drafts
+
+++++
+
+### Business-friendly
+
+- Visualizations
+- Progress tracking
+
+++++
+
+### Library
+
+- No server
+- No scaffolding
+
+++++
+
+### Possible only in <y-ellow>Scala</y-ellow>
+
+- Akka/Pekko
+- Culture of IOs
+- Language features
+
+----
+
+<span class="breadcrumb-data">Workflows4s</span>
+
+### Is it production ready?
+
+> Everything is production ready if you're brave enough
+
+++++
+
+### What's still missing?
+
+* Polishing <!-- .element: class="fragment fade-in-then-semi-out" -->
+* Workflow evolution strategy <!-- .element: class="fragment fade-in-then-semi-out" -->
+* USAGE ATTEMPTS! <!-- .element: class="fragment fade-in-then-semi-out" -->
+
+----
+
+## More?
+
+<ul style="font-size: .7em">
+    <li class="fragment fade-in-then-semi-out yellow"><a href="https://www.youtube.com/watch?v=jLN1ibwUwuY">Love, Hate & Workflows</a></li>
+    <li class="fragment fade-in-then-semi-out yellow"><a href="https://business4s.org/workflows4s/">Workflows4s Docs</a></li>
+    <li class="fragment fade-in-then-semi-out yellow"><a href="https://www.youtube.com/@Business4scalaHQ">Workflows4s DevLog</a></li>
+    <li class="fragment fade-in-then-semi-out yellow"><a href="https://github.com/business4s/workflows4s/issues?q=is%3Aissue%20state%3Aopen%20label%3A%22good%20first%20issue%22">Workflows4s Issues</a></li>
+    <li class="fragment fade-in-then-semi-out yellow"><a href="https://bit.ly/business4s-discord">Business4s Discord</a></li>
+</ul>
+
+----
+
+## Why it all matters?
+
+----
+
+## What is Business4s?
+
+----
+
+### Focus on the <y-ellow>business</y-ellow>
+
+<hr>
+
+<div>
+Thank you!
+
+Voytek Pituła <y-ellow>@</y-ellow> SwissBorg
+</div>
+<a href="https://w.pitula.me/presentations">w.pitula.me/presentations</a>
+
