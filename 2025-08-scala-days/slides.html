@@ -246,7 +246,7 @@ Long-running persistent processes.
 
 So that you talk with your stakeholders.
 
-todo img: mermaid viz
+<img width="50%" src="resources/pr-request-mermaid.png">
 
 ++++
 
@@ -254,7 +254,7 @@ todo img: mermaid viz
 
 #### BPMN
 
-todo img: bpmn viz
+<img width="50%" src="resources/pull-request-bpmn.svg">
 
 <small>I don’t love BPMN. But it reminds us why we’re here.</small>
 
@@ -264,17 +264,31 @@ todo img: bpmn viz
 
 ### Drafting
 
-todo snippet: draft
-
 So that you talk to stakeholders *early*.
+
+```scala
+val createPR: WIO.Draft    = WIO.draft.signal()
+val runPipeline: WIO.Draft = WIO.draft.step(error = "Critical Issue")
+val awaitReview: WIO.Draft = WIO.draft.signal(error = "Rejected")
+
+val mergePR: WIO.Draft = WIO.draft.step()
+val closePR: WIO.Draft = WIO.draft.step()
+
+val workflow: WIO.Draft = (
+    createPR >>>
+      runPipeline >>>
+      awaitReview >>>
+      mergePR
+  ).handleErrorWith(closePR)
+```
 
 ++++
 
 ### Introspection
 
-todo: progress viz
-
 So that you talk to stakeholders *when things go wrong*.
+
+<img width="50%" src="resources/pr-mermaid-progress.png">
 
 ----
 
@@ -294,14 +308,32 @@ Rules without a rule engine
 
 So that you talk with your stakeholders more.
 
-todo: dmn viz
+<img src="resources/decisions.png">
 
 ++++
 
 ### Diagnostics
 So that *both devs and stakeholders* can understand what happened
 
-todo: diagnostics output
+<div  style="font-size: 0.7em"><pre><code data-trim data-noescape class="language-text">
+Evaluation diagnostics for "PullRequestDecision"
+Hit policy: First
+Result: Some(Output(true,false))
+Input:
+  numOfApprovals: 2
+  isTargetBranchProtected: true
+  authorIsAdmin: false
+Rule 0 [✗]:
+  numOfApprovals          [✓]: > 0
+  isTargetBranchProtected [✗]: false
+  authorIsAdmin           [✓]: -
+  == ✗
+Rule 1 [✓]:
+  numOfApprovals          [✓]: > 1
+  isTargetBranchProtected [✓]: true
+  authorIsAdmin           [✓]: -
+  == Output(allowMerging = true, notifyUnusualAction = false)
+</code></pre></div>
 
 ----
 
@@ -317,11 +349,11 @@ todo: diagnostics output
 
 <span class="breadcrumb-data">Business4s Projects » Style guide</span>
 
-todo example 1
+<img src="resources/style-guide-example-1.png">
 
 ++++
 
-todo example 2
+<img src="resources/style-guide-example-2.png">
 
 ----
 
