@@ -1,6 +1,18 @@
 // Sample data in JSON format
 const presentationsData = [
     {
+        title: "Business4s - Bridging the Gap Between Devs and The Business By Any Means Necessary",
+        meta: "Scala",
+        conferences: [
+            {
+                name: "Scala Days 2025",
+                link: "https://archives.scaladays.org/2025//",
+                slides: "2025-08-scala-days",
+                video: null
+            }
+        ]
+    },
+    {
         title: "Durable Event-Sourced Workflow Monad... Seriously!",
         meta: "Scala",
         conferences: [
