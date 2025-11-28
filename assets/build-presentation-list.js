@@ -8,7 +8,7 @@ const presentationsData = [
                 name: "Scala Days 2025",
                 link: "https://archives.scaladays.org/2025//",
                 slides: "2025-08-scala-days",
-                video: null
+                video: "https://www.youtube.com/watch?v=eIw9TksowkI"
             }
         ]
     },
