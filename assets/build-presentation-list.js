@@ -6,9 +6,15 @@ const presentationsData = [
         conferences: [
             {
                 name: "Scala Days 2025",
-                link: "https://archives.scaladays.org/2025//",
+                link: "https://archives.scaladays.org/2025/",
                 slides: "2025-08-scala-days",
                 video: "https://www.youtube.com/watch?v=eIw9TksowkI"
+            },
+            {
+                name: "Second Online Func Prog Sweden 2026",
+                link: "https://www.meetup.com/func-prog-sweden/events/312442142/?eventOrigin=group_upcoming_events",
+                slides: "2026-02-func-prog-sweden",
+                video: null
             }
         ]
     },

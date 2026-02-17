@@ -74,6 +74,10 @@ Accounting terms
 
 ----
 
+<img src="resources/little-code.png">
+
+----
+
 ## Let's <y-ellow>step back</y-ellow>
 
 To understand why
@@ -304,6 +308,31 @@ So that you talk to stakeholders *when things go wrong*.
 ### Web UI
 
 <img width="50%" src="resources/workflows4s-web-ui.png">
+
+
+++++
+
+#### A bit of Code?
+
+```scala
+sealed trait WIO[In, Err, Out]
+```
+
+```scala
+case class Sequence[In1, Err1, Out1, Err2, Out2](
+    first: WIO[In1, Err1, Out1],
+    second: WIO[Out1, Err2, Out2]
+) extends WIO[In1, Err1 | Err2, Out2]
+```
+```scala
+case class RunIO[In, Err, Out, Evt](
+    sideEffect: In => IO[Evt],
+    onEvent: Evt => Either[Err, Out]
+) extends WIO[In, Err, Out]
+
+```
+
+https://www.youtube.com/watch?v=2-WUxH7vVsw
 
 ----
 
