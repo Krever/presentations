@@ -14,7 +14,7 @@ const presentationsData = [
                 name: "Second Online Func Prog Sweden 2026",
                 link: "https://www.meetup.com/func-prog-sweden/events/312442142/?eventOrigin=group_upcoming_events",
                 slides: "2026-02-func-prog-sweden",
-                video: null
+                video: "https://youtu.be/rFa4JhgYw7w?t=5117"
             }
         ]
     },
